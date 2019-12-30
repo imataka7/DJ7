@@ -2,8 +2,8 @@
 
 import Vue, { VueConstructor, PluginObject } from 'vue';
 import firebase from 'firebase/app';
-// import auth from 'firebase/auth';
-// import firestore from 'firebase/firestore';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -28,10 +28,10 @@ const firebaseConfig = {
   measurementId: 'G-78Z8YSTCVZ',
 };
 
+export const app = firebase.initializeApp(firebaseConfig);
+
 export default {
   install(vue: VueConstructor, options: any) {
-    const app = firebase.initializeApp(firebaseConfig);
-
     vue.prototype.$firestore = app.firestore();
     vue.prototype.$auth = app.auth();
   },

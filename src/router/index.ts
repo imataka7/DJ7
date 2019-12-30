@@ -1,14 +1,23 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Hub from '../views/Hub.vue';
+import { app as firebase } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home,
+    name: 'hub',
+    component: Hub,
+    meta: {
+      requreAuth: true,
+    },
+  },
+  {
+    path: '/signin',
+    name: 'signin',
+    component: () => import(/* webpackChunkName: "signin" */ '../views/Signin.vue'),
   },
   {
     path: '/about',
@@ -18,12 +27,35 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
+  {
+    path: '*',
+    redirect: '/',
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isReqiredAuth = to.matched.some(r => r.meta.requreAuth);
+
+  if (isReqiredAuth) {
+    // eslint-disable-next-line
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        next();
+      } else {
+        next({
+          path: '/signin',
+        });
+      }
+    });
+  } else {
+    next();
+  }
 });
 
 export default router;
