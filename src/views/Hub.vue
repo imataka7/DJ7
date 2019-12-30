@@ -1,7 +1,12 @@
 <template>
   <div class="hub">
-    <h1>Welcome {{ currentUser.displayName }}</h1>
-    <img :src="currentUser.photoURL" alt="icon" />
+    <h1>
+      MusicHub
+      RoomId: {{ $route.params.roomId }}
+      <br />
+      Welcome {{ currentUser.displayName }}
+    </h1>
+    <img style="width: 75px; height: 75px;" :src="currentUser.photoURL" alt="icon" />
     <button @click="$auth.signOut()">Sign out</button>
 
     <p>
@@ -14,8 +19,11 @@
     </div>
 
     <div class="player-container">
-      <youtube-player :video-url="videoUrl" v-if="videoUrl !== ''"></youtube-player>
-      <p v-else>No videos are selected</p>
+      <youtube-player :video-url="videoUrl" v-if="videoUrl !== ''" @update="play"></youtube-player>
+      <p
+        style="color: #fff; background: #333; width: 300px; padding: 10px;"
+        v-else
+      >No videos are selected</p>
     </div>
 
     <pre>{{ JSON.stringify( currentUser, null, '  ' ) }}</pre>
