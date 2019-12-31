@@ -1,9 +1,9 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>This is an about <router-link to="/">page</router-link></h1>
     <p>Send to firestore at {{ firestoreTime }} by {{ updater }}</p>
     <p>You received at {{ currentTime }}</p>
-    <p>Diff: {{ currentTime - firestoreTime }} seconds</p>
+    <p>Diff: {{ currentTime - firestoreTime }} msec</p>
     <button @click="push">push</button>
   </div>
 </template>
@@ -31,12 +31,15 @@ export default class About extends Vue {
   public async created() {
     const snapshot = await this.ref.get();
     const data = snapshot.data()!;
-    this.firestoreTime = data.test.seconds;
-    this.updater = data.pushedBy;
+    // this.firestoreTime = data.test.seconds;
+    // this.firestoreTime = data.test;
+    // this.updater = data.pushedBy;
 
     this.unsubscribe = this.ref.onSnapshot((doc) => {
-      this.firestoreTime = doc.data()?.test.seconds;
-      this.currentTime = Math.round(Date.now() / 1000);
+      // this.firestoreTime = doc.data()?.test.seconds;
+      this.firestoreTime = doc.data()?.test;
+      // this.currentTime = Math.round(Date.now() / 1000);
+      this.currentTime = Date.now();
       this.updater = doc.data()?.pushedBy;
     });
 
@@ -49,7 +52,7 @@ export default class About extends Vue {
 
   public push() {
     this.ref.update({
-      test: new Date(),
+      test: Date.now(),
       pushedBy: this.$auth.currentUser?.displayName,
     });
   }
