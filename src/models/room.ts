@@ -13,6 +13,7 @@ interface Room {
   roomId: string;
   queues: string[];
   player: Player;
+  users: string[];
 }
 
 export default Room;
