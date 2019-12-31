@@ -31,14 +31,9 @@ export default class About extends Vue {
   public async created() {
     const snapshot = await this.ref.get();
     const data = snapshot.data()!;
-    // this.firestoreTime = data.test.seconds;
-    // this.firestoreTime = data.test;
-    // this.updater = data.pushedBy;
 
     this.unsubscribe = this.ref.onSnapshot((doc) => {
-      // this.firestoreTime = doc.data()?.test.seconds;
       this.firestoreTime = doc.data()?.test;
-      // this.currentTime = Math.round(Date.now() / 1000);
       this.currentTime = Date.now();
       this.updater = doc.data()?.pushedBy;
     });
