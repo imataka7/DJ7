@@ -47,10 +47,15 @@ function getMusicInfo(url: string) {
   if (/youtube.com|youtu.be/.test(url)) {
     const id = getYTVideoId(url);
 
-    return id ? `https://www.youtube.com/embed/${id}?enablejsapi=1` : '';
+    if (id) {
+      return {
+        source: `https://www.youtube.com/embed/${id}`,
+        type: 'YouTube',
+      };
+    }
   }
 
-  return '';
+  return null;
 }
 
 export {

@@ -34,6 +34,7 @@ const routes = [
     path: '/:roomId',
     name: 'hub',
     component: Hub,
+    alias: '/:roomId/req',
     meta: {
       requreAuth: true,
     },

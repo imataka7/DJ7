@@ -18,11 +18,15 @@ import {
 import YouTube from 'youtube-player';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStatus from '@/models/playerStatus';
+import controllers from '@/store/modules/controllers';
 
 @Component
 export default class PlayerYoutube extends Vue {
   @Prop({ default: '' })
   videoUrl!: string;
+
+  @Prop({ default: '' })
+  roomId!: string;
 
   public async mounted() {
     const el = this.$el.querySelector('.video-player');
@@ -31,18 +35,38 @@ export default class PlayerYoutube extends Vue {
     player.stopVideo();
 
     this.player = player;
+
+    controllers.updateController({
+      roomId: this.roomId,
+      controller: {
+        play: this.play,
+        pause: this.pause,
+        setStatus: this.setStatus,
+      },
+    });
+    console.log('call');
   }
 
   private player!: YouTubePlayer;
 
   public play() {
-    this.player.playVideo();
     this.$emit('update', PlayerStatus.PLAY);
   }
 
   public pause() {
-    this.player.pauseVideo();
-    this.$emit('update', PlayerStatus.STOP);
+    this.$emit('update', PlayerStatus.PAUSE);
+  }
+
+  public setStatus(status: PlayerStatus) {
+    switch (status) {
+      case PlayerStatus.PLAY:
+        this.player.playVideo();
+        break;
+      case PlayerStatus.PAUSE:
+        this.player.pauseVideo();
+        break;
+      default:
+    }
   }
 
   public async changeVolume(level: number) {
