@@ -17,6 +17,7 @@ import {
 } from 'vue-property-decorator';
 import YouTube from 'youtube-player';
 import { YouTubePlayer } from 'youtube-player/dist/types';
+import PlayerStatus from '@/models/playerStatus';
 
 @Component
 export default class PlayerYoutube extends Vue {
@@ -36,12 +37,12 @@ export default class PlayerYoutube extends Vue {
 
   public play() {
     this.player.playVideo();
-    this.$emit('play');
+    this.$emit('update', PlayerStatus.PLAY);
   }
 
   public pause() {
     this.player.pauseVideo();
-    this.$emit('pause');
+    this.$emit('update', PlayerStatus.STOP);
   }
 
   public async changeVolume(level: number) {
