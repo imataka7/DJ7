@@ -2,11 +2,9 @@ import PlayerStatus from './playerStatus';
 
 interface Player {
   source: string;
-  startAt: {
-    seconds: number,
-    nanoseconds: number,
-  };
   status: PlayerStatus;
+  updatedAt: number;
+  playedTime: number;
 }
 
 interface Room {
