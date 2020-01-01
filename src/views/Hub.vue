@@ -117,20 +117,21 @@ export default class Hub extends Vue {
       users: arrayUnion(this.currentUser.uid),
     });
 
-    // const snapshot = await this.roomRef.get();
-    // const data = snapshot.data();
-    // const status = data as Room;
+    const snapshot = await this.roomRef.get();
+    const data = snapshot.data();
+    const status = data as Room;
 
-    // this.updateRoomStatus(status);
+    await this.updateRoomStatus(status);
 
     this.unsubscribeLister = this.roomRef.onSnapshot(async (doc) => {
-      this.updateRoomStatus(doc.data() as Room);
+      await this.updateRoomStatus(doc.data() as Room);
 
       const { updatedAt, playedTime } = this.roomStatus!.player;
       const seekTo = ((Date.now() - updatedAt) / 1000) + playedTime;
 
       // console.log(seekTo, this.controller);
 
+      // console.log(this.controller);
       await this.controller?.setStatus(this.roomStatus!.player.status, seekTo);
     });
   }
@@ -140,6 +141,8 @@ export default class Hub extends Vue {
 
     const { source, updatedAt, playedTime } = status.player;
     if (source && source !== this.musicSource) {
+      this.musicSource = source;
+
       const player = new YoutubePlayer({
         el: '.player-container',
         propsData: {
@@ -149,8 +152,7 @@ export default class Hub extends Vue {
       }).$mount();
       player.$on('update', this.onStatusChanged);
 
-      this.musicSource = source;
-      // console.log(this.controller);
+      await player.init();
     }
   }
 

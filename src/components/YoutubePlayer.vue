@@ -28,11 +28,11 @@ export default class PlayerYoutube extends Vue {
   @Prop({ default: '' })
   roomId!: string;
 
-  public async mounted() {
+  public async init() {
     const el = this.$el.querySelector('.video-player');
     const player = YouTube(el as HTMLElement);
     await player.loadVideoByUrl(this.videoUrl);
-    player.stopVideo();
+    await player.pauseVideo();
 
     this.player = player;
 
@@ -44,8 +44,16 @@ export default class PlayerYoutube extends Vue {
         setStatus: this.setStatus,
       },
     });
-    console.log('call');
+
+    // return new Promise((resolve) => {
+    //   player.on('ready', () => resolve());
+    // });
   }
+
+  // public async mounted() {
+  //   await this.init();
+  //   console.log('call');
+  // }
 
   public player!: YouTubePlayer;
 
@@ -58,8 +66,6 @@ export default class PlayerYoutube extends Vue {
   }
 
   public async setStatus(status: PlayerStatus, seekTo: number) {
-    await this.$nextTick();
-
     switch (status) {
       case PlayerStatus.PLAY:
         await this.player.playVideo();
@@ -70,7 +76,11 @@ export default class PlayerYoutube extends Vue {
       default:
     }
 
-    await this.player.seekTo(seekTo, true);
+    await this.$nextTick();
+
+    await new Promise(r => setTimeout(() => r(), 1000));
+
+    await this.player.seekTo(seekTo + 1, true);
     console.log(status, seekTo, await this.player.getPlayerState());
   }
 
