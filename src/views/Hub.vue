@@ -4,6 +4,7 @@
       MusicHub RoomId: {{ roomId }}
       <br />
       Welcome {{ currentUser.displayName }}
+      {{ isHost ? "You are the host" : "" }}
     </h1>
     <img
       style="width: 75px; height: 75px;"
@@ -16,28 +17,38 @@
       <a href="https://www.youtube.com/embed/oOv98YTPkUs">
         debug you no url dao
       </a>
+      <br />
+      <router-link :to="`/${this.roomId}`" v-if="isRequestOnly"
+        >Go player mode</router-link
+      >
+      <router-link :to="`/${this.roomId}/req`" v-else>
+        Go requrest only mode
+      </router-link>
+      <router-link to="/about">Realtime Tester</router-link>
     </p>
 
     <div class="input-area">
-      <input type="url" v-model="videoUrlInner" />
-      <button @click="setUrl">Queue</button>
+      <input type="url" v-model="musicSourceInner" />
+      <button @click="addQueue">Queue</button>
     </div>
 
-    <div class="player-container">
-      <youtube-player
-        :video-url="videoUrl"
-        v-if="videoUrl !== ''"
+    <div class="player-container" v-if="!isRequestOnly">
+      <!-- <youtube-player
+        :video-url="musicSource"
+        :room-id="roomId"
+        v-if="musicSource !== ''"
         @update="onStatusChanged"
-      ></youtube-player>
+        :key="roomId"
+      ></youtube-player> -->
       <p
         style="color: #fff; background: #333; width: 300px; padding: 10px;"
-        v-else
+        v-if="musicSource === ''"
       >
         No videos are selected
       </p>
     </div>
 
-    <pre>{{ roomStatus || "" }}</pre>
+    <pre>{{ roomStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
   </div>
 </template>
@@ -47,9 +58,16 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
-import { getEmbedUrl } from '@/utils/urlParser';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
+import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import Room from '@/models/room';
+import controllers from '@/store/modules/controllers';
+import PlayerStatus from '../models/playerStatus';
+
+const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Component({
   components: {
@@ -58,48 +76,132 @@ import Room from '@/models/room';
 })
 export default class Hub extends Vue {
   get currentUser() {
-    return this.$auth.currentUser;
+    return this.$auth.currentUser!;
   }
 
-  get roomId() {
-    return this.$route.params.roomId;
+  public roomId = '';
+
+  get isRequestOnly() {
+    return !!this.$route.path.match(/\/req$/);
   }
 
   get roomRef() {
     return this.$firestore.collection('rooms').doc(this.roomId);
   }
 
-  public roomStatus: Room | string = '';
+  get isHost() {
+    return this.currentUser.uid === this.roomStatus?.users[0];
+  }
 
-  public listerUnsubscribe?: () => void;
+  public roomStatus: Room | null = null;
+
+  public unsubscribeLister?: () => void;
+
+  get controller() {
+    return controllers.getControllerById(this.roomId);
+  }
+
+  public registerEvents() {
+    window.addEventListener('beforeunload', this.destructor);
+  }
+
+  public unregisterEvents() {
+    window.removeEventListener('beforeunload', this.destructor);
+  }
 
   public async init() {
-    const snapshot = await this.roomRef.get();
-    this.roomStatus = snapshot.data() as Room;
+    this.roomId = this.$route.params.roomId;
+    this.registerEvents();
 
-    this.listerUnsubscribe = this.roomRef.onSnapshot((doc) => {
-      this.roomStatus = doc.data() as Room;
+    this.roomRef.update({
+      users: arrayUnion(this.currentUser.uid),
+    });
+
+    // const snapshot = await this.roomRef.get();
+    // const data = snapshot.data();
+    // const status = data as Room;
+
+    // this.updateRoomStatus(status);
+
+    this.unsubscribeLister = this.roomRef.onSnapshot(async (doc) => {
+      this.updateRoomStatus(doc.data() as Room);
+
+      const { updatedAt, playedTime } = this.roomStatus!.player;
+      const seekTo = ((Date.now() - updatedAt) / 1000) + playedTime;
+
+      // console.log(seekTo, this.controller);
+
+      await this.controller?.setStatus(this.roomStatus!.player.status, seekTo);
     });
   }
 
-  public async created() {
+  public async updateRoomStatus(status: Room) {
+    this.roomStatus = status;
+
+    const { source, updatedAt, playedTime } = status.player;
+    if (source && source !== this.musicSource) {
+      const player = new YoutubePlayer({
+        el: '.player-container',
+        propsData: {
+          roomId: this.roomId,
+          videoUrl: source,
+        },
+      }).$mount();
+      player.$on('update', this.onStatusChanged);
+
+      this.musicSource = source;
+      // console.log(this.controller);
+    }
+  }
+
+  public async mounted() {
     await this.init();
   }
 
+  public unsubscribeUser() {
+    this.roomRef.update({
+      users: arrayRemove(this.currentUser.uid),
+    });
+  }
+
+  private destructor() {
+    this.unsubscribeUser();
+    this.unsubscribeLister?.();
+  }
+
   public beforeDestroy() {
-    this.listerUnsubscribe?.();
+    this.unregisterEvents();
+    this.destructor();
   }
 
-  public videoUrl: string = '';
+  public musicSource: string = '';
 
-  public videoUrlInner: string = 'https://www.youtube.com/embed/oOv98YTPkUs';
+  public musicSourceInner: string = 'https://www.youtube.com/embed/oOv98YTPkUs';
 
-  public setUrl() {
-    this.videoUrl = getEmbedUrl(this.videoUrlInner);
+  public addQueue() {
+    const info = getMusicInfo(this.musicSourceInner);
+
+    // TODO: show error
+    if (!info) {
+      return;
+    }
+
+    this.musicSource = info.source;
+    this.roomRef.update({
+      queues: arrayUnion(info),
+    });
   }
 
-  public onStatusChanged() {
-    console.log('pass');
+  public onStatusChanged(status: number, playedTime: number) {
+    if (status === this.roomStatus?.player.status) {
+      return;
+    }
+
+    this.roomRef.update({
+      'player.status': status,
+      'player.playedTime': playedTime,
+      'player.updatedAt': Date.now(),
+    });
   }
 }
 </script>
