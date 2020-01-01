@@ -32,6 +32,8 @@ export default class PlayerYoutube extends Vue {
     const el = this.$el.querySelector('.video-player');
     const player = YouTube(el as HTMLElement);
     await player.loadVideoByUrl(this.videoUrl);
+    // stopだと読み込みが行われないかも
+    // また、頭出しされてしまうかも
     await player.pauseVideo();
 
     this.player = player;
@@ -44,16 +46,7 @@ export default class PlayerYoutube extends Vue {
         setStatus: this.setStatus,
       },
     });
-
-    // return new Promise((resolve) => {
-    //   player.on('ready', () => resolve());
-    // });
   }
-
-  // public async mounted() {
-  //   await this.init();
-  //   console.log('call');
-  // }
 
   public player!: YouTubePlayer;
 
@@ -76,12 +69,16 @@ export default class PlayerYoutube extends Vue {
       default:
     }
 
-    await this.$nextTick();
+    const start = performance.now();
+    // eslint-disable-next-line
+    while (await this.player.getPlayerState() !== 1) {
+      // eslint-disable-next-line
+      await new Promise(r => setTimeout(() => r(), 100));
+    }
 
-    await new Promise(r => setTimeout(() => r(), 1000));
-
-    await this.player.seekTo(seekTo + 1, true);
-    console.log(status, seekTo, await this.player.getPlayerState());
+    await this.player.seekTo(seekTo + (performance.now() - start) / 1000, true);
+    // console.log(await this.player.getPlayerState());
+    // console.log(status, seekTo, await this.player.getPlayerState());
   }
 
   public async changeVolume(level: number) {
