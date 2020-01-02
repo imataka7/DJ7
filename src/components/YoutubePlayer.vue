@@ -57,9 +57,10 @@ export default class PlayerYoutube extends Vue {
     this.$emit('update', PlayerStatus.PAUSE, await this.player.getCurrentTime());
   }
 
+  // FIXME: たまに更新したときにシークされない
   public async setStatus(status: PlayerStatus, seekTo: number) {
     const start = performance.now();
-    while (/-1|3|5/.test((await this.player.getPlayerState()).toString(10))) {
+    while (/-1|3|5/.test((await this.player.getPlayerState())?.toString(10))) {
       await new Promise(r => setTimeout(() => r(), 100));
     }
 
