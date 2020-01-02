@@ -29,15 +29,28 @@ export default class PlayerYoutube extends Vue {
   @Prop({ default: '' })
   roomId!: string;
 
-  public async init() {
-    const el = this.$el.querySelector('.video-player');
-    const player = YouTube(el as HTMLElement);
-    await player.loadVideoByUrl(this.videoUrl);
+  public player!: YouTubePlayer;
 
-    this.player = player;
+  private async waitPlayerReady() {
+    while (/-1|3|5|undefined/.test((await this.player.getPlayerState())?.toString(10))) {
+      await new Promise(r => setTimeout(() => r(), 10));
+      console.log(await this.player.getPlayerState());
+    }
   }
 
-  public player!: YouTubePlayer;
+  public async init() {
+    const el = this.$el.querySelector('.video-player');
+    this.player = YouTube(el as HTMLElement);
+    this.player.loadVideoByUrl(this.videoUrl);
+
+    this.player.on('stateChange', (e) => {
+      if (e.data === 0) {
+        this.$emit('end');
+      }
+    });
+
+    await this.waitPlayerReady();
+  }
 
   public async play() {
     this.$emit('update', PlayerStatus.PLAY, await this.player.getCurrentTime());
@@ -48,13 +61,9 @@ export default class PlayerYoutube extends Vue {
   }
 
   // FIXME: たまに更新したときにシークされない
+  // なおったか？
   public async setStatus(status: PlayerStatus, seekTo: number) {
-    const start = performance.now();
-    while (/-1|3|5/.test((await this.player.getPlayerState())?.toString(10))) {
-      await new Promise(r => setTimeout(() => r(), 100));
-    }
-
-    await this.player.seekTo(seekTo + (performance.now() - start) / 1000, true);
+    await this.player.seekTo(seekTo, true);
 
     switch (status) {
       case PlayerStatus.PLAY:

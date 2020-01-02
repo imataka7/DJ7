@@ -7,9 +7,14 @@ interface Player {
   playedTime: number;
 }
 
+interface Queue {
+  source: string;
+  platform: string;
+}
+
 interface Room {
   roomId: string;
-  queues: string[];
+  queues: Queue[];
   player: Player;
   users: string[];
 }

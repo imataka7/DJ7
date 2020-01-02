@@ -133,17 +133,28 @@ export default class Hub extends Vue {
 
   private player: YoutubePlayer | null = null;
 
-  public async updateRoomStatus(status: Room) {
-    this.roomStatus = status;
+  public async updateRoomStatus(roomStatus: Room) {
+    const previousSource = this.roomStatus?.player.source;
+    this.roomStatus = roomStatus;
 
-    const { source, updatedAt, playedTime } = status.player;
-    if (source && source !== this.musicSource) {
+    const {
+      source, updatedAt, playedTime, status,
+    } = roomStatus.player;
+
+    if (status === PlayerStatus.NO_MUSIC) {
+      this.player?.$destroy();
+      this.$el.querySelector('.player')?.remove();
+      this.player = null;
+      this.musicSource = source;
+      return;
+    }
+
+    if (source && source !== previousSource) {
       this.musicSource = source;
 
-      if (this.player) {
-        this.player.$destroy();
-        this.$el.querySelector('.player')!.remove();
-      }
+      this.player?.$destroy();
+      this.$el.querySelector('.player')?.remove();
+
       const container = this.$el.querySelector('.player-container') as HTMLElement;
       container.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
 
@@ -155,7 +166,9 @@ export default class Hub extends Vue {
         },
       }).$mount();
       this.player.$on('update', this.onStatusChanged);
+      this.player.$on('end', this.onMusicEnded);
 
+      console.log(this.player);
       await this.player.init();
     }
   }
@@ -193,12 +206,23 @@ export default class Hub extends Vue {
     }
 
     this.musicSource = info.source;
+
+    if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
+      this.roomRef.update({
+        'player.status': PlayerStatus.PLAY,
+        'player.source': info.source,
+        'player.updatedAt': Date.now(),
+      });
+
+      return;
+    }
+
     this.roomRef.update({
       queues: arrayUnion(info),
     });
   }
 
-  public onStatusChanged(status: number, playedTime: number) {
+  private onStatusChanged(status: number, playedTime: number) {
     if (status === this.roomStatus?.player.status) {
       return;
     }
@@ -207,6 +231,37 @@ export default class Hub extends Vue {
       'player.status': status,
       'player.playedTime': playedTime,
       'player.updatedAt': Date.now(),
+    });
+  }
+
+  private onMusicEnded() {
+    const { source } = this.roomStatus!.player;
+    const { queues } = this.roomStatus!;
+
+    if (queues.length === 0) {
+      this.roomRef.update({
+        player: {
+          source: '',
+          playedTime: 0,
+          status: PlayerStatus.NO_MUSIC,
+          updatedAt: Date.now(),
+        },
+      });
+
+      return;
+    }
+
+    const nextMusic = queues[0].source;
+    queues.shift();
+
+    this.roomRef.update({
+      player: {
+        source: nextMusic,
+        playedTime: 0,
+        status: PlayerStatus.PLAY,
+        updatedAt: Date.now(),
+      },
+      queues,
     });
   }
 }
