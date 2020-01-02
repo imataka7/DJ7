@@ -12,6 +12,8 @@
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
+/* eslint-disable no-await-in-loop */
+
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
@@ -32,9 +34,6 @@ export default class PlayerYoutube extends Vue {
     const el = this.$el.querySelector('.video-player');
     const player = YouTube(el as HTMLElement);
     await player.loadVideoByUrl(this.videoUrl);
-    // stopだと読み込みが行われないかも
-    // また、頭出しされてしまうかも
-    await player.pauseVideo();
 
     this.player = player;
 
@@ -59,6 +58,13 @@ export default class PlayerYoutube extends Vue {
   }
 
   public async setStatus(status: PlayerStatus, seekTo: number) {
+    const start = performance.now();
+    while (/-1|3|5/.test((await this.player.getPlayerState()).toString(10))) {
+      await new Promise(r => setTimeout(() => r(), 100));
+    }
+
+    await this.player.seekTo(seekTo + (performance.now() - start) / 1000, true);
+
     switch (status) {
       case PlayerStatus.PLAY:
         await this.player.playVideo();
@@ -69,14 +75,6 @@ export default class PlayerYoutube extends Vue {
       default:
     }
 
-    const start = performance.now();
-    // eslint-disable-next-line
-    while (await this.player.getPlayerState() !== 1) {
-      // eslint-disable-next-line
-      await new Promise(r => setTimeout(() => r(), 100));
-    }
-
-    await this.player.seekTo(seekTo + (performance.now() - start) / 1000, true);
     // console.log(await this.player.getPlayerState());
     // console.log(status, seekTo, await this.player.getPlayerState());
   }
