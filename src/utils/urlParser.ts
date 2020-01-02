@@ -24,7 +24,7 @@ function getYTVideoId(url: string) {
 }
 
 /**
- * parse URL and create source of iframe
+ * parse URL and create source for iframe
  * @param url URL to parse
  * @returns parsed URL. if failed, reuturns empty string.
  */

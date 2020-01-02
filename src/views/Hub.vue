@@ -108,15 +108,15 @@ export default class Hub extends Vue {
     this.roomId = this.$route.params.roomId;
     this.registerEvents();
 
-    this.roomRef.update({
-      users: arrayUnion(this.currentUser.uid),
-    });
-
     const snapshot = await this.roomRef.get();
     const data = snapshot.data();
     const roomStatus = data as Room;
 
     await this.updateRoomStatus(roomStatus);
+
+    this.roomRef.update({
+      users: arrayUnion(this.currentUser.uid),
+    });
 
     this.unsubscribeLister = this.roomRef.onSnapshot(async (doc) => {
       await this.updateRoomStatus(doc.data() as Room);
@@ -134,12 +134,14 @@ export default class Hub extends Vue {
   private player: YoutubePlayer | null = null;
 
   public async updateRoomStatus(roomStatus: Room) {
-    const previousSource = this.roomStatus?.player.source;
+    const previousSource = this.roomStatus?.player.music.source;
     this.roomStatus = roomStatus;
 
     const {
-      source, updatedAt, playedTime, status,
+      music, updatedAt, playedTime, status,
     } = roomStatus.player;
+
+    const { source, platform } = music;
 
     if (status === PlayerStatus.NO_MUSIC) {
       this.player?.$destroy();
@@ -162,9 +164,9 @@ export default class Hub extends Vue {
         el: '.player-is-here',
         propsData: {
           roomId: this.roomId,
-          videoUrl: source,
+          source,
         },
-      }).$mount();
+      });
       this.player.$on('update', this.onStatusChanged);
       this.player.$on('end', this.onMusicEnded);
 
@@ -210,7 +212,7 @@ export default class Hub extends Vue {
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       this.roomRef.update({
         'player.status': PlayerStatus.PLAY,
-        'player.source': info.source,
+        'player.music': info,
         'player.updatedAt': Date.now(),
       });
 
@@ -235,13 +237,13 @@ export default class Hub extends Vue {
   }
 
   private onMusicEnded() {
-    const { source } = this.roomStatus!.player;
+    const { music } = this.roomStatus!.player;
     const { queues } = this.roomStatus!;
 
     if (queues.length === 0) {
       this.roomRef.update({
         player: {
-          source: '',
+          music: null,
           playedTime: 0,
           status: PlayerStatus.NO_MUSIC,
           updatedAt: Date.now(),
@@ -251,12 +253,12 @@ export default class Hub extends Vue {
       return;
     }
 
-    const nextMusic = queues[0].source;
+    const nextMusic = queues[0];
     queues.shift();
 
     this.roomRef.update({
       player: {
-        source: nextMusic,
+        music: nextMusic,
         playedTime: 0,
         status: PlayerStatus.PLAY,
         updatedAt: Date.now(),

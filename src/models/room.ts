@@ -1,20 +1,20 @@
 import PlayerStatus from './playerStatus';
 
-interface Player {
+interface Music {
   source: string;
+  platform: string;
+}
+
+interface Player {
+  music: Music;
   status: PlayerStatus;
   updatedAt: number;
   playedTime: number;
 }
 
-interface Queue {
-  source: string;
-  platform: string;
-}
-
 interface Room {
   roomId: string;
-  queues: Queue[];
+  queues: Music[];
   player: Player;
   users: string[];
 }

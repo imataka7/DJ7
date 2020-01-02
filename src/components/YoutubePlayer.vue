@@ -24,7 +24,7 @@ import PlayerStatus from '@/models/playerStatus';
 @Component
 export default class PlayerYoutube extends Vue {
   @Prop({ default: '' })
-  videoUrl!: string;
+  source!: string;
 
   @Prop({ default: '' })
   roomId!: string;
@@ -41,7 +41,7 @@ export default class PlayerYoutube extends Vue {
   public async init() {
     const el = this.$el.querySelector('.video-player');
     this.player = YouTube(el as HTMLElement);
-    this.player.loadVideoByUrl(this.videoUrl);
+    this.player.loadVideoByUrl(this.source);
 
     this.player.on('stateChange', (e) => {
       if (e.data === 0) {
