@@ -20,7 +20,6 @@ import {
 import YouTube from 'youtube-player';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStatus from '@/models/playerStatus';
-import controllers from '@/store/modules/controllers';
 
 @Component
 export default class PlayerYoutube extends Vue {
@@ -36,15 +35,6 @@ export default class PlayerYoutube extends Vue {
     await player.loadVideoByUrl(this.videoUrl);
 
     this.player = player;
-
-    controllers.updateController({
-      roomId: this.roomId,
-      controller: {
-        play: this.play,
-        pause: this.pause,
-        setStatus: this.setStatus,
-      },
-    });
   }
 
   public player!: YouTubePlayer;

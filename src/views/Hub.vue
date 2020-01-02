@@ -42,7 +42,7 @@
       ></youtube-player> -->
       <p
         style="color: #fff; background: #333; width: 300px; padding: 10px;"
-        v-if="musicSource === ''"
+        v-if="!player"
       >
         No videos are selected
       </p>
@@ -64,7 +64,6 @@ import 'firebase/firestore';
 import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import Room from '@/models/room';
-import controllers from '@/store/modules/controllers';
 import PlayerStatus from '../models/playerStatus';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -97,10 +96,6 @@ export default class Hub extends Vue {
 
   public unsubscribeLister?: () => void;
 
-  get controller() {
-    return controllers.getControllerById(this.roomId);
-  }
-
   public registerEvents() {
     window.addEventListener('beforeunload', this.destructor);
   }
@@ -130,15 +125,13 @@ export default class Hub extends Vue {
       const seekTo = status === PlayerStatus.PLAY
         ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
 
-      console.log(seekTo, this.controller);
+      console.log(seekTo, this.player);
 
-      // console.log(this.controller);
-      // await this.controller?.setStatus(this.roomStatus!.player.status, seekTo);
       this.player?.setStatus(status, seekTo);
     });
   }
 
-  private player?: YoutubePlayer;
+  private player: YoutubePlayer | null = null;
 
   public async updateRoomStatus(status: Room) {
     this.roomStatus = status;
@@ -154,18 +147,16 @@ export default class Hub extends Vue {
       const container = this.$el.querySelector('.player-container') as HTMLElement;
       container.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
 
-      const player = new YoutubePlayer({
+      this.player = new YoutubePlayer({
         el: '.player-is-here',
         propsData: {
           roomId: this.roomId,
           videoUrl: source,
         },
       }).$mount();
-      player.$on('update', this.onStatusChanged);
+      this.player.$on('update', this.onStatusChanged);
 
-      await player.init();
-
-      this.player = player;
+      await this.player.init();
     }
   }
 
