@@ -44,7 +44,7 @@
         style="color: #fff; background: #333; width: 300px; padding: 10px;"
         v-if="!player"
       >
-        No videos are selected
+        No videos in the queue
       </p>
     </div>
 
@@ -104,6 +104,8 @@ export default class Hub extends Vue {
     window.removeEventListener('beforeunload', this.destructor);
   }
 
+  private previousPlayedTime?: number;
+
   public async init() {
     this.roomId = this.$route.params.roomId;
     this.registerEvents();
@@ -122,6 +124,12 @@ export default class Hub extends Vue {
       await this.updateRoomStatus(doc.data() as Room);
 
       const { updatedAt, playedTime, status } = this.roomStatus!.player;
+
+      if (this.previousPlayedTime === playedTime) {
+        return;
+      }
+
+      this.previousPlayedTime = playedTime;
       const seekTo = status === PlayerStatus.PLAY
         ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
 
@@ -134,22 +142,22 @@ export default class Hub extends Vue {
   private player: YoutubePlayer | null = null;
 
   public async updateRoomStatus(roomStatus: Room) {
-    const previousSource = this.roomStatus?.player.music.source;
+    const previousSource = this.roomStatus?.player.music?.source;
     this.roomStatus = roomStatus;
 
     const {
       music, updatedAt, playedTime, status,
     } = roomStatus.player;
 
-    const { source, platform } = music;
-
     if (status === PlayerStatus.NO_MUSIC) {
       this.player?.$destroy();
       this.$el.querySelector('.player')?.remove();
       this.player = null;
-      this.musicSource = source;
+      this.musicSource = '';
       return;
     }
+
+    const { source, platform } = music;
 
     if (source && source !== previousSource) {
       this.musicSource = source;
@@ -208,6 +216,7 @@ export default class Hub extends Vue {
     }
 
     this.musicSource = info.source;
+    this.musicSourceInner = '';
 
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       this.roomRef.update({
@@ -215,7 +224,6 @@ export default class Hub extends Vue {
         'player.music': info,
         'player.updatedAt': Date.now(),
       });
-
       return;
     }
 
