@@ -119,22 +119,26 @@ export default class Hub extends Vue {
 
     const snapshot = await this.roomRef.get();
     const data = snapshot.data();
-    const status = data as Room;
+    const roomStatus = data as Room;
 
-    await this.updateRoomStatus(status);
+    await this.updateRoomStatus(roomStatus);
 
     this.unsubscribeLister = this.roomRef.onSnapshot(async (doc) => {
       await this.updateRoomStatus(doc.data() as Room);
 
-      const { updatedAt, playedTime } = this.roomStatus!.player;
-      const seekTo = ((Date.now() - updatedAt) / 1000) + playedTime;
+      const { updatedAt, playedTime, status } = this.roomStatus!.player;
+      const seekTo = status === PlayerStatus.PLAY
+        ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
 
-      // console.log(seekTo, this.controller);
+      console.log(seekTo, this.controller);
 
       // console.log(this.controller);
-      await this.controller?.setStatus(this.roomStatus!.player.status, seekTo);
+      // await this.controller?.setStatus(this.roomStatus!.player.status, seekTo);
+      this.player?.setStatus(status, seekTo);
     });
   }
+
+  private player?: YoutubePlayer;
 
   public async updateRoomStatus(status: Room) {
     this.roomStatus = status;
@@ -143,8 +147,15 @@ export default class Hub extends Vue {
     if (source && source !== this.musicSource) {
       this.musicSource = source;
 
+      if (this.player) {
+        this.player.$destroy();
+        this.$el.querySelector('.player')!.remove();
+      }
+      const container = this.$el.querySelector('.player-container') as HTMLElement;
+      container.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
+
       const player = new YoutubePlayer({
-        el: '.player-container',
+        el: '.player-is-here',
         propsData: {
           roomId: this.roomId,
           videoUrl: source,
@@ -153,6 +164,8 @@ export default class Hub extends Vue {
       player.$on('update', this.onStatusChanged);
 
       await player.init();
+
+      this.player = player;
     }
   }
 
