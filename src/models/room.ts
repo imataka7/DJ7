@@ -19,4 +19,9 @@ interface Room {
   users: string[];
 }
 
+export {
+  Music,
+  Player,
+};
+
 export default Room;

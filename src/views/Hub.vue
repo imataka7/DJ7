@@ -133,7 +133,7 @@ export default class Hub extends Vue {
       const seekTo = status === PlayerStatus.PLAY
         ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
 
-      console.log(seekTo, this.player);
+      // console.log(seekTo, this.player);
 
       this.player?.setStatus(status, seekTo);
     });
@@ -178,7 +178,7 @@ export default class Hub extends Vue {
       this.player.$on('update', this.onStatusChanged);
       this.player.$on('end', this.onMusicEnded);
 
-      console.log(this.player);
+      // console.log(this.player);
       await this.player.init();
     }
   }
