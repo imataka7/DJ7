@@ -27,19 +27,7 @@
       <router-link to="/about">Realtime Tester</router-link>
     </p>
 
-    <!-- <div class="input-area">
-      <input type="url" v-model="musicSourceInner" />
-      <button @click="addQueue">Queue</button>
-    </div> -->
-
     <div class="player-container" v-if="!isRequestOnly">
-      <!-- <youtube-player
-        :video-url="musicSource"
-        :room-id="roomId"
-        v-if="musicSource !== ''"
-        @update="onStatusChanged"
-        :key="roomId"
-      ></youtube-player> -->
       <p
         style="color: #fff; background: #333; width: 300px; padding: 10px;"
         v-if="!player"
@@ -110,13 +98,31 @@ export default class Hub extends Vue {
 
   private previousPlayedTime?: number;
 
+  public addRoom() {
+    this.roomRef.set({
+      player: {
+        music: null,
+        playedTime: 0,
+        status: PlayerStatus.NO_MUSIC,
+        updatedAt: Date.now(),
+      },
+      queues: [],
+      roomId: this.roomId,
+      users: [],
+    });
+  }
+
   public async init() {
     this.roomId = this.$route.params.roomId;
     this.registerEvents();
 
     const snapshot = await this.roomRef.get();
-    const data = snapshot.data();
-    const roomStatus = data as Room;
+    let roomStatus = snapshot.data() as Room;
+
+    if (!snapshot.exists) {
+      this.addRoom();
+      roomStatus = (await this.roomRef.get()).data() as Room;
+    }
 
     await this.updateRoomStatus(roomStatus);
 
