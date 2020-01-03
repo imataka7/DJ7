@@ -3,6 +3,7 @@ import PlayerStatus from './playerStatus';
 interface Music {
   source: string;
   platform: string;
+  id: string;
 }
 
 interface Player {

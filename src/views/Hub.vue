@@ -1,5 +1,7 @@
 <template>
   <div class="hub">
+    <input type="text" v-model="jumpTo" />
+    <button @click="jump">Jump</button>
     <h1>
       MusicHub RoomId: {{ roomId }}
       <br />
@@ -152,7 +154,7 @@ export default class Hub extends Vue {
   private player: YoutubePlayer | null = null;
 
   public async updateRoomStatus(roomStatus: Room) {
-    const previousSource = this.roomStatus?.player.music?.source;
+    const previousId = this.roomStatus?.player.music?.id;
     this.roomStatus = roomStatus;
 
     const {
@@ -167,9 +169,9 @@ export default class Hub extends Vue {
       return;
     }
 
-    const { source, platform } = music;
+    const { source, platform, id } = music;
 
-    if (source && source !== previousSource) {
+    if (id && id !== previousId) {
       this.musicSource = source;
 
       this.player?.$destroy();
@@ -278,6 +280,17 @@ export default class Hub extends Vue {
       },
       queues,
     });
+  }
+
+  public jumpTo = '';
+
+  public jump() {
+    if (!this.jumpTo) {
+      return;
+    }
+
+    const { origin } = window.location;
+    window.location.href = `${origin}/${this.jumpTo}`;
   }
 }
 </script>

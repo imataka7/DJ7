@@ -40,6 +40,10 @@ function getEmbedUrl(url: string) {
   return '';
 }
 
+function generateRandomId() {
+  return Math.random().toString(36).slice(2);
+}
+
 /**
  * Parse given URL or search query to get music infomation
  * @param url URL to parse
@@ -53,6 +57,7 @@ function getMusicInfo(url: string): Music | null {
       return {
         source: `https://www.youtube.com/embed/${id}`,
         platform: 'YouTube',
+        id: generateRandomId(),
       };
     }
   }
