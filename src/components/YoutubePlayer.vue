@@ -4,7 +4,7 @@
     <div class="control-buttons">
       <button @click="play">Play</button>
       <button @click="pause">Pause</button>
-      <button @click="skip">skip</button>
+      <button @click="end">skip</button>
       <button @click="changeVolume(10)">Volume +</button>
       <button @click="changeVolume(-10)">Volume -</button>
     </div>
@@ -45,7 +45,7 @@ export default class PlayerYoutube extends Vue {
     this.player.loadVideoByUrl(this.source);
     this.player.on('stateChange', (e) => {
       if (e.data === 0) {
-        this.$emit('end');
+        this.end();
       }
     });
 
@@ -60,7 +60,7 @@ export default class PlayerYoutube extends Vue {
     this.$emit('update', PlayerStatus.PAUSE, await this.player.getCurrentTime());
   }
 
-  public async skip() {
+  public async end() {
     this.$emit('end');
   }
 
