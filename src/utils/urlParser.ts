@@ -1,3 +1,5 @@
+import { Music } from '@/models/room';
+
 // TODO: add tests
 // test cases are https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
 /**
@@ -38,19 +40,19 @@ function getEmbedUrl(url: string) {
   return '';
 }
 
-interface MusicInfo {
-  embedId: string;
-  provider: string;
-}
-
-function getMusicInfo(url: string) {
+/**
+ * Parse given URL or search query to get music infomation
+ * @param url URL to parse
+ * @returns Music info if parse succeeded otherwise null
+ */
+function getMusicInfo(url: string): Music | null {
   if (/youtube.com|youtu.be/.test(url)) {
     const id = getYTVideoId(url);
 
     if (id) {
       return {
         source: `https://www.youtube.com/embed/${id}`,
-        type: 'YouTube',
+        platform: 'YouTube',
       };
     }
   }

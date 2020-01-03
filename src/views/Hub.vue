@@ -27,10 +27,10 @@
       <router-link to="/about">Realtime Tester</router-link>
     </p>
 
-    <div class="input-area">
+    <!-- <div class="input-area">
       <input type="url" v-model="musicSourceInner" />
       <button @click="addQueue">Queue</button>
-    </div>
+    </div> -->
 
     <div class="player-container" v-if="!isRequestOnly">
       <!-- <youtube-player
@@ -48,6 +48,8 @@
       </p>
     </div>
 
+    <input-area @parsed="addQueue"></input-area>
+
     <pre>{{ roomStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
   </div>
@@ -63,7 +65,8 @@ import 'firebase/firestore';
 
 import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
-import Room from '@/models/room';
+import InputArea from '@/components/InputArea.vue';
+import Room, { Music } from '@/models/room';
 import PlayerStatus from '../models/playerStatus';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -71,6 +74,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 @Component({
   components: {
     YoutubePlayer,
+    InputArea,
   },
 })
 export default class Hub extends Vue {
@@ -207,28 +211,23 @@ export default class Hub extends Vue {
 
   public musicSourceInner: string = 'https://www.youtube.com/embed/oOv98YTPkUs';
 
-  public addQueue() {
-    const info = getMusicInfo(this.musicSourceInner);
-
-    // TODO: show error
-    if (!info) {
-      return;
-    }
-
-    this.musicSource = info.source;
-    this.musicSourceInner = '';
-
+  public addQueue(items: Music[]) {
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       this.roomRef.update({
         'player.status': PlayerStatus.PLAY,
-        'player.music': info,
+        'player.music': items[0],
         'player.updatedAt': Date.now(),
       });
-      return;
+
+      if (items.length === 1) {
+        return;
+      }
+
+      items.unshift();
     }
 
     this.roomRef.update({
-      queues: arrayUnion(info),
+      queues: arrayUnion(...items),
     });
   }
 
