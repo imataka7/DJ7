@@ -35,7 +35,7 @@ export default class PlayerYoutube extends Vue {
   private async waitPlayerReady() {
     while (/-1|3|5|undefined/.test((await this.player.getPlayerState())?.toString(10))) {
       await new Promise(r => setTimeout(() => r(), 10));
-    //   console.log(await this.player.getPlayerState());
+      // console.log(await this.player.getPlayerState());
     }
   }
 

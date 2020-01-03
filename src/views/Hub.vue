@@ -18,9 +18,9 @@
         debug you no url dao
       </a>
       <br />
-      <router-link :to="`/${this.roomId}`" v-if="isRequestOnly"
-        >Go player mode</router-link
-      >
+      <router-link :to="`/${this.roomId}`" v-if="isRequestOnly">
+        Go player mode
+      </router-link>
       <router-link :to="`/${this.roomId}/req`" v-else>
         Go requrest only mode
       </router-link>
