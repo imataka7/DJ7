@@ -1,0 +1,16 @@
+on: [push]
+
+jobs:
+  deploy:
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      runs: npm install
+    - name: Build the project
+      runs: npm run build
+    - name: Deploy to firebase
+      runs: npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
+    - name: Notify to discord
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
