@@ -13,16 +13,22 @@ interface Player {
   playedTime: number;
 }
 
+interface RoomUser {
+  uid: string;
+  photo: string | null;
+}
+
 interface Room {
   roomId: string;
   queues: Music[];
   player: Player;
-  users: string[];
+  users: RoomUser[];
 }
 
 export {
   Music,
   Player,
+  RoomUser,
 };
 
 export default Room;

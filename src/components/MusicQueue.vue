@@ -12,7 +12,7 @@
         <button @click="del(q.id)">Delete</button>
       </div>
     </draggable>
-    <pre>{{ queues }}</pre>
+    <!-- <pre>{{ queues }}</pre> -->
   </div>
 </template>
 

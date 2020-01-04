@@ -59,7 +59,7 @@ import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import InputArea from '@/components/InputArea.vue';
 import MusicQueue from '@/components/MusicQueue.vue';
-import Room, { Music } from '@/models/room';
+import Room, { Music, RoomUser } from '@/models/room';
 import PlayerStatus from '../models/playerStatus';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -76,6 +76,14 @@ export default class Hub extends Vue {
     return this.$auth.currentUser!;
   }
 
+  get me(): RoomUser {
+    const { uid, photoURL } = this.currentUser;
+    return {
+      uid,
+      photo: photoURL,
+    };
+  }
+
   public roomId = '';
 
   get isRequestOnly() {
@@ -87,7 +95,7 @@ export default class Hub extends Vue {
   }
 
   get isHost() {
-    return this.currentUser.uid === this.roomStatus?.users[0];
+    return this.currentUser.uid === this.roomStatus?.users[0].uid;
   }
 
   public roomStatus: Room | null = null;
@@ -143,7 +151,7 @@ export default class Hub extends Vue {
     await this.updateRoomStatus(roomStatus);
 
     this.roomRef.update({
-      users: arrayUnion(this.currentUser.uid),
+      users: arrayUnion(this.me),
     });
 
     this.unsubscribeLister = this.roomRef.onSnapshot(async (doc) => {
@@ -215,7 +223,7 @@ export default class Hub extends Vue {
 
   public unsubscribeUser() {
     this.roomRef.update({
-      users: arrayRemove(this.currentUser.uid),
+      users: arrayRemove(this.me),
     });
   }
 
