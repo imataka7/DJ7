@@ -9,8 +9,10 @@
       {{ isHost ? "You are the host" : "" }}
     </h1>
     <img
+      v-for="u in users"
+      :key="u.id"
       style="width: 75px; height: 75px;"
-      :src="currentUser.photoURL"
+      :src="u.photo"
       alt="icon"
     />
     <button @click="$auth.signOut()">Sign out</button>
@@ -95,7 +97,7 @@ export default class Hub extends Vue {
   }
 
   get isHost() {
-    return this.currentUser.uid === this.roomStatus?.users[0].uid;
+    return this.currentUser.uid === this.roomStatus?.users[0]?.uid;
   }
 
   public roomStatus: Room | null = null;
@@ -108,6 +110,10 @@ export default class Hub extends Vue {
     this.roomRef.update({
       queues: newVal,
     });
+  }
+
+  get users() {
+    return this.roomStatus?.users;
   }
 
   public unsubscribeLister?: () => void;
