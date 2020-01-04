@@ -23,9 +23,9 @@
       <router-link :to="`/${this.roomId}`" v-if="isRequestOnly">
         Go player mode
       </router-link>
-      <router-link :to="`/${this.roomId}/req`" v-else>
+      <!-- <router-link :to="`/${this.roomId}/req`" v-else>
         Go requrest only mode
-      </router-link>
+      </router-link> -->
       <router-link to="/about">Realtime Tester</router-link>
     </p>
 
@@ -178,7 +178,7 @@ export default class Hub extends Vue {
       this.$el.querySelector('.player')?.remove();
 
       const container = this.$el.querySelector('.player-container') as HTMLElement;
-      container.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
+      container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
 
       this.player = new YoutubePlayer({
         el: '.player-is-here',
