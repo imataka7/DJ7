@@ -294,8 +294,8 @@ export default class Hub extends Vue {
   }
 
   public async mounted() {
-    await this.init();
     await this.initUser();
+    await this.init();
   }
 
   public unsubscribeUser() {
