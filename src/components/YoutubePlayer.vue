@@ -44,6 +44,7 @@ export default class PlayerYoutube extends Vue {
     this.player = YouTube(el as HTMLElement);
     this.player.loadVideoByUrl(this.source);
     this.player.on('stateChange', (e) => {
+      // 0 means the video has ended
       if (e.data === 0) {
         this.end();
       }
