@@ -40,6 +40,9 @@ function getEmbedUrl(url: string) {
   return '';
 }
 
+/**
+ * Generate randomId to identify music in queue
+ */
 function generateRandomId() {
   return Math.random().toString(36).slice(2);
 }
@@ -51,11 +54,11 @@ function generateRandomId() {
  */
 function getMusicInfo(url: string): Music | null {
   if (/youtube.com|youtu.be/.test(url)) {
-    const id = getYTVideoId(url);
+    const videoId = getYTVideoId(url);
 
-    if (id) {
+    if (videoId) {
       return {
-        source: `https://www.youtube.com/embed/${id}`,
+        source: `https://www.youtube.com/embed/${videoId}`,
         platform: 'YouTube',
         id: generateRandomId(),
       };
