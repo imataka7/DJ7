@@ -45,6 +45,7 @@
     <music-queue v-model="queues"></music-queue>
 
     <pre>{{ roomStatus }}</pre>
+    <pre>{{ userStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
   </div>
 </template>
@@ -62,6 +63,7 @@ import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import InputArea from '@/components/InputArea.vue';
 import MusicQueue from '@/components/MusicQueue.vue';
 import Room, { Music, RoomUser } from '@/models/room';
+import User from '@/models/user';
 import PlayerStatus from '../models/playerStatus';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -84,6 +86,16 @@ export default class Hub extends Vue {
       uid,
       photo: photoURL,
     };
+  }
+
+  public userStatus: User | null = null;
+
+  get userRef() {
+    return this.$firestore.collection('users').doc(this.currentUser.uid);
+  }
+
+  get history() {
+    return this.userStatus?.history || [];
   }
 
   public roomId = '';
@@ -116,7 +128,7 @@ export default class Hub extends Vue {
     return this.roomStatus?.users;
   }
 
-  public unsubscribeLister?: () => void;
+  public unsubscribeListers: (() => void)[] = [];
 
   public registerEvents() {
     window.addEventListener('beforeunload', this.destructor);
@@ -160,7 +172,7 @@ export default class Hub extends Vue {
       users: arrayUnion(this.me),
     });
 
-    this.unsubscribeLister = this.roomRef.onSnapshot(async (doc) => {
+    const listener = this.roomRef.onSnapshot(async (doc) => {
       await this.updateRoomStatus(doc.data() as Room);
 
       const { updatedAt, playedTime, status } = this.roomStatus!.player;
@@ -177,6 +189,28 @@ export default class Hub extends Vue {
 
       this.player?.setStatus(status, seekTo);
     });
+
+    this.unsubscribeListers.push(listener);
+  }
+
+  public async initUser() {
+    let snapshot = await this.userRef.get();
+
+    if (!snapshot.exists) {
+      await this.userRef.set({
+        uid: this.currentUser.uid,
+        history: [],
+      });
+      snapshot = await this.userRef.get();
+    }
+
+    this.userStatus = snapshot.data() as User;
+
+    const listener = this.userRef.onSnapshot(async (doc) => {
+      this.userStatus = doc.data() as User;
+    });
+
+    this.unsubscribeListers.push(listener);
   }
 
   private player: YoutubePlayer | null = null;
@@ -220,11 +254,34 @@ export default class Hub extends Vue {
 
       // console.log(this.player);
       await this.player.init();
+
+      await this.updateHistory(source, platform);
     }
+  }
+
+  public async updateHistory(source: string, platform: string) {
+    const isExists = this.history.some(h => h.source === source);
+
+    if (isExists) {
+      await this.userRef.update({
+        history: arrayRemove({
+          source,
+          platform,
+        }),
+      });
+    }
+
+    await this.userRef.update({
+      history: arrayUnion({
+        source,
+        platform,
+      }),
+    });
   }
 
   public async mounted() {
     await this.init();
+    await this.initUser();
   }
 
   public unsubscribeUser() {
@@ -235,7 +292,7 @@ export default class Hub extends Vue {
 
   private destructor() {
     this.unsubscribeUser();
-    this.unsubscribeLister?.();
+    this.unsubscribeListers.forEach(u => u());
   }
 
   public beforeDestroy() {

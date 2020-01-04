@@ -92,4 +92,11 @@ export default class PlayerYoutube extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.control-buttons {
+  padding: 10px 0;
+
+  button {
+    margin-right: 10px;
+  }
+}
 </style>
