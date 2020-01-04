@@ -1,4 +1,4 @@
-import { Music } from '@/models/room';
+import { Musicx } from '@/models/room';
 
 // TODO: add tests
 // test cases are https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
@@ -52,7 +52,7 @@ function generateRandomId() {
  * @param url URL to parse
  * @returns Music info if parse succeeded otherwise null
  */
-function getMusicInfo(url: string): Music | null {
+function getMusicInfo(url: string): Musicx | null {
   if (/youtube.com|youtu.be/.test(url)) {
     const videoId = getYTVideoId(url);
 
@@ -61,6 +61,7 @@ function getMusicInfo(url: string): Music | null {
         source: `https://www.youtube.com/embed/${videoId}`,
         platform: 'YouTube',
         id: generateRandomId(),
+        thumbnail: '',
       };
     }
   }
@@ -72,4 +73,5 @@ export {
   getEmbedUrl,
   getYTVideoId,
   getMusicInfo,
+  generateRandomId,
 };

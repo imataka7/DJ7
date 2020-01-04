@@ -1,13 +1,12 @@
 import PlayerStatus from './playerStatus';
+import Music from './music';
 
-interface Music {
-  source: string;
-  platform: string;
+interface Musicx extends Music {
   id: string;
 }
 
 interface Player {
-  music: Music;
+  music: Musicx;
   status: PlayerStatus;
   updatedAt: number;
   playedTime: number;
@@ -26,9 +25,9 @@ interface Room {
 }
 
 export {
-  Music,
   Player,
   RoomUser,
+  Musicx,
 };
 
 export default Room;

@@ -22,7 +22,7 @@ import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
-import { Music } from '@/models/room';
+import { Musicx } from '@/models/room';
 
 @Component({
   components: {
@@ -31,7 +31,7 @@ import { Music } from '@/models/room';
 })
 export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
-  value!: Music[];
+  value!: Musicx[];
 
   get queues() {
     return this.value;

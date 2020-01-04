@@ -1,9 +1,9 @@
+import Music from '@/models/music';
+
 interface User {
   uid: string;
-  history: {
-    source: string;
-    platform: string;
-  }[];
+  history: Music[];
 }
+
 
 export default User;

@@ -42,7 +42,14 @@
 
     <input-area @parsed="addQueue"></input-area>
 
-    <music-queue v-model="queues"></music-queue>
+    <p>
+      Queues
+      <music-queue v-model="queues"></music-queue>
+    </p>
+
+    <p>
+      History
+    </p>
 
     <pre>{{ roomStatus }}</pre>
     <pre>{{ userStatus }}</pre>
@@ -62,7 +69,8 @@ import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import InputArea from '@/components/InputArea.vue';
 import MusicQueue from '@/components/MusicQueue.vue';
-import Room, { Music, RoomUser } from '@/models/room';
+import Room, { RoomUser } from '@/models/room';
+import Music from '@/models/music';
 import User from '@/models/user';
 import PlayerStatus from '../models/playerStatus';
 
@@ -231,7 +239,9 @@ export default class Hub extends Vue {
       return;
     }
 
-    const { source, platform, id } = music;
+    const {
+      source, platform, id, thumbnail,
+    } = music;
 
     if (id && id !== previousId) {
       this.musicSource = source;
@@ -255,27 +265,27 @@ export default class Hub extends Vue {
       // console.log(this.player);
       await this.player.init();
 
-      await this.updateHistory(source, platform);
+      await this.updateHistory({
+        source,
+        platform,
+        thumbnail,
+      });
     }
   }
 
-  public async updateHistory(source: string, platform: string) {
+  public async updateHistory(music: Music) {
+    const { source } = music;
+
     const isExists = this.history.some(h => h.source === source);
 
     if (isExists) {
       await this.userRef.update({
-        history: arrayRemove({
-          source,
-          platform,
-        }),
+        history: arrayRemove(music),
       });
     }
 
     await this.userRef.update({
-      history: arrayUnion({
-        source,
-        platform,
-      }),
+      history: arrayUnion(music),
     });
   }
 
