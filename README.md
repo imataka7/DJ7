@@ -4,6 +4,14 @@ Share your moments with music.
 
 https://sairilab-musichub.web.app/
 
+# Features
+* Play in sync
+* Pause
+* Skip
+* Add music to the queue
+* Change the order of the queue
+* Delete music in the queue
+
 ## Project setup
 
 ```
