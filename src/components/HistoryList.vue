@@ -13,6 +13,8 @@ import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
 import Music from '@/models/music';
+import { Musicx } from '../models/room';
+import { generateRandomId } from '@/utils/urlParser';
 
 @Component
 export default class HistoryList extends Vue {
@@ -23,7 +25,7 @@ export default class HistoryList extends Vue {
   list!: Music[];
 
   public add(music: Music) {
-    this.$emit('add', [music]);
+    this.$emit('add', [{ ...music, id: generateRandomId() }]);
   }
 }
 </script>

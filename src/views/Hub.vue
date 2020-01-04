@@ -70,7 +70,7 @@ import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import InputArea from '@/components/InputArea.vue';
 import MusicQueue from '@/components/MusicQueue.vue';
-import Room, { RoomUser } from '@/models/room';
+import Room, { RoomUser, Musicx } from '@/models/room';
 import Music from '@/models/music';
 import User from '@/models/user';
 import PlayerStatus from '../models/playerStatus';
@@ -243,7 +243,7 @@ export default class Hub extends Vue {
     }
 
     const {
-      source, platform, id, thumbnail,
+      source, platform, id, thumbnail, title,
     } = music;
 
     if (id && id !== previousId) {
@@ -272,6 +272,7 @@ export default class Hub extends Vue {
         source,
         platform,
         thumbnail,
+        title,
       });
     }
   }
@@ -317,7 +318,7 @@ export default class Hub extends Vue {
 
   public musicSourceInner: string = 'https://www.youtube.com/embed/oOv98YTPkUs';
 
-  public addQueue(items: Music[]) {
+  public addQueue(items: Musicx[]) {
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       this.roomRef.update({
         'player.status': PlayerStatus.PLAY,

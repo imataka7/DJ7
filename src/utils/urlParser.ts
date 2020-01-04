@@ -62,6 +62,7 @@ function getMusicInfo(url: string): Musicx | null {
         platform: 'YouTube',
         id: generateRandomId(),
         thumbnail: '',
+        title: '',
       };
     }
   }
