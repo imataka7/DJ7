@@ -49,6 +49,7 @@
 
     <p>
       History
+      <history-list :list="history" @add="addQueue"></history-list>
     </p>
 
     <pre>{{ roomStatus }}</pre>
@@ -73,6 +74,7 @@ import Room, { RoomUser } from '@/models/room';
 import Music from '@/models/music';
 import User from '@/models/user';
 import PlayerStatus from '../models/playerStatus';
+import HistoryList from '@/components/HistoryList.vue';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -81,6 +83,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
     YoutubePlayer,
     InputArea,
     MusicQueue,
+    HistoryList,
   },
 })
 export default class Hub extends Vue {
