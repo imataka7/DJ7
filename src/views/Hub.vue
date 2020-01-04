@@ -40,6 +40,8 @@
 
     <input-area @parsed="addQueue"></input-area>
 
+    <music-queue v-model="queues"></music-queue>
+
     <pre>{{ roomStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
   </div>
@@ -56,6 +58,7 @@ import 'firebase/firestore';
 import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import InputArea from '@/components/InputArea.vue';
+import MusicQueue from '@/components/MusicQueue.vue';
 import Room, { Music } from '@/models/room';
 import PlayerStatus from '../models/playerStatus';
 
@@ -65,6 +68,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
   components: {
     YoutubePlayer,
     InputArea,
+    MusicQueue,
   },
 })
 export default class Hub extends Vue {
@@ -87,6 +91,16 @@ export default class Hub extends Vue {
   }
 
   public roomStatus: Room | null = null;
+
+  get queues() {
+    return this.roomStatus?.queues;
+  }
+
+  set queues(newVal) {
+    this.roomRef.update({
+      queues: newVal,
+    });
+  }
 
   public unsubscribeLister?: () => void;
 
