@@ -17,8 +17,14 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "vuedraggable": [
+        "types/vuedraggable"
       ]
     },
+    "typeRoots": [
+      "types",
+    ],
     "lib": [
       "esnext",
       "dom",
