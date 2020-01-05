@@ -99,7 +99,7 @@ export default class About extends Vue {
 
     const id = await searchVideo(this.text);
     if (!id) {
-      console.log('not found');
+      // console.log('not found');
       return;
     }
 
@@ -107,7 +107,7 @@ export default class About extends Vue {
 
     this.id = id;
 
-    console.log(performance.now() - start);
+    // console.log(performance.now() - start);
   }
 }
 </script>
