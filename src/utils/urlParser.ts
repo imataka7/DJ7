@@ -1,3 +1,4 @@
+import searchVideo from './search';
 import { Musicx } from '@/models/room';
 
 // TODO: add tests
@@ -47,23 +48,33 @@ function generateRandomId() {
   return Math.random().toString(36).slice(2);
 }
 
+function createYTInfo(videoId: string): Musicx {
+  return {
+    source: `https://www.youtube.com/embed/${videoId}`,
+    platform: 'YouTube',
+    id: generateRandomId(),
+    thumbnail: '',
+    title: '',
+  };
+}
+
 /**
  * Parse given URL or search query to get music infomation
- * @param url URL to parse
+ * @param query URL to parse
  * @returns Music info if parse succeeded otherwise null
  */
-function getMusicInfo(url: string): Musicx | null {
-  if (/youtube.com|youtu.be/.test(url)) {
-    const videoId = getYTVideoId(url);
+async function getMusicInfo(query: string) {
+  if (/youtube.com|youtu.be/.test(query)) {
+    const videoId = getYTVideoId(query);
 
     if (videoId) {
-      return {
-        source: `https://www.youtube.com/embed/${videoId}`,
-        platform: 'YouTube',
-        id: generateRandomId(),
-        thumbnail: '',
-        title: '',
-      };
+      return createYTInfo(videoId);
+    }
+  } else {
+    const videoId = await searchVideo(query);
+
+    if (videoId) {
+      return createYTInfo(videoId);
     }
   }
 

@@ -16,8 +16,10 @@ import { getMusicInfo } from '@/utils/urlParser';
 export default class InputArea extends Vue {
   public value = 'https://www.youtube.com/watch?v=fFSJiqNdbgU';
 
-  public parse() {
-    const queries = this.value.split('\n').map(getMusicInfo).filter(q => q !== null);
+  public async parse() {
+    // const queries = this.value.split('\n').map(getMusicInfo).filter(q => q !== null);
+    const tasks = this.value.split('\n').map(getMusicInfo);
+    const queries = (await Promise.all(tasks)).filter(q => q !== null);
 
     this.$emit('parsed', queries);
 
