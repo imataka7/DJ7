@@ -1,4 +1,5 @@
 import YouTubePlayer from 'youtube-player';
+import sleep from './sleep';
 
 const dummyEl = document.createElement('div');
 dummyEl.style.display = 'none';
@@ -34,6 +35,8 @@ export default async function searchVideo(query: string) {
   });
 
   const list = await waitUntilPlaylistUpdated();
+
+  await sleep(100);
 
   return list?.[0];
 }

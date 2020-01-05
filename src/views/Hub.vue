@@ -325,17 +325,19 @@ export default class Hub extends Vue {
 
   public addQueue(items: Musicx[]) {
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
+      const nextMusic = items[0];
+
       this.roomRef.update({
         'player.status': PlayerStatus.PLAY,
-        'player.music': items[0],
-        'player.updatedAt': Date.now(),
+        'player.music': nextMusic,
+        'player.updatedAt': nextMusic.extraStatus?.playedTime || Date.now(),
       });
 
       if (items.length === 1) {
         return;
       }
 
-      items.unshift();
+      items.shift();
     }
 
     this.roomRef.update({
