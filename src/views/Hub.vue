@@ -399,7 +399,6 @@ export default class Hub extends Vue {
 
   public async interrupt(music: Musicx) {
     const playedTime = await this.player!.getCurrentPlayedTime();
-    console.log(playedTime);
 
     const queues = JSON.parse(JSON.stringify(this.queues)) as Musicx[];
     queues.unshift({
