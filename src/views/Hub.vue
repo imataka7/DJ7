@@ -43,12 +43,13 @@
     <input-area @parsed="addQueue"></input-area>
 
     <p>
-      Queues
-      <music-queue v-model="queues"></music-queue>
+      <span style="font-weight: 700;">Queues</span>
+      <!-- TODO: Make disable when queues are updating -->
+      <music-queue v-model="queues" @interrupt="interrupt"></music-queue>
     </p>
 
     <p>
-      History
+      <span style="font-weight: 700;">History</span>
       <history-list :list="history" @add="addQueue"></history-list>
     </p>
 
@@ -126,13 +127,17 @@ export default class Hub extends Vue {
   public roomStatus: Room | null = null;
 
   get queues() {
-    return this.roomStatus?.queues;
+    return this.roomStatus?.queues || [];
   }
 
   set queues(newVal) {
     this.roomRef.update({
       queues: newVal,
     });
+  }
+
+  get playingMusic() {
+    return this.roomStatus?.player.music;
   }
 
   get users() {
@@ -390,6 +395,29 @@ export default class Hub extends Vue {
 
     const { origin } = window.location;
     window.location.href = `${origin}/${this.jumpTo}`;
+  }
+
+  public async interrupt(music: Musicx) {
+    const playedTime = await this.player!.getCurrentPlayedTime();
+    console.log(playedTime);
+
+    const queues = JSON.parse(JSON.stringify(this.queues)) as Musicx[];
+    queues.unshift({
+      ...this.playingMusic!,
+      extraStatus: {
+        playedTime,
+      },
+    });
+
+    this.roomRef.update({
+      queues: queues.filter(q => q.id !== music.id),
+      player: {
+        music,
+        playedTime: music.extraStatus?.playedTime || 0,
+        status: PlayerStatus.PLAY,
+        updatedAt: Date.now(),
+      },
+    });
   }
 }
 </script>

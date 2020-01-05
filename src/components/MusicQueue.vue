@@ -8,8 +8,9 @@
       v-model="queues"
     >
       <div class="draggable-item" v-for="q in queues" :key="q.id">
-        {{ q.source }}
-        <button @click="del(q.id)">Delete</button>
+        {{ q.source }} <span v-if="q.extraStatus">*</span>
+        <button @click="del(q)">Delete</button>
+        <button @click="interrupt(q)">Interrupt</button>
       </div>
     </draggable>
     <!-- <pre>{{ queues }}</pre> -->
@@ -43,9 +44,13 @@ export default class MusicQueue extends Vue {
 
   public dragging = false;
 
-  public del(id: string) {
-    const newQueue = this.queues.filter(q => q.id !== id);
+  public del(music: Musicx) {
+    const newQueue = this.queues.filter(q => q.id !== music.id);
     this.$emit('input', newQueue);
+  }
+
+  public interrupt(music: Musicx) {
+    this.$emit('interrupt', music);
   }
 }
 </script>
@@ -54,7 +59,10 @@ export default class MusicQueue extends Vue {
 .music-queue {
   .draggable-item {
     width: 500px;
-    background-color: #ddd;
+
+    &:hover {
+      background-color: #ddd;
+    }
   }
 }
 </style>

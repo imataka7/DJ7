@@ -3,6 +3,9 @@ import Music from './music';
 
 interface Musicx extends Music {
   id: string;
+  extraStatus?: {
+    playedTime: number;
+  }
 }
 
 interface Player {
@@ -19,7 +22,7 @@ interface RoomUser {
 
 interface Room {
   roomId: string;
-  queues: Music[];
+  queues: Musicx[];
   player: Player;
   users: RoomUser[];
 }

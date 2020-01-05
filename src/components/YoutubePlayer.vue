@@ -84,6 +84,10 @@ export default class PlayerYoutube extends Vue {
     // console.log(status, seekTo, await this.player.getPlayerState());
   }
 
+  public async getCurrentPlayedTime() {
+    return this.player.getCurrentTime();
+  }
+
   public async changeVolume(level: number) {
     const currentVolume = await this.player.getVolume();
     this.player.setVolume(currentVolume + level);
