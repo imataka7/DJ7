@@ -39,7 +39,7 @@ export default class HistoryList extends Vue {
 
 <style lang="scss" scoped>
 .history-item {
-  width: 600px;
+  width: 800px;
 
   img {
     height: 100px;

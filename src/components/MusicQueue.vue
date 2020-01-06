@@ -10,7 +10,7 @@
       <div class="draggable-item" v-for="q in queues" :key="q.id">
         <img :src="q.thumbnail" alt="Thumbnail not found" />
         <div class="desc">
-          <p>{{ q.title }}</p>
+          <p class="b">{{ q.title }}</p>
           <p>{{ q.source }}</p>
           <div class="buttons">
             <button @click="del(q)">Delete</button>
@@ -65,7 +65,7 @@ export default class MusicQueue extends Vue {
 <style lang="scss" scoped>
 .music-queue {
   .draggable-item {
-    width: 700px;
+    width: 800px;
 
     img {
       height: 100px;
@@ -80,6 +80,10 @@ export default class MusicQueue extends Vue {
       p {
         margin: 0;
         padding: 3px 0;
+
+        &.b {
+          font-weight: 700;
+        }
       }
 
       .buttons {

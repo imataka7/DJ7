@@ -48,8 +48,9 @@
       <music-queue v-model="queues" @interrupt="interrupt"></music-queue>
     </p>
 
-    <p>
+    <p style="margin-top: 50px">
       <span style="font-weight: 700;">History</span>
+      <button @click="migrateHistory">Update history yah</button>
       <history-list :list="history" @add="addQueue"></history-list>
     </p>
 
@@ -418,6 +419,27 @@ export default class Hub extends Vue {
         status: PlayerStatus.PLAY,
         updatedAt: Date.now(),
       },
+    });
+  }
+
+  public async migrateHistory() {
+    const newHistory = [];
+
+    this.history.map((h) => {
+      if (h.thumbnail !== '') {
+        return h;
+      }
+
+      return getMusicInfo(h.source);
+    });
+
+    for (let i = 0; i < this.history.length; i += 1) {
+      // eslint-disable-next-line
+      newHistory.push(await getMusicInfo(this.history[i].source));
+    }
+
+    this.userRef.update({
+      history: newHistory,
     });
   }
 }
