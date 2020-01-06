@@ -1,5 +1,4 @@
 import YouTubePlayer from 'youtube-player';
-import sleep from './sleep';
 
 const dummyEl = document.createElement('div');
 dummyEl.style.display = 'none';
@@ -7,11 +6,20 @@ document.body.insertAdjacentElement('beforeend', dummyEl);
 
 const player = YouTubePlayer(dummyEl);
 
+/**
+ * wait until playlist will be updated and returns videoId.
+ * If the video would not found within 3 sec, stop waiting.
+ * @returns videoId. If the video not found, returns undefined
+ */
 async function waitUntilPlaylistUpdated(): Promise<readonly string[] | undefined> {
   return new Promise(async (r) => {
-    setTimeout(() => r(), 5000);
+    setTimeout(() => r(), 3000);
 
     const listener = player.on('stateChange', async (event) => {
+      if (event.data !== 5) {
+        return;
+      }
+
       const list = await player.getPlaylist();
 
       if (list) {
@@ -35,8 +43,6 @@ export default async function searchVideo(query: string) {
   });
 
   const list = await waitUntilPlaylistUpdated();
-
-  await sleep(100);
 
   return list?.[0];
 }

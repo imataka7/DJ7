@@ -1,5 +1,6 @@
 import searchVideo from './search';
 import { Musicx } from '@/models/room';
+import getVideoTitle from './getYTVideoTitle';
 
 // TODO: add tests
 // test cases are https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
@@ -48,14 +49,16 @@ function generateRandomId() {
   return Math.random().toString(36).slice(2);
 }
 
-function createYTInfo(videoId: string): Musicx {
+async function createYTInfo(videoId: string) {
+  const title = await getVideoTitle(videoId);
+
   return {
     source: `https://www.youtube.com/embed/${videoId}`,
     platform: 'YouTube',
     id: generateRandomId(),
-    thumbnail: '',
-    title: '',
-  };
+    thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+    title,
+  } as Musicx;
 }
 
 /**

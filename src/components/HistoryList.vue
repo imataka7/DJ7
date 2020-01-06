@@ -1,8 +1,15 @@
 <template>
   <div class="history-list">
     <div class="history-item" v-for="m in list" :key="m.source">
-      {{ m.platform }} | {{ m.source }}
-      <button @click="add(m)">Add</button>
+      <!-- {{ m.platform }} | {{ m.source }} -->
+      <img :src="m.thumbnail" alt="Thumbnail not found" />
+      <div class="desc">
+        <p class="b">{{ m.title }}</p>
+        <p>{{ m.source }}</p>
+        <div class="buttons">
+          <button @click="add(m)">Add</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +40,32 @@ export default class HistoryList extends Vue {
 <style lang="scss" scoped>
 .history-item {
   width: 600px;
+
+  img {
+    height: 100px;
+    display: inline-block;
+  }
+
+  .desc {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: super;
+
+    p {
+      margin: 0;
+      padding: 3px 0;
+
+      &.b {
+        font-weight: 700;
+      }
+    }
+
+    .buttons {
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
 
   &:hover {
     background-color: #ddd;

@@ -8,9 +8,16 @@
       v-model="queues"
     >
       <div class="draggable-item" v-for="q in queues" :key="q.id">
-        {{ q.source }} <span v-if="q.extraStatus">*</span>
-        <button @click="del(q)">Delete</button>
-        <button @click="interrupt(q)">Interrupt</button>
+        <img :src="q.thumbnail" alt="Thumbnail not found" />
+        <div class="desc">
+          <p>{{ q.title }}</p>
+          <p>{{ q.source }}</p>
+          <div class="buttons">
+            <button @click="del(q)">Delete</button>
+            <button @click="interrupt(q)">Interrupt</button>
+          </div>
+        </div>
+        <span v-if="q.extraStatus">*</span>
       </div>
     </draggable>
     <!-- <pre>{{ queues }}</pre> -->
@@ -58,7 +65,29 @@ export default class MusicQueue extends Vue {
 <style lang="scss" scoped>
 .music-queue {
   .draggable-item {
-    width: 500px;
+    width: 700px;
+
+    img {
+      height: 100px;
+      display: inline-block;
+    }
+
+    .desc {
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: super;
+
+      p {
+        margin: 0;
+        padding: 3px 0;
+      }
+
+      .buttons {
+        button {
+          margin-right: 10px;
+        }
+      }
+    }
 
     &:hover {
       background-color: #ddd;
