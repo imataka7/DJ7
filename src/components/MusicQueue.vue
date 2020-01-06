@@ -1,5 +1,5 @@
 <template>
-  <div class="music-queue">
+  <div class="music-queue" :key="reloadKey">
     <draggable
       @start="dragging = true"
       @end="dragging = false"
@@ -7,7 +7,11 @@
       class="draggable-list"
       v-model="queues"
     >
-      <div class="draggable-item" v-for="q in queues" :key="q.id">
+      <div
+        :class="`draggable-item ${!dragging ? '' : ''}`"
+        v-for="q in queues"
+        :key="q.id"
+      >
         <img :src="q.thumbnail" alt="Thumbnail not found" />
         <div class="desc">
           <p class="b">{{ q.title }}</p>
@@ -41,15 +45,37 @@ export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
   value!: Musicx[];
 
-  get queues() {
-    return this.value;
+  @Watch('value')
+  public onValueChanged(newVal: Musicx[]) {
+    this.queueTemp = newVal;
   }
 
-  set queues(newVal) {
-    this.$emit('input', newVal);
+  @Prop({ default: false })
+  isDraggable!: boolean;
+
+  public reloadKey = Math.random();
+
+  @Watch('isDraggable')
+  public onChanged(val: boolean) {
+    this.reloadKey = Math.random();
   }
 
   public dragging = false;
+
+  public queueTemp: Musicx[] = [] ;
+
+  get queues() {
+    return this.queueTemp;
+  }
+
+  set queues(newVal) {
+    this.queueTemp = newVal;
+    this.$emit('input', newVal);
+  }
+
+  public mounted() {
+    this.queueTemp = this.value;
+  }
 
   public del(music: Musicx) {
     const newQueue = this.queues.filter(q => q.id !== music.id);

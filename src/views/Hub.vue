@@ -43,15 +43,23 @@
     <input-area @parsed="addQueue"></input-area>
 
     <p>
-      <span style="font-weight: 700;">Queues</span>
+      <span style="font-weight: 700;">Queue</span>
       <!-- TODO: Make disable when queues are updating -->
-      <music-queue v-model="queues" @interrupt="interrupt"></music-queue>
+      <music-queue
+        v-model="queues"
+        @interrupt="interrupt"
+        :is-draggable="!isQueueUpdating"
+      ></music-queue>
     </p>
 
     <p style="margin-top: 50px">
       <span style="font-weight: 700;">History</span>
-      <button @click="migrateHistory">Update history yah</button>
-      <history-list :list="history" @add="addQueue"></history-list>
+      <button @click="migrateHistory">Upgrade history yah</button>
+      <history-list
+        :list="history"
+        @add="addQueue"
+        @del="deleteMusicFromHistory"
+      ></history-list>
     </p>
 
     <pre>{{ roomStatus }}</pre>
@@ -126,6 +134,8 @@ export default class Hub extends Vue {
   }
 
   public roomStatus: Room | null = null;
+
+  public isQueueUpdating = false;
 
   get queues() {
     return this.roomStatus?.queues || [];
@@ -233,8 +243,14 @@ export default class Hub extends Vue {
   private player: YoutubePlayer | null = null;
 
   public async updateRoomStatus(roomStatus: Room) {
+    this.isQueueUpdating = true;
+
     const previousId = this.roomStatus?.player.music?.id;
     this.roomStatus = roomStatus;
+
+    setTimeout(() => {
+      this.isQueueUpdating = false;
+    }, 100);
 
     const {
       music, updatedAt, playedTime, status,
@@ -419,6 +435,12 @@ export default class Hub extends Vue {
         status: PlayerStatus.PLAY,
         updatedAt: Date.now(),
       },
+    });
+  }
+
+  public async deleteMusicFromHistory(music: Music) {
+    this.userRef.update({
+      history: arrayRemove(music),
     });
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="input-area">
-    <textarea v-model="value"></textarea>
-    <button @click="parse">Queue</button>
+    <textarea v-model="value" :disabled="searching"></textarea>
+    <button @click="parse" :disabled="searching">Queue</button>
   </div>
 </template>
 
@@ -17,7 +17,11 @@ import { Musicx } from '@/models/room';
 export default class InputArea extends Vue {
   public value = 'https://www.youtube.com/watch?v=fFSJiqNdbgU';
 
+  public searching = false;
+
   public async parse() {
+    this.searching = true;
+
     const queries = this.value.split('\n').filter(q => q !== '');
 
     if (queries.length === 0) {
@@ -39,6 +43,7 @@ export default class InputArea extends Vue {
     this.$emit('parsed', musicList);
 
     this.value = '';
+    this.searching = false;
   }
 }
 </script>
