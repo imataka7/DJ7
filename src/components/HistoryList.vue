@@ -8,6 +8,7 @@
         <p>{{ m.source }}</p>
         <div class="buttons">
           <button @click="add(m)">Add</button>
+          <button @click="del(m)">Delete</button>
         </div>
       </div>
     </div>
@@ -33,6 +34,10 @@ export default class HistoryList extends Vue {
 
   public add(music: Music) {
     this.$emit('add', [{ ...music, id: generateRandomId() }]);
+  }
+
+  public del(music: Music) {
+    this.$emit('del', music);
   }
 }
 </script>
