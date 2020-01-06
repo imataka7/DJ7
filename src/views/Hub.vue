@@ -425,17 +425,11 @@ export default class Hub extends Vue {
   public async migrateHistory() {
     const newHistory = [];
 
-    this.history.map((h) => {
-      if (h.thumbnail !== '') {
-        return h;
-      }
-
-      return getMusicInfo(h.source);
-    });
-
     for (let i = 0; i < this.history.length; i += 1) {
       // eslint-disable-next-line
-      newHistory.push(await getMusicInfo(this.history[i].source));
+      const m = await getMusicInfo(this.history[i].source);
+      delete m!.id;
+      newHistory.push(m);
     }
 
     this.userRef.update({
