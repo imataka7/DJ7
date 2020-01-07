@@ -38,11 +38,27 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   @Prop({ default: '' })
   roomId!: string;
 
+  get isMobile() {
+    const mobiles = /Android|webOS|iPhone|iPad|iPod/i;
+    return mobiles.test(window.navigator.userAgent);
+  }
+
   public player!: YouTubePlayer;
 
   public async init() {
     const el = this.$el.querySelector('.video-player');
-    this.player = YouTube(el as HTMLElement);
+    this.player = YouTube(el as HTMLElement, {
+      playerVars: {
+        // controls: 0,
+        disablekb: 0,
+        playsinline: 1,
+        enablejsapi: 1,
+      },
+    });
+
+    if (this.isMobile) {
+      this.player.mute();
+    }
 
     // It's playable even when set `display: none`.
     // (await this.player.getIframe()).style.display = 'none';
@@ -57,10 +73,18 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async play() {
+    if (this.currentState === PlayerStates.BUFFERING) {
+      return;
+    }
+
     this.$emit('update', PlayerStatus.PLAY, await this.player.getCurrentTime());
   }
 
   public async pause() {
+    if (this.currentState === PlayerStates.BUFFERING) {
+      return;
+    }
+
     this.$emit('update', PlayerStatus.PAUSE, await this.player.getCurrentTime());
   }
 
