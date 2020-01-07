@@ -1,6 +1,8 @@
 <template>
   <div class="music-queue" :key="reloadKey">
+    {{ isMobile }}
     <draggable
+      :delay="isMobile ? 200 : 0"
       @start="dragging = true"
       @end="dragging = false"
       tag="div"
@@ -84,6 +86,11 @@ export default class MusicQueue extends Vue {
 
   public interrupt(music: Musicx) {
     this.$emit('interrupt', music);
+  }
+
+  get isMobile() {
+    const mobiles = /Android|webOS|iPhone|iPad|iPod/i;
+    return mobiles.test(window.navigator.userAgent);
   }
 }
 </script>
