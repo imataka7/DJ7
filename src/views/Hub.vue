@@ -31,18 +31,11 @@
       <router-link to="/about">Realtime Tester</router-link>
     </p>
 
-    <div class="player-container" v-if="!isRequestOnly">
-      <p
-        style="color: #fff; background: #333; width: 300px; padding: 10px;"
-        v-if="!player"
-      >
-        No videos in the queue
-      </p>
-    </div>
+    <div class="player-container" v-if="!isRequestOnly"></div>
 
     <input-area @parsed="addQueue"></input-area>
 
-    <p>
+    <div style="margin: 10px 0;">
       <span style="font-weight: 700;">Queue</span>
       <!-- TODO: Make disable when queues are updating -->
       <music-queue
@@ -50,7 +43,13 @@
         @interrupt="interrupt"
         :is-draggable="!isQueueUpdating"
       ></music-queue>
-    </p>
+      <div
+        style="color: #fff; background: #333; width: 300px; padding: 10px;"
+        v-if="queues.length === 0"
+      >
+        No videos in the queue
+      </div>
+    </div>
 
     <p style="margin-top: 50px">
       <span style="font-weight: 700;">History</span>
@@ -194,6 +193,21 @@ export default class Hub extends Vue {
       roomStatus = (await this.roomRef.get()).data() as Room;
     }
 
+    const container = this.$el.querySelector('.player-container') as HTMLElement;
+    container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
+
+    this.player = new YoutubePlayer({
+      el: '.player-is-here',
+      propsData: {
+        roomId: this.roomId,
+        source: '',
+      },
+    });
+    this.player.$on('update', this.onStatusChanged);
+    this.player.$on('end', this.onMusicEnded);
+
+    await this.player.init();
+
     await this.updateRoomStatus(roomStatus);
 
     this.roomRef.update({
@@ -272,27 +286,8 @@ export default class Hub extends Vue {
     if (id && id !== previousId) {
       this.musicSource = source;
 
-      // this.player?.$destroy();
-      // this.$el.querySelector('.player')?.remove();
 
-      if (!this.player) {
-        const container = this.$el.querySelector('.player-container') as HTMLElement;
-        container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
-
-        this.player = new YoutubePlayer({
-          el: '.player-is-here',
-          propsData: {
-            roomId: this.roomId,
-            source,
-          },
-        });
-        this.player.$on('update', this.onStatusChanged);
-        this.player.$on('end', this.onMusicEnded);
-
-        await this.player.init();
-      }
-
-      await this.player.loadMusic(music);
+      await this.player!.loadMusic(music);
 
       await this.updateHistory({
         source,
