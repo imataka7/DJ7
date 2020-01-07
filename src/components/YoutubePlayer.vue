@@ -136,7 +136,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
 
   public async cue() {
     // await sleep(3000);
-    console.log(this.query);
+    // console.log(this.query);
     await this.player.loadVideoByUrl(this.query);
   }
 
