@@ -21,6 +21,9 @@
           <div class="buttons">
             <button @click="del(q)">Delete</button>
             <button @click="interrupt(q)">Interrupt</button>
+            <button @click="moveToTop(q)" :disabled="!isDraggable">
+              Move to top
+            </button>
           </div>
         </div>
         <span v-if="q.extraStatus">*</span>
@@ -86,6 +89,14 @@ export default class MusicQueue extends Vue {
 
   public interrupt(music: Musicx) {
     this.$emit('interrupt', music);
+  }
+
+  public moveToTop(music: Musicx) {
+    const newQueue = this.queues.filter(q => q.id !== music.id);
+
+    newQueue.unshift(music);
+
+    this.queues = newQueue;
   }
 
   get isMobile() {
