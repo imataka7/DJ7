@@ -76,6 +76,7 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
 import YoutubePlayer from '@/components/YoutubePlayer.vue';
 import InputArea from '@/components/InputArea.vue';
@@ -257,9 +258,9 @@ export default class Hub extends Vue {
     } = roomStatus.player;
 
     if (status === PlayerStatus.NO_MUSIC) {
-      this.player?.$destroy();
-      this.$el.querySelector('.player')?.remove();
-      this.player = null;
+      // this.player?.$destroy();
+      // this.$el.querySelector('.player')?.remove();
+      // this.player = null;
       this.musicSource = '';
       return;
     }
@@ -271,24 +272,27 @@ export default class Hub extends Vue {
     if (id && id !== previousId) {
       this.musicSource = source;
 
-      this.player?.$destroy();
-      this.$el.querySelector('.player')?.remove();
+      // this.player?.$destroy();
+      // this.$el.querySelector('.player')?.remove();
 
-      const container = this.$el.querySelector('.player-container') as HTMLElement;
-      container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
+      if (!this.player) {
+        const container = this.$el.querySelector('.player-container') as HTMLElement;
+        container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
 
-      this.player = new YoutubePlayer({
-        el: '.player-is-here',
-        propsData: {
-          roomId: this.roomId,
-          source,
-        },
-      });
-      this.player.$on('update', this.onStatusChanged);
-      this.player.$on('end', this.onMusicEnded);
+        this.player = new YoutubePlayer({
+          el: '.player-is-here',
+          propsData: {
+            roomId: this.roomId,
+            source,
+          },
+        });
+        this.player.$on('update', this.onStatusChanged);
+        this.player.$on('end', this.onMusicEnded);
 
-      // console.log(this.player);
-      await this.player.init();
+        await this.player.init();
+      }
+
+      await this.player.loadMusic(music);
 
       await this.updateHistory({
         source,
@@ -299,6 +303,7 @@ export default class Hub extends Vue {
     }
   }
 
+  // TODO: use transaction
   public async updateHistory(music: Music) {
     const { source } = music;
 
