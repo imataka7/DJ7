@@ -37,7 +37,6 @@
 
     <div style="margin: 10px 0;">
       <span style="font-weight: 700;">Queue</span>
-      <!-- TODO: Make disable when queues are updating -->
       <music-queue
         v-model="queues"
         @interrupt="interrupt"
@@ -276,6 +275,7 @@ export default class Hub extends Vue {
       // this.$el.querySelector('.player')?.remove();
       // this.player = null;
       this.musicSource = '';
+      this.player?.stop();
       return;
     }
 
@@ -304,15 +304,19 @@ export default class Hub extends Vue {
 
     const isExists = this.history.some(h => h.source === source);
 
+    const batch = this.$firestore.batch();
+
     if (isExists) {
-      await this.userRef.update({
+      batch.update(this.userRef, {
         history: arrayRemove(music),
       });
     }
 
-    await this.userRef.update({
+    batch.update(this.userRef, {
       history: arrayUnion(music),
     });
+
+    await batch.commit();
   }
 
   public async mounted() {
