@@ -1,6 +1,5 @@
 <template>
   <div class="music-queue" :key="reloadKey">
-    {{ isMobile }}
     <draggable
       :delay="isMobile ? 200 : 0"
       @start="dragging = true"
