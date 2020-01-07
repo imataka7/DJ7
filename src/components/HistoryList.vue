@@ -1,6 +1,6 @@
 <template>
   <div class="history-list">
-    <div class="history-item" v-for="m in list" :key="m.source">
+    <div class="history-item" v-for="m in reversedList" :key="m.source">
       <!-- {{ m.platform }} | {{ m.source }} -->
       <img :src="m.thumbnail" alt="Thumbnail not found" />
       <div class="desc">
@@ -31,6 +31,10 @@ export default class HistoryList extends Vue {
 
   @Prop({ default: () => [] })
   list!: Music[];
+
+  get reversedList() {
+    return this.list.reverse();
+  }
 
   public add(music: Music) {
     this.$emit('add', [{ ...music, id: generateRandomId() }]);
