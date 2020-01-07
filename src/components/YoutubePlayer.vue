@@ -40,35 +40,12 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
 
   public player!: YouTubePlayer;
 
-  private async waitPlayerReady() {
-    while (/-1|3|5|undefined/.test((await this.player.getPlayerState())?.toString(10))) {
-      await new Promise(r => setTimeout(() => r(), 10));
-      // console.log(await this.player.getPlayerState());
-    }
-  }
-
-  // public async init() {
-  //   const el = this.$el.querySelector('.video-player');
-  //   this.player = YouTube(el as HTMLElement);
-
-  //   // It's playable even when set `display: none`.
-  //   // (await this.player.getIframe()).style.display = 'none';
-
-  //   await this.player.cueVideoByUrl(this.source);
-  //   this.player.on('stateChange', (e) => {
-  //     // 0 means the video has ended
-  //     if (e.data === 0) {
-  //       this.end();
-  //     }
-  //   });
-
-  //   await this.waitPlayerReady();
-  //   console.log('initialized');
-  // }
-
   public async init() {
     const el = this.$el.querySelector('.video-player');
     this.player = YouTube(el as HTMLElement);
+
+    // It's playable even when set `display: none`.
+    // (await this.player.getIframe()).style.display = 'none';
 
     this.player.on('stateChange', async (e) => {
       this.currentState = e.data;
@@ -77,19 +54,6 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
         this.end();
       }
     });
-
-    // return new Promise<void>(async (r) => {
-    //   const listener = this.player.on('stateChange', async (e) => {
-    //     if (e.data === 1) {
-    //       // await this.player.pauseVideo();
-    //       r();
-    //       // @ts-ignore
-    //       this.player.off(listener);
-    //     }
-    //   });
-
-    //   await this.player.loadVideoByUrl(this.source);
-    // });
   }
 
   public async play() {
