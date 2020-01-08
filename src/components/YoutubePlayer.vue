@@ -9,7 +9,8 @@
       <button @click="changeVolume(-10)">Volume -</button>
       <!-- <input type="text" v-model="query" />
       <button @click="cue">cue</button>
-      <button @click="stop">stop</button> -->
+      <button @click="stop">stop</button>
+      <button @click="seekTo(-100)">seek</button> -->
       <span>{{ currentState }}</span>
     </div>
   </div>
@@ -139,7 +140,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
         }
       });
 
-      await this.player.loadVideoByUrl(music.source);
+      await this.player.loadVideoByUrl({ mediaContentUrl: music.source, startSeconds: 0 });
     });
   }
 
