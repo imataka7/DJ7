@@ -105,6 +105,9 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
       case PlayerStatus.PAUSE:
         await this.player.pauseVideo();
         break;
+      case PlayerStatus.NO_MUSIC:
+        await this.player.stopVideo();
+        break;
       default:
     }
 

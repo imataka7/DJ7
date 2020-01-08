@@ -270,11 +270,7 @@ export default class Hub extends Vue {
     } = roomStatus.player;
 
     if (status === PlayerStatus.NO_MUSIC) {
-      // this.player?.$destroy();
-      // this.$el.querySelector('.player')?.remove();
-      // this.player = null;
       this.musicSource = '';
-      this.player?.stop();
       return;
     }
 
@@ -366,7 +362,8 @@ export default class Hub extends Vue {
   }
 
   private onStatusChanged(status: number, playedTime: number) {
-    if (status === this.roomStatus?.player.status) {
+    if (status === this.roomStatus?.player.status
+    || this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       return;
     }
 
@@ -378,12 +375,16 @@ export default class Hub extends Vue {
   }
 
   private onMusicEnded() {
+    if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
+      return;
+    }
+
     const { music } = this.roomStatus!.player;
     const { queues } = this.roomStatus!;
 
     // 曲が途中で終わってしまうことに対する策
     // これで修正されるかは不明
-    if (music.id === queues[0].id) {
+    if (music?.id === queues[0]?.id) {
       return;
     }
 
@@ -406,7 +407,7 @@ export default class Hub extends Vue {
     this.roomRef.update({
       player: {
         music: nextMusic,
-        playedTime: 0,
+        playedTime: nextMusic.extraStatus?.playedTime || 0,
         status: PlayerStatus.PLAY,
         updatedAt: Date.now(),
       },
