@@ -214,19 +214,18 @@ export default class Hub extends Vue {
     });
 
     const listener = this.roomRef.onSnapshot(async (doc) => {
+      const previousRoomState = this.roomStatus;
       await this.updateRoomStatus(doc.data() as Room);
 
       const { updatedAt, playedTime, status } = this.roomStatus!.player;
 
-      if (this.previousPlayedTime === playedTime) {
+      if (this.previousPlayedTime === playedTime && status === previousRoomState?.player.status) {
         return;
       }
 
       this.previousPlayedTime = playedTime;
       const seekTo = status === PlayerStatus.PLAY
         ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
-
-      // console.log(seekTo, this.player);
 
       this.player?.setStatus(status, seekTo);
     });
