@@ -381,6 +381,12 @@ export default class Hub extends Vue {
     const { music } = this.roomStatus!.player;
     const { queues } = this.roomStatus!;
 
+    // 曲が途中で終わってしまうことに対する策
+    // これで修正されるかは不明
+    if (music.id === queues[0].id) {
+      return;
+    }
+
     if (queues.length === 0) {
       this.roomRef.update({
         player: {
