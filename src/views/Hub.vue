@@ -197,10 +197,6 @@ export default class Hub extends Vue {
 
     this.player = new YoutubePlayer({
       el: '.player-is-here',
-      propsData: {
-        roomId: this.roomId,
-        source: '',
-      },
     });
     this.player.$on('update', this.onStatusChanged);
     this.player.$on('end', this.onMusicEnded);

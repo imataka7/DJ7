@@ -11,7 +11,7 @@
       <button @click="cue">cue</button>
       <button @click="stop">stop</button>
       <button @click="seekTo(-100)">seek</button> -->
-      <span>{{ currentState }}</span>
+      <span>{{ state }}</span>
     </div>
   </div>
 </template>
@@ -33,11 +33,7 @@ import Music from '../models/music';
 
 @Component
 export default class PlayerYoutube extends Vue implements MusicPlayer {
-  @Prop({ default: '' })
-  source!: string;
-
-  @Prop({ default: '' })
-  roomId!: string;
+  public platform = 'YouTube';
 
   get isMobile() {
     const mobiles = /Android|webOS|iPhone|iPad|iPod/i;
@@ -65,7 +61,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
     // (await this.player.getIframe()).style.display = 'none';
 
     this.player.on('stateChange', async (e) => {
-      this.currentState = e.data;
+      this.state = e.data;
       // console.log(e, await this.getCurrentPlayedTime());
       if (e.data === 0) {
         this.end();
@@ -74,7 +70,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async play() {
-    if (this.currentState === PlayerStates.BUFFERING) {
+    if (this.state === PlayerStates.BUFFERING) {
       return;
     }
 
@@ -82,7 +78,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async pause() {
-    if (this.currentState === PlayerStates.BUFFERING) {
+    if (this.state === PlayerStates.BUFFERING) {
       return;
     }
 
@@ -159,7 +155,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
     await this.player.setVolume(vol);
   }
 
-  currentState: PlayerStates = 9;
+  state: PlayerStates = 9;
 }
 </script>
 
