@@ -1,8 +1,10 @@
 enum PlayerStatus {
-  STOP = 0,
+  STOP = -1,
+  END = 0,
   PLAY = 1,
   PAUSE = 2,
-  NO_MUSIC = 5,
+  BUFFERING = 3,
+  NO_MUSIC = 8,
   ERROR = 9
 }
 

@@ -1,8 +1,9 @@
-import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 import Music from './music';
+import PlayerStatus from './playerStatus';
 
 interface MusicPlayer {
-  init: () => Promise<void>;
+  platform: string;
+  state: PlayerStatus;
 
   loadMusic(music: Music): Promise<void>;
   play(): Promise<void>;
@@ -13,7 +14,7 @@ interface MusicPlayer {
   // getCurrenPlayedTime: () => Promise<number>;
   getCurrentPlayedTime(): Promise<number>;
 
-  currentState: PlayerStates;
+  init: () => Promise<void>;
 }
 
 export default MusicPlayer;
