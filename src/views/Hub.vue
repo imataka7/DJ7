@@ -265,7 +265,7 @@ export default class Hub extends Vue {
       music, updatedAt, playedTime, status,
     } = roomStatus.player;
 
-    if (status === PlayerStatus.NO_MUSIC) {
+    if (!music || status === PlayerStatus.NO_MUSIC) {
       this.musicSource = '';
       return;
     }

@@ -70,7 +70,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async play() {
-    if (this.state === PlayerStates.BUFFERING) {
+    if (this.state === PlayerStatus.BUFFERING) {
       return;
     }
 
@@ -78,7 +78,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async pause() {
-    if (this.state === PlayerStates.BUFFERING) {
+    if (this.state === PlayerStatus.BUFFERING) {
       return;
     }
 
@@ -155,7 +155,29 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
     await this.player.setVolume(vol);
   }
 
-  state: PlayerStates = 9;
+  iframeState: PlayerStates = 9;
+
+  state: PlayerStatus = 8;
+
+  @Watch('iframeState')
+  onStateChanged(newState: PlayerStates) {
+    this.state = (() => {
+      switch (newState) {
+        case PlayerStates.BUFFERING:
+          return PlayerStatus.BUFFERING;
+        case PlayerStates.PLAYING:
+          return PlayerStatus.PLAY;
+        case PlayerStates.PAUSED:
+          return PlayerStatus.PAUSE;
+        case PlayerStates.ENDED:
+          return PlayerStatus.END;
+        case PlayerStates.UNSTARTED:
+          return PlayerStatus.STOP;
+        default:
+          return PlayerStatus.ERROR;
+      }
+    })();
+  }
 }
 </script>
 
