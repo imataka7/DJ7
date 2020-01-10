@@ -16,4 +16,9 @@ export default class MusicHub extends Vue {
 </script>
 
 <style lang="scss">
+@import "~normalize.css";
+
+html {
+  overflow: hidden auto;
+}
 </style>
