@@ -84,6 +84,7 @@ import Music from '@/models/music';
 import User from '@/models/user';
 import PlayerStatus from '../models/playerStatus';
 import HistoryList from '@/components/HistoryList.vue';
+import sleep from '../utils/sleep';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -370,10 +371,12 @@ export default class Hub extends Vue {
     });
   }
 
-  private onMusicEnded() {
+  private async onMusicEnded() {
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       return;
     }
+
+    await sleep(Math.floor(Math.random() * 1000));
 
     const { music } = this.roomStatus!.player;
     const { queues } = this.roomStatus!;
