@@ -17,6 +17,7 @@ export default class MusicHub extends Vue {
 
 <style lang="scss">
 @import "~normalize.css";
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 
 html {
   overflow: hidden auto;
