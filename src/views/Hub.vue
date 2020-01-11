@@ -64,7 +64,8 @@
     <pre>{{ userStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
 
-    <player-controller></player-controller>
+    <!-- <player-controller></player-controller> -->
+    <div class="player-controller"></div>
   </div>
 </template>
 
@@ -185,6 +186,8 @@ export default class Hub extends Vue {
     });
   }
 
+  private controller!: PlayerController;
+
   public async init() {
     this.roomId = this.$route.params.roomId;
     this.registerEvents();
@@ -197,16 +200,27 @@ export default class Hub extends Vue {
       roomStatus = (await this.roomRef.get()).data() as Room;
     }
 
-    const container = this.$el.querySelector('.player-container') as HTMLElement;
-    container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
+    // const container = this.$el.querySelector('.player-container') as HTMLElement;
+    // container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
 
-    this.player = new YoutubePlayer({
-      el: '.player-is-here',
-    });
-    this.player.$on('update', this.onStatusChanged);
-    this.player.$on('end', this.onMusicEnded);
+    // this.player = new YoutubePlayer({
+    //   el: '.player-is-here',
+    // });
+    // this.player.$on('update', this.onStatusChanged);
+    // this.player.$on('end', this.onMusicEnded);
 
-    await this.player.init();
+    // await this.player.init();
+
+    const el = this.$el.querySelector('.player-controller')!;
+    this.controller = new PlayerController({
+      el,
+    }).$mount();
+    this.controller.$on('update', this.onStatusChanged);
+    this.controller.$on('end', this.onMusicEnded);
+    this.controller.$on('forward', this.forwardMusic);
+    this.controller.$on('seeked', this.onSeeked);
+
+    await this.controller.initPlayers();
 
     await this.updateRoomStatus(roomStatus);
 
@@ -228,10 +242,36 @@ export default class Hub extends Vue {
       const seekTo = status === PlayerStatus.PLAY
         ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
 
-      this.player?.setStatus(status, seekTo);
+      await this.setStatus(status, seekTo);
     });
 
     this.unsubscribeListers.push(listener);
+  }
+
+  private async setStatus(status: PlayerStatus, to: number) {
+    this.controller.currentStatus = status;
+    await this.controller.seekTo(to);
+
+    const { PLAY, PAUSE, NO_MUSIC } = PlayerStatus;
+    switch (status) {
+      case PLAY:
+        await this.controller.play();
+        return;
+      case PAUSE:
+        await this.controller.pause();
+        return;
+      case NO_MUSIC:
+        await this.controller.stop();
+        break;
+      default:
+    }
+  }
+
+  public async onSeeked(time: number) {
+    this.roomRef.update({
+      'player.playedTime': time,
+      'player.updatedAt': Date.now(),
+    });
   }
 
   public async initUser() {
@@ -254,13 +294,12 @@ export default class Hub extends Vue {
     this.unsubscribeListers.push(listener);
   }
 
-  private player: YoutubePlayer | null = null;
-
   public async updateRoomStatus(roomStatus: Room) {
     this.isQueueUpdating = true;
 
     const previousId = this.roomStatus?.player.music?.id;
     this.roomStatus = roomStatus;
+    this.controller.currentPlayerInfo = roomStatus.player;
 
     setTimeout(() => {
       this.isQueueUpdating = false;
@@ -282,8 +321,7 @@ export default class Hub extends Vue {
     if (id && id !== previousId) {
       this.musicSource = source;
 
-
-      await this.player!.loadMusic(music);
+      await this.controller.loadMusic(music);
 
       await this.updateHistory({
         source,
@@ -385,14 +423,22 @@ export default class Hub extends Vue {
       return;
     }
 
-    const { player, queues } = this.roomStatus!;
-    const { music } = player;
+    const snapshot = await this.roomRef.get();
+    const status = snapshot.data() as Room;
+
+    const { player, queues } = status;
+    const { music, playedTime, updatedAt } = player;
 
     // チャタリング対策
-    if (player.playedTime === 0 && Date.now() - player.updatedAt < 1000) {
+    if (playedTime === 0 && Date.now() - updatedAt < 3000) {
       return;
     }
 
+    this.setMusicFromQueue(queues);
+  }
+
+  private async forwardMusic() {
+    const { queues } = this.roomStatus!;
     this.setMusicFromQueue(queues);
   }
 
@@ -436,7 +482,11 @@ export default class Hub extends Vue {
   }
 
   public async interrupt(music: Musicx) {
-    const playedTime = await this.player!.getCurrentPlayedTime();
+    const playedTime = await this.controller.getPlayedTime();
+
+    if (!playedTime) {
+      return;
+    }
 
     const queues = JSON.parse(JSON.stringify(this.queues)) as Musicx[];
     queues.unshift({

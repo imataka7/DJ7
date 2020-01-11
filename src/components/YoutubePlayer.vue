@@ -1,18 +1,18 @@
 <template>
   <div class="youtube-player player">
     <div class="video-player"></div>
-    <div class="control-buttons">
+    <!-- <div class="control-buttons">
       <button @click="play">Play</button>
       <button @click="pause">Pause</button>
       <button @click="end">skip</button>
       <button @click="changeVolume(10)">Volume +</button>
       <button @click="changeVolume(-10)">Volume -</button>
-      <!-- <input type="text" v-model="query" />
+      <input type="text" v-model="query" />
       <button @click="cue">cue</button>
       <button @click="stop">stop</button>
-      <button @click="seekTo(-100)">seek</button> -->
+      <button @click="seekTo(-100)">seek</button>
       <span>{{ state }}</span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -70,19 +70,21 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async play() {
-    if (this.state === PlayerStatus.BUFFERING) {
-      return;
-    }
+    // if (this.state === PlayerStatus.BUFFERING) {
+    //   return;
+    // }
 
-    this.$emit('update', PlayerStatus.PLAY, await this.player.getCurrentTime());
+    // this.$emit('update', PlayerStatus.PLAY, await this.player.getCurrentTime());
+    this.player.playVideo();
   }
 
   public async pause() {
-    if (this.state === PlayerStatus.BUFFERING) {
-      return;
-    }
+    // if (this.state === PlayerStatus.BUFFERING) {
+    //   return;
+    // }
 
-    this.$emit('update', PlayerStatus.PAUSE, await this.player.getCurrentTime());
+    // this.$emit('update', PlayerStatus.PAUSE, await this.player.getCurrentTime());
+    this.player.pauseVideo();
   }
 
   public async end() {
@@ -91,6 +93,9 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
 
   // FIXME: たまに更新したときにシークされない
   // なおったか？
+  /**
+   * @deprecated
+   */
   public async setStatus(status: PlayerStatus, seekTo: number) {
     await this.player.seekTo(seekTo, true);
 
@@ -177,6 +182,10 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
           return PlayerStatus.ERROR;
       }
     })();
+  }
+
+  async getDuration() {
+    return this.player.getDuration();
   }
 }
 </script>
