@@ -353,6 +353,7 @@ export default class Hub extends Vue {
       });
 
       if (items.length === 1) {
+        await batch.commit();
         return;
       }
 

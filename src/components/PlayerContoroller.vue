@@ -241,12 +241,12 @@ export default class PlayerController extends Vue {
 }
 
 .bounce-enter-active {
-  animation: bounce-in 0.2s;
+  animation: bounce-in 0.1s;
 }
 
-.bounce-leave-active {
-  animation: bounce-in 0.1s reverse;
-}
+// .bounce-leave-active {
+//   animation: bounce-in 0.1s reverse;
+// }
 
 @keyframes bounce-in {
   0% {
