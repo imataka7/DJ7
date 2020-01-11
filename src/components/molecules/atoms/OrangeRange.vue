@@ -45,7 +45,7 @@ export default class OrangeRange extends Vue {
 <style lang="scss" scoped>
 .orange-range {
   position: relative;
-  padding-bottom: 7px;
+  padding-bottom: 9px;
   width: 150px;
 
   --range-color: #f50;
@@ -79,6 +79,7 @@ export default class OrangeRange extends Vue {
 
   &:disabled {
     filter: grayscale(100%);
+    cursor: not-allowed;
   }
 }
 
@@ -91,6 +92,6 @@ export default class OrangeRange extends Vue {
   height: 2px;
   width: 100%;
   background-color: var(--range-color);
-  top: 12px;
+  top: 13px;
 }
 </style>

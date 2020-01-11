@@ -1,7 +1,11 @@
 <template>
   <div class="seek-bar">
-    <p>2:56 / 3:48</p>
-    <orange-range v-model="range" :width="500" @change="seeked"></orange-range>
+    <orange-range
+      v-model="range"
+      :width="500"
+      @change="seeked"
+      :disabled="disabled"
+    ></orange-range>
   </div>
 </template>
 
@@ -21,35 +25,22 @@ export default class SeekBar extends Vue {
   @Prop({ default: 0 })
   public value!: number;
 
-  get playedTime() {
-    return this.value;
+  get range() {
+    return Math.floor(this.value);
   }
 
-  set playedTime(time: number) {
+  set range(time: number) {
     this.$emit('input', time);
   }
 
   @Prop({ default: false })
   public disabled!: boolean;
 
-  public range = 0;
-
   public seeked() {
-    this.$emit('seeked', this.playedTime);
+    this.$emit('seeked', this.value);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.seek-bar {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-
-  p {
-    font-family: "Roboto Mono", monospace;
-    padding-top: 3px;
-    margin-right: 30px;
-  }
-}
 </style>
