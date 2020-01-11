@@ -13,6 +13,7 @@ interface MusicPlayer {
   setVolume(vol: number): Promise<void>;
   // getCurrenPlayedTime: () => Promise<number>;
   getCurrentPlayedTime(): Promise<number>;
+  getDuration(): Promise<number>;
 
   init: () => Promise<void>;
 }
