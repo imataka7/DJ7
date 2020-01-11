@@ -35,7 +35,6 @@ export default class SeekBar extends Vue {
   public range = 0;
 
   public seeked() {
-    console.log(this.range);
     this.$emit('seeked', this.playedTime);
   }
 }
