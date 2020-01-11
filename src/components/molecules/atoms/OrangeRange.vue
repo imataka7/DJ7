@@ -1,10 +1,17 @@
 <template>
-  <div class="orange-range">
+  <div class="orange-range" :style="`width: ${width}px;`">
     <div
       class="range-runnable-track"
       :style="`width: ${(width * val) / 100}px`"
+      v-if="!disabled"
     ></div>
-    <input type="range" class="input-range" v-model.number="val" />
+    <input
+      type="range"
+      class="input-range"
+      v-model.number="val"
+      :disabled="disabled"
+      @change="$emit('change', val)"
+    />
   </div>
 </template>
 
@@ -22,6 +29,9 @@ export default class OrangeRange extends Vue {
   @Prop({ default: 150 })
   public width!: number;
 
+  @Prop({ default: false })
+  public disabled!: boolean;
+
   get val() {
     return this.value;
   }
@@ -34,8 +44,11 @@ export default class OrangeRange extends Vue {
 
 <style lang="scss" scoped>
 .orange-range {
+  position: relative;
   padding-bottom: 7px;
   width: 150px;
+
+  --range-color: #f50;
 }
 
 .input-range[type="range"] {
@@ -44,6 +57,7 @@ export default class OrangeRange extends Vue {
   background-color: #bbb;
   height: 2px;
   width: 100%;
+  cursor: pointer;
 
   &:focus,
   &:active {
@@ -53,15 +67,18 @@ export default class OrangeRange extends Vue {
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    cursor: pointer;
     position: relative;
     border: none;
     width: 12px;
     height: 12px;
     display: block;
-    background-color: #f50;
+    background-color: var(--range-color);
     border-radius: 50%;
     -webkit-border-radius: 50%;
+  }
+
+  &:disabled {
+    filter: grayscale(100%);
   }
 }
 
@@ -73,7 +90,7 @@ export default class OrangeRange extends Vue {
   position: absolute;
   height: 2px;
   width: 100%;
-  background-color: #f50;
-  top: 27px;
+  background-color: var(--range-color);
+  top: 12px;
 }
 </style>
