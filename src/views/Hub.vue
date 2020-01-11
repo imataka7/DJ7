@@ -63,6 +63,8 @@
     <pre>{{ roomStatus }}</pre>
     <pre>{{ userStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
+
+    <player-controller></player-controller>
   </div>
 </template>
 
@@ -84,6 +86,7 @@ import Music from '@/models/music';
 import User from '@/models/user';
 import PlayerStatus from '../models/playerStatus';
 import HistoryList from '@/components/HistoryList.vue';
+import PlayerController from '@/components/PlayerContoroller.vue';
 import sleep from '../utils/sleep';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -94,6 +97,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
     InputArea,
     MusicQueue,
     HistoryList,
+    PlayerController,
   },
 })
 export default class Hub extends Vue {
