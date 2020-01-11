@@ -340,11 +340,13 @@ export default class Hub extends Vue {
 
   public musicSourceInner: string = 'https://www.youtube.com/embed/oOv98YTPkUs';
 
-  public addQueue(items: Musicx[]) {
+  public async addQueue(items: Musicx[]) {
+    const batch = this.$firestore.batch();
+
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       const nextMusic = items[0];
 
-      this.roomRef.update({
+      batch.update(this.roomRef, {
         'player.status': PlayerStatus.PLAY,
         'player.music': nextMusic,
         'player.updatedAt': nextMusic.extraStatus?.playedTime || Date.now(),
@@ -357,9 +359,11 @@ export default class Hub extends Vue {
       items.shift();
     }
 
-    this.roomRef.update({
+    batch.update(this.roomRef, {
       queues: arrayUnion(...items),
     });
+
+    await batch.commit();
   }
 
   private onStatusChanged(status: number, playedTime: number) {
@@ -380,17 +384,18 @@ export default class Hub extends Vue {
       return;
     }
 
-    await sleep(Math.floor(Math.random() * 1000));
+    const { player, queues } = this.roomStatus!;
+    const { music } = player;
 
-    const { music } = this.roomStatus!.player;
-    const { queues } = this.roomStatus!;
-
-    // 曲が途中で終わってしまうことに対する策
-    // これで修正されるかは不明
-    if (music?.id === queues[0]?.id) {
+    // チャタリング対策
+    if (player.playedTime === 0 && Date.now() - player.updatedAt < 1000) {
       return;
     }
 
+    this.setMusicFromQueue(queues);
+  }
+
+  private setMusicFromQueue(queues: Musicx[]) {
     if (queues.length === 0) {
       this.roomRef.update({
         player: {
