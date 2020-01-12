@@ -44,7 +44,8 @@
 
       <div class="seek-bar-container">
         <p>
-          {{ formatDuration((range * musicDuration) / 100) }} /
+          {{ formatDuration(((range * musicDuration) | 0) / 100) }}
+          /
           {{ formatDuration(musicDuration) }}
         </p>
         <seek-bar
@@ -107,6 +108,7 @@ import PlayerStatus from '../models/playerStatus';
 import VolumePicker from './molecules/VolumePicker.vue';
 import SeekBar from './molecules/SeekBar.vue';
 import PlayerMusicInfo from './molecules/PlayerMusicInfo.vue';
+import sleep from '../utils/sleep';
 
 interface SupportedPlatform {
   youtube?: MusicPlayer;
@@ -259,9 +261,15 @@ export default class PlayerController extends Vue {
 
   public toggleMute() {
     if (this.currentVolume === 0) {
-      this.currentVolume = 50;
+      const vol = localStorage.getItem('volume') || '30';
+      this.currentVolume = parseInt(vol, 10);
     } else {
+      const prevVolume = this.currentVolume;
       this.currentVolume = 0;
+      // Make sure to work `setItem` after `onVolumeChanged`
+      Promise.resolve().then(() => {
+        localStorage.setItem('volume', prevVolume.toString(10));
+      });
     }
   }
 

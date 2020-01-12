@@ -26,7 +26,7 @@ export default class SeekBar extends Vue {
   public value!: number;
 
   get range() {
-    return Math.floor(this.value);
+    return Math.floor(this.value) || 0;
   }
 
   set range(time: number) {
