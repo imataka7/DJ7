@@ -22,4 +22,23 @@ export default class MusicHub extends Vue {
 html {
   overflow: hidden auto;
 }
+
+:root {
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: inset 0 0 2px #777;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #777;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+}
 </style>
