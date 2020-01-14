@@ -15,11 +15,19 @@
         :music="q"
       >
         <template v-slot:buttons>
-          <button @click="del(q)">Delete</button>
-          <button @click="interrupt(q)">Interrupt</button>
-          <button @click="moveToTop(q)" :disabled="!isDraggable">
-            Move To Top
-          </button>
+          <abutton title="Delete" @click="del(q)">
+            <fa-icon icon="times"></fa-icon>
+          </abutton>
+          <abutton title="Interrupt" @click="interrupt(q)">
+            <fa-icon icon="hand-paper"></fa-icon>
+          </abutton>
+          <abutton
+            title="Move to top"
+            @click="moveToTop(q)"
+            :disabled="!isDraggable"
+          >
+            <fa-icon icon="arrow-alt-circle-up"></fa-icon>
+          </abutton>
         </template>
       </music-list-item>
     </draggable>
@@ -34,11 +42,13 @@ import {
 import Draggable from 'vuedraggable';
 import { Musicx } from '@/models/room';
 import MusicListItem from './molecules/MusicListItem.vue';
+import ActionButton from './molecules/ActionButton.vue';
 
 @Component({
   components: {
     Draggable,
     MusicListItem,
+    abutton: ActionButton,
   },
 })
 export default class MusicQueue extends Vue {

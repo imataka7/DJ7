@@ -39,9 +39,10 @@ export default class MusicListItem extends Vue {
   width: 100%;
   padding: 5px 0;
   font-family: "Roboto Mono", "Meiryo UI", monospace;
+  transition: background 0.2s;
 
   &:hover {
-    background-color: #ddd;
+    background: #eee;
   }
 }
 
@@ -70,6 +71,8 @@ img {
 }
 
 .buttons {
+  display: flex;
+  justify-content: flex-start;
   margin-top: 5px;
 
   button {
