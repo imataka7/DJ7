@@ -1,17 +1,11 @@
 <template>
   <div class="history-list">
-    <div class="history-item" v-for="m in reversedList" :key="m.source">
-      <!-- {{ m.platform }} | {{ m.source }} -->
-      <img :src="m.thumbnail" alt="Thumbnail not found" />
-      <div class="desc">
-        <p class="b">{{ m.title }}</p>
-        <p>{{ m.source }}</p>
-        <div class="buttons">
-          <button @click="add(m)">Add</button>
-          <button @click="del(m)">Delete</button>
-        </div>
-      </div>
-    </div>
+    <music-list-item v-for="m in reversedList" :key="m.id" :music="m">
+      <template v-slot:buttons>
+        <button @click="add(m)">Add</button>
+        <button @click="del(m)">Delete</button>
+      </template>
+    </music-list-item>
   </div>
 </template>
 
@@ -23,8 +17,13 @@ import {
 import Music from '@/models/music';
 import { Musicx } from '../models/room';
 import { generateRandomId } from '@/utils/urlParser';
+import MusicListItem from './molecules/MusicListItem.vue';
 
-@Component
+@Component({
+  components: {
+    MusicListItem,
+  },
+})
 export default class HistoryList extends Vue {
   // @Prop({ default: () => [] })
   // value!: HistoryItem[];
@@ -47,37 +46,11 @@ export default class HistoryList extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.history-item {
-  width: 800px;
+.history-list {
+  width: 100%;
 
-  img {
-    height: 100px;
-    display: inline-block;
-  }
-
-  .desc {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: super;
-
-    p {
-      margin: 0;
-      padding: 3px 0;
-
-      &.b {
-        font-weight: 700;
-      }
-    }
-
-    .buttons {
-      button {
-        margin-right: 10px;
-      }
-    }
-  }
-
-  &:hover {
-    background-color: #ddd;
+  button {
+    font-size: 0.8em;
   }
 }
 </style>

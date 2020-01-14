@@ -8,27 +8,21 @@
       class="draggable-list"
       v-model="queues"
     >
-      <div
+      <music-list-item
         :class="`draggable-item ${!dragging ? '' : ''}`"
         v-for="q in queues"
         :key="q.id"
+        :music="q"
       >
-        <img :src="q.thumbnail" alt="Thumbnail not found" />
-        <div class="desc">
-          <p class="b">{{ q.title }}</p>
-          <p>{{ q.source }}</p>
-          <div class="buttons">
-            <button @click="del(q)">Delete</button>
-            <button @click="interrupt(q)">Interrupt</button>
-            <button @click="moveToTop(q)" :disabled="!isDraggable">
-              Move to top
-            </button>
-          </div>
-        </div>
-        <span v-if="q.extraStatus">*</span>
-      </div>
+        <template v-slot:buttons>
+          <button @click="del(q)">Delete</button>
+          <button @click="interrupt(q)">Interrupt</button>
+          <button @click="moveToTop(q)" :disabled="!isDraggable">
+            Move To Top
+          </button>
+        </template>
+      </music-list-item>
     </draggable>
-    <!-- <pre>{{ queues }}</pre> -->
   </div>
 </template>
 
@@ -39,10 +33,12 @@ import {
 } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
 import { Musicx } from '@/models/room';
+import MusicListItem from './molecules/MusicListItem.vue';
 
 @Component({
   components: {
     Draggable,
+    MusicListItem,
   },
 })
 export default class MusicQueue extends Vue {
@@ -107,38 +103,10 @@ export default class MusicQueue extends Vue {
 
 <style lang="scss" scoped>
 .music-queue {
-  .draggable-item {
-    width: 800px;
+  width: 100%;
 
-    img {
-      height: 100px;
-      display: inline-block;
-    }
-
-    .desc {
-      display: inline-block;
-      margin-left: 10px;
-      vertical-align: super;
-
-      p {
-        margin: 0;
-        padding: 3px 0;
-
-        &.b {
-          font-weight: 700;
-        }
-      }
-
-      .buttons {
-        button {
-          margin-right: 10px;
-        }
-      }
-    }
-
-    &:hover {
-      background-color: #ddd;
-    }
+  button {
+    font-size: 0.8em;
   }
 }
 </style>
