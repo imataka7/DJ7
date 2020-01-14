@@ -80,17 +80,17 @@
       </div>
     </div>
     <div class="player-container">
-      <transition>
-        <!-- <div
+      <!-- <transition>
+        <div
           class="youtube-player"
           v-show="
             currentPlayer &&
               currentPlayer.platform === 'YouTube' &&
               isTheaterMode
           "
-        ></div> -->
-        <div class="youtube-player"></div>
-      </transition>
+        ></div>
+      </transition> -->
+      <div class="youtube-player"></div>
     </div>
   </div>
 </template>
@@ -338,6 +338,7 @@ export default class PlayerController extends Vue {
   background-color: #eee;
   border-top: solid 1px #bbb;
   font-family: "Roboto Mono", "Meiryo UI", monospace;
+  z-index: 200;
 }
 
 .is-flex {
@@ -359,6 +360,7 @@ export default class PlayerController extends Vue {
     cursor: pointer;
     background: transparent;
     border: none;
+    transition: color 0.2s;
 
     &:focus {
       outline: none;
@@ -369,15 +371,21 @@ export default class PlayerController extends Vue {
       cursor: not-allowed;
     }
 
-    &.has-bounce:not(:disabled):active {
-      animation: bounce-in 0.1s;
+    &:not(:disabled) {
+      &.has-bounce:active {
+        animation: bounce-in 0.1s;
+      }
+
+      &:hover {
+        color: #f50;
+      }
     }
   }
 }
 
 .seek-bar-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 
   p {
@@ -404,11 +412,11 @@ export default class PlayerController extends Vue {
   width: 300px;
 }
 
-.player-container {
-  position: fixed;
-  top: 100px;
-  right: 100px;
-}
+// .player-container {
+//   position: fixed;
+//   top: 100px;
+//   right: 100px;
+// }
 
 .fade-enter-active,
 .fade-leave-active {
