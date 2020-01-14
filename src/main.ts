@@ -1,7 +1,18 @@
 import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faPlay, faPause, faForward, faVolumeMute, faVolumeUp, faVolumeDown, faVolumeOff, faSpinner,
+  faPlay,
+  faPause,
+  faForward,
+  faVolumeMute,
+  faVolumeUp,
+  faVolumeDown,
+  faVolumeOff,
+  faSpinner,
+  faCog,
+  faArrowAltCircleUp,
+  faExchangeAlt,
+  faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -13,7 +24,18 @@ import store from './store';
 import firebase from './plugins/firebase';
 
 library.add(...[
-  faPlay, faPause, faForward, faVolumeMute, faVolumeUp, faVolumeDown, faVolumeOff, faSpinner,
+  faPlay,
+  faPause,
+  faForward,
+  faVolumeMute,
+  faVolumeUp,
+  faVolumeDown,
+  faVolumeOff,
+  faSpinner,
+  faCog,
+  faArrowAltCircleUp,
+  faExchangeAlt,
+  faTrashAlt,
 ]);
 Vue.component('fa-icon', FontAwesomeIcon);
 
