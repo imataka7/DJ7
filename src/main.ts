@@ -13,8 +13,12 @@ import {
   faArrowAltCircleUp,
   faExchangeAlt,
   faTrashAlt,
+  faTimes,
+  faPlus,
+  faCircle,
+  faHandPaper,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -36,8 +40,13 @@ library.add(...[
   faArrowAltCircleUp,
   faExchangeAlt,
   faTrashAlt,
+  faTimes,
+  faPlus,
+  faCircle,
+  faHandPaper,
 ]);
 Vue.component('fa-icon', FontAwesomeIcon);
+Vue.component('fa-layers', FontAwesomeLayers);
 
 Vue.use(firebase);
 Vue.config.productionTip = false;
