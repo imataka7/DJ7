@@ -1,7 +1,21 @@
 <template>
   <div class="input-area">
-    <textarea v-model="value" :disabled="searching"></textarea>
-    <button @click="parse" :disabled="searching">Queue</button>
+    <div class="textarea-wrapper">
+      <textarea
+        v-model="value"
+        :disabled="searching"
+        placeholder="Enter specific YouTube URLs or queries to search!"
+      ></textarea>
+    </div>
+    <div class="confirm-field">
+      <label class="checkbox" title="ごめん">
+        <input type="checkbox" v-model="isPlaylist" disabled />
+        Queue as playlist
+      </label>
+      <abutton class="button" @click="parse" :disabled="searching"
+        >Queue</abutton
+      >
+    </div>
   </div>
 </template>
 
@@ -12,10 +26,17 @@ import {
 } from 'vue-property-decorator';
 import { getMusicInfo } from '@/utils/urlParser';
 import { Musicx } from '@/models/room';
+import ActionButton from './molecules/ActionButton.vue';
 
-@Component
+@Component({
+  components: {
+    abutton: ActionButton,
+  },
+})
 export default class InputArea extends Vue {
-  public value = 'https://www.youtube.com/watch?v=fFSJiqNdbgU';
+  public value = '';
+
+  public isPlaylist = false;
 
   public searching = false;
 
@@ -50,4 +71,31 @@ export default class InputArea extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.input-area {
+  width: 100%;
+}
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+  // min-height: 10em;
+
+  textarea {
+    min-width: calc(100% - 4px);
+    min-height: 10em;
+    border-radius: 3px;
+    // padding: 0;
+  }
+}
+
+.confirm-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+
+  .button {
+    width: 80px;
+  }
+}
 </style>
