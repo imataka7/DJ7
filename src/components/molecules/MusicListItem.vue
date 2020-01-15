@@ -74,9 +74,5 @@ img {
   display: flex;
   justify-content: flex-start;
   margin-top: 5px;
-
-  button {
-    margin-right: 10px;
-  }
 }
 </style>
