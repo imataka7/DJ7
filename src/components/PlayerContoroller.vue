@@ -71,15 +71,24 @@
           ></volume-picker>
         </transition>
       </div>
-      <div class="music-info-container">
+      <div
+        @click="
+          isTheaterMode = !isTheaterMode;
+          isPopupShowing = false;
+        "
+        class="music-info-container"
+      >
+        <div v-if="isPopupShowing" class="click-me">
+          <p>Click Me!</p>
+        </div>
         <player-music-info
           v-if="currentMusic"
           :music="currentMusic"
         ></player-music-info>
-        <p v-else>No music playing</p>
+        <p class="no-music-indicator" v-else>No music playing</p>
       </div>
     </div>
-    <div class="player-container">
+    <div :class="`player-container ${isTheaterMode ? 'is-theater' : ''}`">
       <!-- <transition>
         <div
           class="youtube-player"
@@ -139,6 +148,9 @@ export default class PlayerController extends Vue {
 
     const youtube = new YouTubePlayer({
       el: ytel,
+      propsData: {
+        class: 'youtube-player',
+      },
     }).$mount();
     youtube.$on('end', this.onMusicEnd);
 
@@ -157,6 +169,11 @@ export default class PlayerController extends Vue {
 
       this.updateSeekBarRange();
     }, 100);
+
+    const v = localStorage.getItem('popup');
+    if (v) {
+      this.isPopupShowing = false;
+    }
   }
 
   public beforeDestory() {
@@ -326,10 +343,17 @@ export default class PlayerController extends Vue {
 
     return `${m}:${s}`;
   }
+
+  public isPopupShowing = true;
+
+  @Watch('isTheaterMode')
+  public onTheaterMode() {
+    localStorage.setItem('popup', JSON.stringify({ isShowing: true }));
+  }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .player-controller {
   position: fixed;
   bottom: 0;
@@ -409,14 +433,87 @@ export default class PlayerController extends Vue {
 }
 
 .music-info-container {
+  position: relative;
   width: 300px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #ddd;
+  }
+
+  .no-music-indicator {
+    text-align: center;
+  }
+
+  .click-me {
+    position: absolute;
+    width: 120px;
+    height: 50px;
+    bottom: 150%;
+    left: 30%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    animation: hovering 1s infinite;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 12px 12px 0 12px;
+      border-color: #333 transparent transparent transparent;
+    }
+  }
 }
 
-// .player-container {
-//   position: fixed;
-//   top: 100px;
-//   right: 100px;
-// }
+@keyframes hovering {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.player-container,
+.player {
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+.player-container {
+  position: fixed;
+  top: 100%;
+  left: 70%;
+  pointer-events: none;
+  // width: 100px;
+  // height: 100px;
+
+  &.is-theater {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 50px);
+    opacity: 1;
+
+    .player,
+    iframe {
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+    }
+  }
+}
 
 .fade-enter-active,
 .fade-leave-active {
