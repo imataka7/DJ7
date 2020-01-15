@@ -1,70 +1,55 @@
 <template>
-  <div class="hub">
-    <input type="text" v-model="jumpTo" />
-    <button @click="jump">Jump</button>
-    <h1>
-      MusicHub RoomId: {{ roomId }}
-      <br />
-      Welcome {{ currentUser.displayName }}
-      {{ isHost ? "You are the host" : "" }}
-    </h1>
-    <img
-      v-for="u in users"
-      :key="u.id"
-      style="width: 75px; height: 75px;"
-      :src="u.photo"
-      alt="icon"
-    />
-    <button @click="$auth.signOut()">Sign out</button>
+  <div class="hub columns">
+    <div class="column input-container">
+      <h1>MusicHub</h1>
+      <h2>RoomId: {{ roomId }}</h2>
 
-    <p>
-      <a href="https://www.youtube.com/embed/oOv98YTPkUs">
-        debug you no url dao
-      </a>
-      <br />
-      <router-link :to="`/${this.roomId}`" v-if="isRequestOnly">
-        Go player mode
-      </router-link>
-      <!-- <router-link :to="`/${this.roomId}/req`" v-else>
-        Go requrest only mode
-      </router-link> -->
-      <router-link to="/about">Realtime Tester</router-link>
-    </p>
+      <div class="room-users">
+        <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+      </div>
 
-    <div class="player-container" v-if="!isRequestOnly"></div>
+      <input-area @parsed="addQueue"></input-area>
 
-    <input-area @parsed="addQueue"></input-area>
+      <div class="ad-container"></div>
 
-    <div style="margin: 10px 0;">
-      <span style="font-weight: 700;">Queue</span>
+      <div class="jumper">
+        <input type="text" v-model="jumpTo" />
+        <button @click="jump">Jump</button>
+      </div>
+      <button @click="$auth.signOut()">Sign out</button>
+    </div>
+
+    <div class="column">
+      <p class="header">Queue</p>
+      <div class="no-music" v-if="queues.length === 0">
+        No music in queue
+      </div>
       <music-queue
         v-model="queues"
         @interrupt="interrupt"
         :is-draggable="!isQueueUpdating"
+        class="music-list"
+        v-else
       ></music-queue>
-      <div
-        style="color: #fff; background: #333; width: 300px; padding: 10px;"
-        v-if="queues.length === 0"
-      >
-        No videos in the queue
-      </div>
     </div>
 
-    <p style="margin-top: 50px">
-      <span style="font-weight: 700;">History</span>
-      <button @click="migrateHistory">Upgrade history yah</button>
+    <div class="column">
+      <p class="header">History</p>
+      <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
       <history-list
         :list="history"
         @add="addQueue"
         @del="deleteMusicFromHistory"
+        class="music-list"
       ></history-list>
-    </p>
-
-    <pre>{{ roomStatus }}</pre>
+      <div class="no-music" v-if="history.length === 0">
+        No music in history
+      </div>
+    </div>
+    <!-- <pre>{{ roomStatus }}</pre>
     <pre>{{ userStatus }}</pre>
-    <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre>
+    <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre> -->
 
-    <!-- <player-controller></player-controller> -->
     <div class="player-controller"></div>
   </div>
 </template>
@@ -199,17 +184,6 @@ export default class Hub extends Vue {
       this.addRoom();
       roomStatus = (await this.roomRef.get()).data() as Room;
     }
-
-    // const container = this.$el.querySelector('.player-container') as HTMLElement;
-    // container?.insertAdjacentHTML('afterbegin', '<div class="player-is-here"></div>');
-
-    // this.player = new YoutubePlayer({
-    //   el: '.player-is-here',
-    // });
-    // this.player.$on('update', this.onStatusChanged);
-    // this.player.$on('end', this.onMusicEnded);
-
-    // await this.player.init();
 
     const el = this.$el.querySelector('.player-controller')!;
     this.controller = new PlayerController({
@@ -531,4 +505,69 @@ export default class Hub extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.hub {
+  max-height: 100vh;
+  margin: auto;
+}
+
+.columns {
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  padding: 10px;
+  margin-bottom: 50px;
+  font-family: "Roboto Mono", monospace;
+}
+
+.input-container {
+  width: 300px;
+  z-index: 100;
+}
+
+.room-users {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 50px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+
+  img {
+    height: 50px;
+    // margin-right: 5px;
+  }
+}
+
+.ad-container {
+  width: 250px;
+  height: 250px;
+  margin: 10px auto;
+  background: #ddd;
+}
+
+.header {
+  margin: 0;
+  height: 30px;
+  text-align: center;
+  border-bottom: solid 1px #ddd;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+.music-list {
+  width: 430px;
+  max-height: calc(100% - 20px);
+  overflow: hidden auto;
+}
+
+.no-music {
+  width: 420px;
+  padding: 10px;
+  margin-top: 10px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+}
 </style>
