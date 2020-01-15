@@ -1,5 +1,5 @@
 <template>
-  <div class="music-queue" :key="reloadKey">
+  <div :class="`music-queue ${isFlash ? 'is-flash' : ''}`" :key="reloadKey">
     <draggable
       :delay="isMobile ? 200 : 0"
       @start="dragging = true"
@@ -15,13 +15,14 @@
         :music="q"
       >
         <template v-slot:buttons>
-          <abutton title="Delete" @click="del(q)">
+          <abutton class="button" title="Delete" @click="del(q)">
             <fa-icon icon="times"></fa-icon>
           </abutton>
-          <abutton title="Interrupt" @click="interrupt(q)">
+          <abutton class="button" title="Interrupt" @click="interrupt(q)">
             <fa-icon icon="hand-paper"></fa-icon>
           </abutton>
           <abutton
+            class="button"
             title="Move to top"
             @click="moveToTop(q)"
             :disabled="!isDraggable"
@@ -65,6 +66,8 @@ export default class MusicQueue extends Vue {
 
   public reloadKey = Math.random();
 
+  public isFlash = false;
+
   @Watch('isDraggable')
   public onChanged(val: boolean) {
     this.reloadKey = Math.random();
@@ -73,6 +76,14 @@ export default class MusicQueue extends Vue {
   public dragging = false;
 
   public queueTemp: Musicx[] = [] ;
+
+  @Watch('queueTemp')
+  public onQueueChanged(newval: any[], oldval: any[]) {
+    if (newval.length > oldval.length) {
+      this.isFlash = true;
+      setTimeout(() => { this.isFlash = false; }, 1000);
+    }
+  }
 
   get queues() {
     return this.queueTemp;
@@ -108,15 +119,51 @@ export default class MusicQueue extends Vue {
     const mobiles = /Android|webOS|iPhone|iPad|iPod/i;
     return mobiles.test(window.navigator.userAgent);
   }
+
+ public dragOptions = {
+   //  animation: 100,
+   group: 'queue',
+   disabled: this.isDraggable,
+   ghostClass: 'ghost',
+ }
 }
 </script>
 
 <style lang="scss" scoped>
 .music-queue {
   width: 100%;
+  min-height: calc(100% - 20px);
+  padding: 0 5px;
 
-  button {
-    font-size: 0.8em;
+  .button {
+    margin: 0 10px;
+  }
+
+  &.is-flash {
+    animation: flash 1.5s ease infinite;
+  }
+}
+
+// .flip-list-move {
+//   transition: transform 0.2s;
+// }
+
+// .no-move {
+//   transition: transform 0s;
+// }
+
+// .ghost {
+//   opacity: 0.5;
+//   background: #c8cbfb;
+// }
+
+@keyframes flash {
+  0% {
+    box-shadow: 0 0 10px 0 #f50 inset;
+  }
+
+  100% {
+    box-shadow: none;
   }
 }
 </style>

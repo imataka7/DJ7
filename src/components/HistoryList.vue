@@ -2,12 +2,10 @@
   <div class="history-list">
     <music-list-item v-for="m in reversedList" :key="m.id" :music="m">
       <template v-slot:buttons>
-        <!-- <button @click="add(m)">Add</button>
-        <button @click="del(m)">Delete</button> -->
-        <abutton title="Delete music" @click="del(m)">
+        <abutton class="button" title="Delete music" @click="del(m)">
           <fa-icon icon="times"></fa-icon>
         </abutton>
-        <abutton title="Add to queue" @click="add(m)">
+        <abutton class="button" title="Add to queue" @click="add(m)">
           <fa-icon icon="plus"></fa-icon>
         </abutton>
       </template>
@@ -56,9 +54,10 @@ export default class HistoryList extends Vue {
 <style lang="scss" scoped>
 .history-list {
   width: 100%;
+  padding: 0 5px;
 
-  button {
-    font-size: 0.8em;
+  .button {
+    margin: 0 10px;
   }
 }
 </style>
