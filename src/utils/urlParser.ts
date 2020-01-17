@@ -67,7 +67,7 @@ async function createYTInfo(videoId: string) {
  * @returns Music info if parse succeeded otherwise null
  */
 async function getMusicInfo(query: string) {
-  if (/^https?:\/\/(youtube.com|youtu.be)\//.test(query)) {
+  if (/^https?:\/\/(www.)?(youtube.com|youtu.be)\//.test(query)) {
     const videoId = getYTVideoId(query);
 
     if (videoId) {
