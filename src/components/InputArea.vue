@@ -84,9 +84,9 @@ export default class InputArea extends Vue {
 
     const musicList = this.isPlaylist ? await this.searchAsPlaylist() : await this.searchAsQuery();
 
-    console.log(musicList);
+    // console.log(musicList);
 
-    // this.$emit('parsed', musicList);
+    this.$emit('parsed', musicList);
 
     this.value = '';
     this.searching = false;
