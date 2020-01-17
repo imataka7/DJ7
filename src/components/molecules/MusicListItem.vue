@@ -7,7 +7,14 @@
           <template v-if="music.extraStatus">
             *
           </template>
-          {{ music.title }}
+          <a
+            class="original-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="getUrl(music.source)"
+          >
+            {{ music.title }}
+          </a>
         </p>
       </div>
       <div class="buttons">
@@ -28,6 +35,12 @@ import { Musicx } from '../../models/room';
 export default class MusicListItem extends Vue {
   @Prop()
   public music!: Musicx;
+
+  public getUrl(url: string) {
+    const videoId = url.replace('https://www.youtube.com/embed/', '');
+
+    return `https://www.youtube.com/watch?v=${videoId}`;
+  }
 }
 </script>
 
@@ -49,6 +62,15 @@ export default class MusicListItem extends Vue {
 img {
   height: 80px;
   margin-right: 10px;
+}
+
+.original-link {
+  color: #000;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #f50;
+  }
 }
 
 .desc-buttons {

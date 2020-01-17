@@ -424,6 +424,7 @@ export default class PlayerController extends Vue {
   position: relative;
   width: 50px;
   height: 100%;
+  z-index: 100;
 }
 
 .volume-picker {
@@ -505,6 +506,7 @@ export default class PlayerController extends Vue {
     width: 100%;
     height: calc(100% - 50px);
     opacity: 1;
+    pointer-events: auto;
 
     .player,
     iframe {
