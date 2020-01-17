@@ -4,12 +4,12 @@
       <textarea
         v-model="value"
         :disabled="searching"
-        placeholder="Enter specific YouTube URLs or queries to search!"
+        :placeholder="isPlaylist ? playlistMessage : queryMessage"
       ></textarea>
     </div>
     <div class="confirm-field">
-      <label class="checkbox" title="ごめん">
-        <input type="checkbox" v-model="isPlaylist" disabled />
+      <label class="checkbox">
+        <input type="checkbox" v-model="isPlaylist" />
         Queue as playlist
       </label>
       <abutton class="button" @click="parse" :disabled="searching"
@@ -24,7 +24,7 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
-import { getMusicInfo } from '@/utils/urlParser';
+import { getMusicInfo, getPlaylistInfo, getPlaylistId } from '@/utils/urlParser';
 import { Musicx } from '@/models/room';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -38,16 +38,17 @@ export default class InputArea extends Vue {
 
   public isPlaylist = false;
 
+  public queryMessage = 'Enter specific YouTube URLs or queries to search!';
+
+  public playlistMessage = 'Enter playlist URLs or playlistIds!'
+
   public searching = false;
 
-  public async parse() {
-    this.searching = true;
-
+  public async searchAsQuery() {
     const queries = this.value.split('\n').filter(q => q !== '');
 
     if (queries.length === 0) {
-      this.searching = false;
-      return;
+      return null;
     }
 
     const musicList: Musicx[] = [];
@@ -60,9 +61,32 @@ export default class InputArea extends Vue {
         musicList.push(searchResult);
       }
     }
-    // console.log(queries, musicList);
 
-    this.$emit('parsed', musicList);
+    return musicList;
+  }
+
+  public async searchAsPlaylist() {
+    const params = this.value.split('\n').filter(q => q !== '');
+
+    if (params.length === 0) {
+      return null;
+    }
+
+    const ids = params.map(getPlaylistId);
+
+    const musicList = await Promise.all(ids.map(getPlaylistInfo));
+
+    return (musicList.filter(m => m !== null) as Musicx[][]).flat();
+  }
+
+  public async parse() {
+    this.searching = true;
+
+    const musicList = this.isPlaylist ? await this.searchAsPlaylist() : await this.searchAsQuery();
+
+    console.log(musicList);
+
+    // this.$emit('parsed', musicList);
 
     this.value = '';
     this.searching = false;

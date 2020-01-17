@@ -1,6 +1,6 @@
 import searchVideo from './search';
 import { Musicx } from '@/models/room';
-import getVideoTitle from './getYTVideoTitle';
+import { getYTVideoTitle, getPlaylistVideos } from './dataAPIConnector';
 
 // TODO: add tests
 // test cases are https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
@@ -49,15 +49,13 @@ function generateRandomId() {
   return Math.random().toString(36).slice(2);
 }
 
-async function createYTInfo(videoId: string) {
-  const title = await getVideoTitle(videoId);
-
+async function createYTInfo(videoId: string, title?: string) {
   return {
     source: `https://www.youtube.com/embed/${videoId}`,
     platform: 'YouTube',
     id: generateRandomId(),
     thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-    title,
+    title: title || await getYTVideoTitle(videoId),
   } as Musicx;
 }
 
@@ -84,9 +82,34 @@ async function getMusicInfo(query: string) {
   return null;
 }
 
+function getPlaylistId(idOrUrl: string) {
+  if (/^https?/.test(idOrUrl)) {
+    const url = new URL(idOrUrl);
+    const id = url.searchParams.get('list');
+
+    if (id) {
+      return id;
+    }
+  }
+
+  return idOrUrl;
+}
+
+async function getPlaylistInfo(playlistId: string) {
+  const playlist = await getPlaylistVideos(playlistId) as { videoId: string, title: string }[];
+
+  if (playlist) {
+    return Promise.all(playlist.map(p => createYTInfo(p.videoId, p.title)));
+  }
+
+  return null;
+}
+
 export {
   getEmbedUrl,
   getYTVideoId,
   getMusicInfo,
   generateRandomId,
+  getPlaylistInfo,
+  getPlaylistId,
 };
