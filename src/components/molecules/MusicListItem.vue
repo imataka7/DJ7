@@ -1,6 +1,14 @@
 <template>
   <div class="music-list-item">
-    <img :src="music.thumbnail" alt="thumbnail" />
+    <a
+      class="img-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      :href="getUrl(music.source)"
+      title="Watch on YouTube"
+    >
+      <img :src="music.thumbnail" alt="thumbnail" />
+    </a>
     <div class="desc-buttons">
       <div class="desc" :title="music.title">
         <p>
@@ -59,9 +67,13 @@ export default class MusicListItem extends Vue {
   }
 }
 
-img {
+.img-link {
   height: 80px;
   margin-right: 10px;
+
+  img {
+    height: 100%;
+  }
 }
 
 .original-link {
