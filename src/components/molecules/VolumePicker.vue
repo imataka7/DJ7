@@ -37,6 +37,7 @@ export default class VolumePicker extends Vue {
   align-items: center;
   background-color: #eee;
   padding: 15px;
+  width: 180px;
   box-sizing: border-box;
   border: solid 1px #bbb;
 

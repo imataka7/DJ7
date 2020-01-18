@@ -1,5 +1,5 @@
 <template>
-  <div class="orange-range" :style="`width: ${width}px;`">
+  <div class="orange-range">
     <div
       class="range-runnable-track"
       :style="`width: ${(width * val) / 100}px`"
@@ -26,11 +26,14 @@ export default class OrangeRange extends Vue {
   @Prop({ default: 0 })
   public value!: number;
 
-  @Prop({ default: 150 })
-  public width!: number;
-
   @Prop({ default: false })
   public disabled!: boolean;
+
+  public width = 0;
+
+  public mounted() {
+    this.width = this.$el.clientWidth;
+  }
 
   get val() {
     return this.value;
@@ -45,8 +48,11 @@ export default class OrangeRange extends Vue {
 <style lang="scss" scoped>
 .orange-range {
   position: relative;
-  padding-bottom: 9px;
-  width: 150px;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
   --range-color: #f50;
 }
@@ -92,6 +98,5 @@ export default class OrangeRange extends Vue {
   height: 2px;
   width: 100%;
   background-color: var(--range-color);
-  top: 13px;
 }
 </style>

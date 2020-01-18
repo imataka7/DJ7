@@ -2,7 +2,6 @@
   <div class="seek-bar">
     <orange-range
       v-model="range"
-      :width="500"
       @change="seeked"
       :disabled="disabled"
     ></orange-range>
@@ -43,4 +42,7 @@ export default class SeekBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.seek-bar {
+  width: 500px;
+}
 </style>

@@ -413,7 +413,6 @@ export default class PlayerController extends Vue {
   align-items: center;
 
   p {
-    padding-top: 3px;
     margin-right: 30px;
   }
 }
