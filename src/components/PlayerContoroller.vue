@@ -118,6 +118,7 @@ import VolumePicker from './molecules/VolumePicker.vue';
 import SeekBar from './molecules/SeekBar.vue';
 import PlayerMusicInfo from './molecules/PlayerMusicInfo.vue';
 import sleep from '../utils/sleep';
+import setEvent from '@/utils/eventUtil';
 
 interface SupportedPlatform {
   youtube?: MusicPlayer;
@@ -174,12 +175,18 @@ export default class PlayerController extends Vue {
     if (v) {
       this.isPopupShowing = false;
     }
+
+    this.listeners.push(setEvent(window, 'keydown', () => { this.isTheaterMode = false; }));
   }
+
+  public listeners: any[] = [];
 
   public beforeDestory() {
     if (this.timer) {
       clearInterval(this.timer);
     }
+
+    this.listeners.forEach(l => l.off());
   }
 
   public async updateStatus(s: PlayerStatus) {
