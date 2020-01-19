@@ -1,7 +1,7 @@
 <template>
-  <div class="button action-button" :title="title" @click="$emit('click')">
+  <button class="button action-button" :title="title" @click="$emit('click')">
     <slot></slot>
-  </div>
+  </button>
 </template>
 
 <script lang="ts">
@@ -35,32 +35,44 @@ export default class ActionButton extends Vue {
   color: #333;
   border: solid 1px;
   border-radius: 9999px;
-  text-align: center;
-  line-height: 30px;
   font-size: 0.9em;
   border-color: var(--border-color);
   transition: all 0.1s;
+  padding: 0;
 
-  &:hover {
-    border-color: var(--button-color);
-    color: var(--button-color);
+  &:not(:disabled) {
+    &:hover {
+      border-color: var(--button-color);
+      color: var(--button-color);
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      opacity: 0;
+      background: #f50;
+      transition: all 0.8s;
+    }
+
+    &:active:after {
+      // background: #f50;
+      opacity: 0.8;
+      transition: 0s;
+    }
+
+    &:focus {
+      outline: 0;
+      box-shadow: 0px 0px 3px var(--button-color);
+      border-color: var(--button-color);
+    }
   }
 
-  &:after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 9999px;
-    opacity: 0;
-    background: #f50;
-    transition: all 0.8s;
-  }
-
-  &:active:after {
-    // background: #f50;
-    opacity: 0.8;
-    transition: 0s;
+  &:disabled {
+    color: #ddd;
+    cursor: not-allowed;
   }
 }
 
