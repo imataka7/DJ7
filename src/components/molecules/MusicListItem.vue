@@ -76,15 +76,6 @@ export default class MusicListItem extends Vue {
   }
 }
 
-.original-link {
-  color: #000;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #f50;
-  }
-}
-
 .desc-buttons {
   flex: 2;
 }
@@ -92,15 +83,24 @@ export default class MusicListItem extends Vue {
 .desc {
   height: 2.5em;
   overflow: hidden;
-  white-space: normal;
-  text-overflow: ellipsis;
 
   p {
     line-height: 1.25em;
     margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    white-space: normal;
+    text-overflow: ellipsis;
+
+    .original-link {
+      color: #000;
+      transition: color 0.2s;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+
+      &:hover {
+        color: #f50;
+      }
+    }
   }
 }
 
