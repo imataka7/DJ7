@@ -32,13 +32,14 @@ export default class ActionButton extends Vue {
   align-items: center;
   min-width: var(--button-width);
   height: var(--button-height);
-  color: #333;
   border: solid 1px;
   border-radius: 9999px;
   font-size: 0.9em;
   border-color: var(--border-color);
   transition: all 0.1s;
   padding: 0;
+  color: #333;
+  background: #fff;
 
   &:not(:disabled) {
     &:hover {
