@@ -1,18 +1,6 @@
 <template>
   <div class="youtube-player player">
     <div class="video-player"></div>
-    <!-- <div class="control-buttons">
-      <button @click="play">Play</button>
-      <button @click="pause">Pause</button>
-      <button @click="end">skip</button>
-      <button @click="changeVolume(10)">Volume +</button>
-      <button @click="changeVolume(-10)">Volume -</button>
-      <input type="text" v-model="query" />
-      <button @click="cue">cue</button>
-      <button @click="stop">stop</button>
-      <button @click="seekTo(-100)">seek</button>
-      <span>{{ state }}</span>
-    </div> -->
   </div>
 </template>
 
