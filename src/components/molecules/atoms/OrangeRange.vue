@@ -2,7 +2,7 @@
   <div class="orange-range">
     <div
       class="range-runnable-track"
-      :style="`width: ${(width * val) / 100}px`"
+      :style="`width: ${Math.ceil((width * val) / 100) + 1}px`"
       v-if="!disabled"
     ></div>
     <input
@@ -10,6 +10,9 @@
       class="input-range"
       v-model.number="val"
       :disabled="disabled"
+      min="0"
+      max="100"
+      step="0.1"
       @change="$emit('change', val)"
     />
   </div>
