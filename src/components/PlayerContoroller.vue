@@ -163,10 +163,10 @@ export default class PlayerController extends Vue {
 
     this.timer = setInterval(() => {
       if (!this.currentPlayerInfo
-    || this.isControllerDisable
-    || this.currentPlayerInfo.status === PlayerStatus.PAUSE
-    || !this.musicDuration
-    || this.isRangeDragging) {
+      || this.isControllerDisable
+      || this.currentPlayerInfo.status === PlayerStatus.PAUSE
+      || !this.musicDuration
+      || this.isRangeDragging) {
         return;
       }
 

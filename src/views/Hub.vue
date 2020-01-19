@@ -37,15 +37,16 @@
       <div class="column">
         <p class="header">History</p>
         <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
+        <div class="no-music" v-if="history.length === 0">
+          No music in history
+        </div>
         <history-list
           :list="history"
           @add="addQueue"
           @del="deleteMusicFromHistory"
           class="music-list"
+          v-else
         ></history-list>
-        <div class="no-music" v-if="history.length === 0">
-          No music in history
-        </div>
       </div>
     </div>
 
@@ -512,7 +513,7 @@ export default class Hub extends Vue {
   // justify-content: space-between;
 
   width: 100%;
-  height: 100vh;
+  height: 100%;
   margin: auto;
   overflow: hidden;
 }
@@ -526,11 +527,11 @@ export default class Hub extends Vue {
 .column {
   padding: 10px;
   font-family: "Roboto Mono", monospace;
-}
 
-.input-container {
-  width: 300px;
-  z-index: 100;
+  .input-container {
+    width: 300px;
+    z-index: 100;
+  }
 }
 
 .room-users {
@@ -543,7 +544,6 @@ export default class Hub extends Vue {
 
   img {
     height: 50px;
-    // margin-right: 5px;
   }
 }
 
@@ -566,7 +566,8 @@ export default class Hub extends Vue {
 .music-list {
   width: 430px;
   max-height: calc(100% - 20px);
-  overflow: hidden auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .no-music {
@@ -582,5 +583,39 @@ export default class Hub extends Vue {
   position: fixed;
   bottom: 0;
   z-index: 100;
+}
+
+@media screen and (max-width: 480px) {
+  .hub,
+  .columns {
+    width: 300vw;
+    margin: 0;
+  }
+
+  .columns {
+    justify-content: flex-start;
+  }
+
+  .column,
+  .input-container {
+    width: 90vw;
+    padding: 10px 5vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    &:nth-child(1) {
+      background: #aaa;
+      overflow-y: auto;
+    }
+  }
+
+  .music-list {
+    width: calc(90vw - 10px);
+    user-select: none;
+  }
+
+  .no-music {
+    width: calc(90vw - 20px);
+  }
 }
 </style>

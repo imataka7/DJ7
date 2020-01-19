@@ -109,6 +109,7 @@ export default class InputArea extends Vue {
     min-height: 10em;
     border-radius: 3px;
     // padding: 0;
+    margin: 0 auto;
   }
 }
 
@@ -120,6 +121,14 @@ export default class InputArea extends Vue {
 
   .button {
     width: 80px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  textarea {
+    min-width: 0 !important;
+    width: 85vw;
+    height: 10em;
   }
 }
 </style>

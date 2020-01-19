@@ -23,6 +23,12 @@ html {
   overflow: hidden auto;
 }
 
+html,
+body,
+#app {
+  height: 100%;
+}
+
 :root {
   ::-webkit-scrollbar {
     width: 7px;
@@ -39,6 +45,13 @@ html {
     background: #777;
     border-radius: 10px;
     box-shadow: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  * {
+    touch-action: pan-x pan-y;
+    // touch-action: pan-y;
   }
 }
 </style>

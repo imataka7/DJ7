@@ -77,6 +77,24 @@ export default class ActionButton extends Vue {
   }
 }
 
+@media screen and (max-width: 480px) {
+  .action-button {
+    min-width: 0;
+    width: 50px;
+
+    &:not(:disabled):hover {
+      &:hover {
+        color: initial;
+        border-color: var(--border-color);
+      }
+
+      &:after {
+        transition: all 0.5s;
+      }
+    }
+  }
+}
+
 @keyframes button-flush {
   0%,
   100% {
