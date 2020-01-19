@@ -604,7 +604,7 @@ export default class Hub extends Vue {
     overflow-y: hidden;
 
     &:nth-child(1) {
-      background: #aaa;
+      // background: #aaa;
       overflow-y: auto;
     }
   }
