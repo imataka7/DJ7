@@ -2,9 +2,9 @@
   <div class="player-controller">
     <div class="controller-container is-flex">
       <div class="player-buttons is-flex">
-        <button class="has-bounce" :disabled="isControllerDisable">
+        <!-- <button class="has-bounce" :disabled="isControllerDisable">
           <fa-icon icon="forward" rotation="180" size="lg"></fa-icon>
-        </button>
+        </button> -->
 
         <transition name="bounce" mode="out-in">
           <button
