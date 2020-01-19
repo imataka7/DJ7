@@ -35,6 +35,10 @@ export default class PlayerMusicInfo extends Vue {
   private decideMarqueeEnable() {
     const el = this.$el.querySelector('.music-title') as HTMLElement;
 
+    if (el.classList.contains('marquee')) {
+      el.classList.remove('marquee');
+    }
+
     if (!el) {
       return;
     }

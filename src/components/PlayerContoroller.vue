@@ -1,5 +1,5 @@
 <template>
-  <div class="player-controller">
+  <div :class="`player-controller  ${isPlayerExpanded ? 'is-expand' : ''}`">
     <div class="controller-container is-flex">
       <div class="player-buttons is-flex">
         <!-- <button class="has-bounce" :disabled="isControllerDisable">
@@ -42,11 +42,17 @@
         </button>
       </div>
 
-      <div class="seek-bar-container">
+      <div class="seek-bar-container" v-show="isPlayerExpanded">
         <p>
-          {{ formatDuration(((range * musicDuration) | 0) / 100) }}
-          /
-          {{ formatDuration(musicDuration) }}
+          <span class="progress-start">
+            {{ formatDuration(((range * musicDuration) | 0) / 100) }}
+          </span>
+          <span v-if="!isPhone">
+            /
+          </span>
+          <span class="progress-end">
+            {{ formatDuration(musicDuration) }}
+          </span>
         </p>
         <seek-bar
           v-model="range"
@@ -60,6 +66,7 @@
         class="volume-container"
         @mouseenter="isVolumePickerActive = true"
         @mouseleave="isVolumePickerActive = false"
+        v-if="!isPhone"
       >
         <button @click="toggleMute">
           <fa-icon :icon="speakerIcon" size="lg"></fa-icon>
@@ -71,14 +78,8 @@
           ></volume-picker>
         </transition>
       </div>
-      <div
-        @click="
-          isTheaterMode = !isTheaterMode;
-          isPopupShowing = false;
-        "
-        class="music-info-container"
-      >
-        <div v-if="isPopupShowing" class="click-me">
+      <div @click="togglePlayerActive" class="music-info-container">
+        <div v-if="!isPhone && isPopupShowing" class="click-me">
           <p>Click Me!</p>
         </div>
         <player-music-info
@@ -109,6 +110,7 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
+import isMobile from 'ismobilejs';
 import YouTubePlayer from '@/components/YoutubePlayer.vue';
 import MusicPlayer from '@/models/musicPlayer';
 import Music from '../models/music';
@@ -357,19 +359,31 @@ export default class PlayerController extends Vue {
   public onTheaterMode() {
     localStorage.setItem('popup', JSON.stringify({ isShowing: true }));
   }
+
+  get isPhone() {
+    return isMobile().phone;
+  }
+
+  public isPlayerExpanded = window.innerWidth > 1240;
+
+  public togglePlayerActive() {
+    if (window.innerWidth > 1240) {
+      this.isTheaterMode = !this.isTheaterMode;
+      return;
+    }
+
+    this.isPlayerExpanded = !this.isPlayerExpanded;
+  }
 }
 </script>
 
 <style lang="scss">
 .player-controller {
-  position: fixed;
-  bottom: 0;
   width: 100%;
-  height: 50px;
   background-color: #eee;
   border-top: solid 1px #bbb;
   font-family: "Roboto Mono", "Meiryo UI", monospace;
-  z-index: 200;
+  z-index: 20;
 }
 
 .is-flex {
@@ -379,8 +393,8 @@ export default class PlayerController extends Vue {
 }
 
 .controller-container {
-  height: 100%;
   width: 1240px;
+  height: 50px;
   margin: auto;
 
   .player-buttons {
@@ -429,7 +443,7 @@ export default class PlayerController extends Vue {
   align-items: center;
   position: relative;
   width: 50px;
-  height: 100%;
+  // height: 100%;
   z-index: 100;
 }
 
@@ -550,6 +564,84 @@ export default class PlayerController extends Vue {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@media screen and (max-width: 1240px) {
+  .player-controller {
+    height: 50px;
+    width: 100vw;
+    transition: height 0.3s ease;
+    display: flex;
+    flex-direction: column-reverse;
+
+    .controller-container {
+      width: 100%;
+
+      .seek-bar-container {
+        width: 90%;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+
+        .seek-bar {
+          width: 100%;
+        }
+
+        p {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          margin: 0;
+        }
+      }
+    }
+
+    .player-container {
+      transition: none;
+    }
+
+    &.is-expand {
+      height: 80vh;
+      border-radius: 10px 10px 0 0;
+
+      .controller-container {
+        height: 200px;
+        flex-direction: column-reverse;
+        margin-top: 0;
+        margin-bottom: 50px;
+      }
+
+      .player-container {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 95%;
+        height: 200px;
+        margin: 30px auto;
+        pointer-events: auto;
+
+        .player,
+        iframe {
+          width: 100%;
+          height: 100%;
+        }
+
+        &,
+        .player,
+        iframe {
+          opacity: 1;
+        }
+      }
+
+      &:after {
+        content: "";
+        width: 50px;
+        height: 5px;
+        background: #aaa;
+        border-radius: 9999px;
+        margin: 10px auto;
+      }
+    }
   }
 }
 </style>

@@ -1,56 +1,60 @@
 <template>
-  <div class="hub columns">
-    <div class="column input-container">
-      <h1>MusicHub</h1>
-      <h2>RoomId: {{ roomId }}</h2>
+  <div class="hub">
+    <div class="columns">
+      <div class="column input-container">
+        <h1>MusicHub</h1>
+        <h2>RoomId: {{ roomId }}</h2>
 
-      <div class="room-users">
-        <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+        <div class="room-users">
+          <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+        </div>
+
+        <input-area @parsed="addQueue"></input-area>
+
+        <div class="ad-container"></div>
+
+        <div class="jumper">
+          <input type="text" v-model="jumpTo" />
+          <button @click="jump">Jump</button>
+        </div>
+        <button @click="$auth.signOut()">Sign out</button>
       </div>
 
-      <input-area @parsed="addQueue"></input-area>
-
-      <div class="ad-container"></div>
-
-      <div class="jumper">
-        <input type="text" v-model="jumpTo" />
-        <button @click="jump">Jump</button>
+      <div class="column">
+        <p class="header">Queue</p>
+        <div class="no-music" v-if="queues.length === 0">
+          No music in queue
+        </div>
+        <music-queue
+          v-model="queues"
+          @interrupt="interrupt"
+          :is-draggable="!isQueueUpdating"
+          class="music-list"
+          v-else
+        ></music-queue>
       </div>
-      <button @click="$auth.signOut()">Sign out</button>
+
+      <div class="column">
+        <p class="header">History</p>
+        <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
+        <history-list
+          :list="history"
+          @add="addQueue"
+          @del="deleteMusicFromHistory"
+          class="music-list"
+        ></history-list>
+        <div class="no-music" v-if="history.length === 0">
+          No music in history
+        </div>
+      </div>
     </div>
 
-    <div class="column">
-      <p class="header">Queue</p>
-      <div class="no-music" v-if="queues.length === 0">
-        No music in queue
-      </div>
-      <music-queue
-        v-model="queues"
-        @interrupt="interrupt"
-        :is-draggable="!isQueueUpdating"
-        class="music-list"
-        v-else
-      ></music-queue>
-    </div>
-
-    <div class="column">
-      <p class="header">History</p>
-      <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
-      <history-list
-        :list="history"
-        @add="addQueue"
-        @del="deleteMusicFromHistory"
-        class="music-list"
-      ></history-list>
-      <div class="no-music" v-if="history.length === 0">
-        No music in history
-      </div>
-    </div>
     <!-- <pre>{{ roomStatus }}</pre>
     <pre>{{ userStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre> -->
 
-    <div class="player-controller"></div>
+    <!-- <div class="player-controller"></div> -->
+    <player-controller ref="controller"></player-controller>
   </div>
 </template>
 
@@ -185,10 +189,7 @@ export default class Hub extends Vue {
       roomStatus = (await this.roomRef.get()).data() as Room;
     }
 
-    const el = this.$el.querySelector('.player-controller')!;
-    this.controller = new PlayerController({
-      el,
-    }).$mount();
+    this.controller = this.$refs.controller as PlayerController;
     this.controller.$on('update', this.onStatusChanged);
     this.controller.$on('end', this.onMusicEnded);
     this.controller.$on('forward', this.forwardMusic);
@@ -506,18 +507,24 @@ export default class Hub extends Vue {
 
 <style lang="scss" scoped>
 .hub {
-  max-height: 100vh;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
+
+  width: 100%;
+  height: 100vh;
   margin: auto;
+  overflow: hidden;
 }
 
 .columns {
   display: flex;
   justify-content: center;
+  height: calc(100% - 50px);
 }
 
 .column {
   padding: 10px;
-  margin-bottom: 50px;
   font-family: "Roboto Mono", monospace;
 }
 
@@ -569,5 +576,11 @@ export default class Hub extends Vue {
   background: #333;
   color: #fff;
   text-align: center;
+}
+
+.player-controller {
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
 }
 </style>
