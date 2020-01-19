@@ -52,6 +52,7 @@ import ActionButton from './molecules/ActionButton.vue';
     abutton: ActionButton,
   },
 })
+// TODO: Refactor
 export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
   value!: Musicx[];
@@ -140,7 +141,7 @@ export default class MusicQueue extends Vue {
   }
 
   &.is-flash {
-    animation: flash 1.5s ease infinite;
+    animation: flash 1.5s ease;
   }
 }
 
