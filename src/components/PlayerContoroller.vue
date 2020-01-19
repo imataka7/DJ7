@@ -42,7 +42,7 @@
         </button>
       </div>
 
-      <div class="seek-bar-container" v-show="isPlayerExpanded">
+      <div class="seek-bar-container" v-if="isPlayerExpanded">
         <p>
           <span class="progress-start">
             {{ formatDuration(((range * musicDuration) | 0) / 100) }}
@@ -178,7 +178,11 @@ export default class PlayerController extends Vue {
       this.isPopupShowing = false;
     }
 
-    this.listeners.push(setEvent(window, 'keydown', () => { this.isTheaterMode = false; }));
+    this.listeners.push(setEvent(window, 'keydown', (e) => {
+      if ((e as KeyboardEvent).keyCode === 27) { // Esc
+        this.isTheaterMode = false;
+      }
+    }));
   }
 
   public listeners: any[] = [];
@@ -574,6 +578,7 @@ export default class PlayerController extends Vue {
     transition: height 0.3s ease;
     display: flex;
     flex-direction: column-reverse;
+    touch-action: none;
 
     .controller-container {
       width: 100%;

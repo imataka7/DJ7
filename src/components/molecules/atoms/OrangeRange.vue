@@ -34,22 +34,15 @@ export default class OrangeRange extends Vue {
 
   public width = 0;
 
-  @Watch('disabled')
-  public updateWidth() {
+  public mounted() {
     this.width = this.$el?.clientWidth || 0;
   }
 
-  public mounted() {
-    this.updateWidth();
-  }
-
   get val() {
-    this.updateWidth();
     return this.value;
   }
 
   set val(newVal) {
-    this.updateWidth();
     this.$emit('input', newVal);
   }
 }
