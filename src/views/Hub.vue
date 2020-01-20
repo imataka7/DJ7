@@ -2,7 +2,7 @@
   <div class="hub">
     <div class="columns">
       <div class="column input-container">
-        <h1>MusicHub</h1>
+        <h1>MusicHub <span class="version">v0.14.4-20200120</span></h1>
         <h2>RoomId: {{ roomId }}</h2>
 
         <div class="room-users">
