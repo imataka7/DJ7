@@ -66,7 +66,7 @@
         class="volume-container"
         @mouseenter="isVolumePickerActive = true"
         @mouseleave="isVolumePickerActive = false"
-        v-if="!isPhone"
+        v-if="!isPhone && !isTablet"
       >
         <button @click="toggleMute">
           <fa-icon :icon="speakerIcon" size="lg"></fa-icon>
@@ -366,6 +366,10 @@ export default class PlayerController extends Vue {
 
   get isPhone() {
     return isMobile().phone;
+  }
+
+  get isTablet() {
+    return isMobile().tablet;
   }
 
   public isPlayerExpanded = window.innerWidth > 1240;

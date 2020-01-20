@@ -585,7 +585,7 @@ export default class Hub extends Vue {
   z-index: 100;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 1200px) {
   .hub,
   .columns {
     width: 300vw;

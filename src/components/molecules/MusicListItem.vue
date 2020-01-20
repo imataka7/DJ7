@@ -7,7 +7,8 @@
       :href="getUrl(music.source)"
       title="Watch on YouTube"
     >
-      <img :src="music.thumbnail" alt="thumbnail" />
+      <!-- <img :src="music.thumbnail" alt="thumbnail" /> -->
+      <img v-lazy="music.thumbnail" alt="thumbnail" />
     </a>
     <div class="desc-buttons">
       <div class="desc" :title="music.title">
@@ -69,10 +70,12 @@ export default class MusicListItem extends Vue {
 
 .img-link {
   height: 80px;
+  width: 106.66px;
   margin-right: 10px;
 
   img {
     height: 100%;
+    margin: auto;
   }
 }
 
