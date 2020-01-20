@@ -86,7 +86,9 @@ export default class InputArea extends Vue {
 
     // console.log(musicList);
 
-    this.$emit('parsed', musicList);
+    if (musicList) {
+      this.$emit('parsed', musicList);
+    }
 
     this.value = '';
     this.searching = false;

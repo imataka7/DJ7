@@ -43,11 +43,11 @@
       </div>
 
       <div class="seek-bar-container">
-        <p>
+        <p class="progress-container">
           <span class="progress-start">
             {{ formatDuration(((range * musicDuration) | 0) / 100) }}
           </span>
-          <span v-if="!isPhone">
+          <span class="progress-slash">
             /
           </span>
           <span class="progress-end">
@@ -573,7 +573,13 @@ export default class PlayerController extends Vue {
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 960px) {
+  .progress-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 640px) {
   .player-controller {
     height: 50px;
     transition: height 0.3s ease;
@@ -589,6 +595,10 @@ export default class PlayerController extends Vue {
         width: 90%;
         flex-direction: column-reverse;
         align-items: flex-start;
+
+        .progress-slash {
+          display: none;
+        }
 
         .seek-bar {
           width: 100%;
@@ -608,7 +618,7 @@ export default class PlayerController extends Vue {
     }
 
     &.is-theater {
-      height: 80vh;
+      height: 500px;
       border-radius: 10px 10px 0 0;
 
       .controller-container {
@@ -627,8 +637,8 @@ export default class PlayerController extends Vue {
         top: auto;
         left: auto;
         width: 95%;
-        height: 200px;
-        margin: 30px auto;
+        height: 250px;
+        margin: 40px auto 30px;
         pointer-events: auto;
 
         .player,
@@ -646,11 +656,14 @@ export default class PlayerController extends Vue {
 
       &:after {
         content: "";
+        position: relative;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 50px;
         height: 5px;
         background: #aaa;
         border-radius: 9999px;
-        margin: 10px auto;
       }
     }
   }
