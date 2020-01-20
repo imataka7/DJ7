@@ -33,6 +33,7 @@ export default class MusicHub extends Vue {
 
 html {
   overflow: hidden auto;
+  font-family: "Roboto Mono", "Meiryo UI", monospace;
 }
 
 html,

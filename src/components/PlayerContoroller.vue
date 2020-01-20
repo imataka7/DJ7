@@ -385,7 +385,7 @@ export default class PlayerController extends Vue {
   width: 100%;
   background-color: #eee;
   border-top: solid 1px #bbb;
-  font-family: "Roboto Mono", "Meiryo UI", monospace;
+  // font-family: "Roboto Mono", "Meiryo UI", monospace;
   z-index: 20;
 }
 
