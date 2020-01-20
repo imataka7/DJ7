@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <p style="position: absolute; top: 10px; left: 10px;">{{ height }}</p>
     <router-view />
   </div>
 </template>
@@ -17,20 +16,13 @@ export default class MusicHub extends Vue {
   public setVh() {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-    this.height += vh * 100;
   }
-
-  public height = 0;
 
   public mounted() {
     this.setVh();
 
     setEvent(window, 'resize', this.setVh);
     setEvent(window, 'orientatoinchange', this.setVh);
-
-    // window.addEventListener('resize', () => {
-    //   this.setVh();
-    // });
   }
 }
 </script>
