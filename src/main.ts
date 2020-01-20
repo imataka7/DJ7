@@ -19,6 +19,7 @@ import {
   faHandPaper,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
+import VueLazyload from 'vue-lazyload';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -48,6 +49,7 @@ library.add(...[
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.component('fa-layers', FontAwesomeLayers);
 
+Vue.use(VueLazyload);
 Vue.use(firebase);
 Vue.config.productionTip = false;
 
