@@ -90,6 +90,7 @@ export default class InputArea extends Vue {
 
     this.value = '';
     this.searching = false;
+    this.isPlaylist = false;
   }
 }
 </script>
