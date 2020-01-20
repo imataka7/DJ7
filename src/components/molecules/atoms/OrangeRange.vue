@@ -2,7 +2,7 @@
   <div class="orange-range">
     <div
       class="range-runnable-track"
-      :style="`width: ${Math.ceil((width * val) / 100) + 1}px`"
+      :style="`width: ${val}%`"
       v-if="!disabled"
     ></div>
     <input
@@ -31,12 +31,6 @@ export default class OrangeRange extends Vue {
 
   @Prop({ default: false })
   public disabled!: boolean;
-
-  public width = 0;
-
-  public mounted() {
-    this.width = this.$el?.clientWidth || 0;
-  }
 
   get val() {
     return this.value;

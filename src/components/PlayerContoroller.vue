@@ -1,5 +1,5 @@
 <template>
-  <div :class="`player-controller  ${isPlayerExpanded ? 'is-expand' : ''}`">
+  <div :class="`player-controller  ${isTheaterMode ? 'is-theater' : ''}`">
     <div class="controller-container is-flex">
       <div class="player-buttons is-flex">
         <!-- <button class="has-bounce" :disabled="isControllerDisable">
@@ -42,7 +42,7 @@
         </button>
       </div>
 
-      <div class="seek-bar-container" v-if="isPlayerExpanded">
+      <div class="seek-bar-container">
         <p>
           <span class="progress-start">
             {{ formatDuration(((range * musicDuration) | 0) / 100) }}
@@ -89,7 +89,7 @@
         <p class="no-music-indicator" v-else>No music playing</p>
       </div>
     </div>
-    <div :class="`player-container ${isTheaterMode ? 'is-theater' : ''}`">
+    <div class="player-container">
       <!-- <transition>
         <div
           class="youtube-player"
@@ -371,12 +371,7 @@ export default class PlayerController extends Vue {
   public isPlayerExpanded = window.innerWidth > 1240;
 
   public togglePlayerActive() {
-    if (window.innerWidth > 1240) {
-      this.isTheaterMode = !this.isTheaterMode;
-      return;
-    }
-
-    this.isPlayerExpanded = !this.isPlayerExpanded;
+    this.isTheaterMode = !this.isTheaterMode;
   }
 }
 </script>
@@ -524,7 +519,7 @@ export default class PlayerController extends Vue {
   // width: 100px;
   // height: 100px;
 
-  &.is-theater {
+  .is-theater > & {
     top: 0;
     left: 0;
     width: 100%;
@@ -572,9 +567,15 @@ export default class PlayerController extends Vue {
 }
 
 @media screen and (max-width: 1240px) {
+  .player-controller,
+  .controller-container {
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
   .player-controller {
     height: 50px;
-    width: 100vw;
     transition: height 0.3s ease;
     display: flex;
     flex-direction: column-reverse;
@@ -584,6 +585,7 @@ export default class PlayerController extends Vue {
       width: 100%;
 
       .seek-bar-container {
+        display: none;
         width: 90%;
         flex-direction: column-reverse;
         align-items: flex-start;
@@ -605,7 +607,7 @@ export default class PlayerController extends Vue {
       transition: none;
     }
 
-    &.is-expand {
+    &.is-theater {
       height: 80vh;
       border-radius: 10px 10px 0 0;
 
@@ -614,6 +616,10 @@ export default class PlayerController extends Vue {
         flex-direction: column-reverse;
         margin-top: 0;
         margin-bottom: 50px;
+      }
+
+      .seek-bar-container {
+        display: flex;
       }
 
       .player-container {
