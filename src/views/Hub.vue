@@ -4,7 +4,7 @@
       <div class="column input-container">
         <h1>MusicHub</h1>
         <h2>RoomId: {{ roomId }}</h2>
-        <span class="version">v0.15.0 on 20200120</span>
+        <span class="version">v0.15.3 on 20200120</span>
 
         <div class="room-users">
           <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
