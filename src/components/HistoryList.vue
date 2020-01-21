@@ -1,15 +1,18 @@
 <template>
   <div class="history-list">
-    <music-list-item v-for="m in reversedList" :key="m.id" :music="m">
-      <template v-slot:buttons>
-        <abutton class="button" title="Delete music" @click="del(m)">
-          <fa-icon icon="times"></fa-icon>
-        </abutton>
-        <abutton class="button" title="Add to queue" @click="add(m)">
-          <fa-icon icon="plus"></fa-icon>
-        </abutton>
-      </template>
-    </music-list-item>
+    <!-- <p>{{ size }}</p> -->
+    <virtual-list :size="size" :remain="10" :key="size">
+      <music-list-item v-for="m in reversedList" :key="m.id" :music="m">
+        <template v-slot:buttons>
+          <abutton class="button" title="Delete music" @click="del(m)">
+            <fa-icon icon="times"></fa-icon>
+          </abutton>
+          <abutton class="button" title="Add to queue" @click="add(m)">
+            <fa-icon icon="plus"></fa-icon>
+          </abutton>
+        </template>
+      </music-list-item>
+    </virtual-list>
   </div>
 </template>
 
@@ -48,6 +51,12 @@ export default class HistoryList extends Vue {
   public del(music: Music) {
     this.$emit('del', music);
   }
+
+  public size = 100;
+
+  public mounted() {
+    this.size = this.$el.clientHeight / 10;
+  }
 }
 </script>
 
@@ -55,6 +64,7 @@ export default class HistoryList extends Vue {
 .history-list {
   width: 100%;
   padding: 0 5px;
+  overflow: hidden;
 
   .button {
     margin: 0 10px;

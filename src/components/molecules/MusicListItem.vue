@@ -7,8 +7,8 @@
       :href="getUrl(music.source)"
       title="Watch on YouTube"
     >
-      <!-- <img :src="music.thumbnail" alt="thumbnail" /> -->
-      <img v-lazy="music.thumbnail" alt="thumbnail" />
+      <img :src="music.thumbnail" alt="thumbnail" />
+      <!-- <img v-lazy="music.thumbnail" alt="thumbnail" /> -->
     </a>
     <div class="desc-buttons">
       <div class="desc" :title="music.title">
@@ -38,9 +38,15 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
+// @ts-ignore
+import VirtualList from 'vue-virtual-scroll-list';
 import { Musicx } from '../../models/room';
 
-@Component
+@Component({
+  components: {
+    VirtualList,
+  },
+})
 export default class MusicListItem extends Vue {
   @Prop()
   public music!: Musicx;
