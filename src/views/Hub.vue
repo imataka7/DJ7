@@ -1,11 +1,11 @@
 <template>
-  <div class="hub">
+  <div class="hub" @resize="() => swiper.update()">
     <div class="swiper-container">
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <h1>MusicHub</h1>
           <h2>RoomId: {{ roomId }}</h2>
-          <span class="version">v0.15.6 on 20200122</span>
+          <span class="version">v0.15.7 on 20200122</span>
 
           <div class="room-users">
             <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
@@ -332,19 +332,24 @@ export default class Hub extends Vue {
     await batch.commit();
   }
 
+  public swiper!: Swiper;
+
   public initSwiper() {
-    const swiper = new Swiper('.swiper-container', {
+    this.swiper = new Swiper('.swiper-container', {
       direction: 'horizontal',
       loop: false,
+      slidesPerView: 1,
+      breakpoints: {
+        1240: {
+          slidesPerView: 3,
+          allowTouchMove: false,
+        },
+      },
     });
   }
 
   public async mounted() {
-    const { phone, tablet } = isMobile();
-    const isPC = !(phone || tablet);
-    if (!isPC) {
-      this.initSwiper();
-    }
+    this.initSwiper();
 
     await Promise.all([
       this.initUser(),
@@ -533,8 +538,9 @@ export default class Hub extends Vue {
 }
 
 .swiper-container {
-  width: 100%;
+  width: 1240px;
   height: 100%;
+  margin: auto;
 }
 
 .columns {
@@ -615,15 +621,17 @@ export default class Hub extends Vue {
     width: 100vw;
     height: 100%;
     overflow-y: auto;
+    margin: 0;
   }
 
   .column,
   .input-container {
+    width: 90vw;
     padding: 10px 5vw;
     overflow-x: hidden;
     overflow-y: hidden;
 
-    &:nth-child(1) {
+    &:first-child {
       overflow-y: auto;
     }
   }
