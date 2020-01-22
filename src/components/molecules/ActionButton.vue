@@ -34,6 +34,7 @@ export default class ActionButton extends Vue {
   border: 1px solid #ccc;
   background: #fff;
   font-size: 0.9em;
+  user-select: none;
 }
 
 .action-button.has-effect {

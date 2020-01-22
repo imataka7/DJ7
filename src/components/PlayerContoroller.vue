@@ -1,5 +1,10 @@
 <template>
-  <div :class="`player-controller  ${isTheaterMode ? 'is-theater' : ''}`">
+  <div
+    :class="`player-controller  ${isTheaterMode ? 'is-theater' : ''}`"
+    @pointerdown="onPointerStart"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerEnd"
+  >
     <div class="controller-container is-flex">
       <div class="player-buttons is-flex">
         <!-- <button class="has-bounce" :disabled="isControllerDisable">
@@ -89,7 +94,7 @@
         <p class="no-music-indicator" v-else>No music playing</p>
       </div>
     </div>
-    <div class="player-container">
+    <div class="player-container" @pointermove.stop>
       <!-- <transition>
         <div
           class="youtube-player"
@@ -372,10 +377,65 @@ export default class PlayerController extends Vue {
     return isMobile().tablet;
   }
 
-  public isPlayerExpanded = window.innerWidth > 1240;
-
   public togglePlayerActive() {
     this.isTheaterMode = !this.isTheaterMode;
+  }
+
+  public sumMovementY = 0;
+
+  public initialPageY = 0;
+
+  public pointerEventStartAt = 0;
+
+  public onPointerStart(e: PointerEvent) {
+    if (window.innerWidth > 1240) {
+      return;
+    }
+
+
+    if (this.isTheaterMode) {
+      const el = this.$el as HTMLElement;
+      el.style.removeProperty('transition');
+      this.sumMovementY = 0;
+      this.pointerEventStartAt = Date.now();
+      this.initialPageY = 0;
+    }
+  }
+
+  public onPointerMove(e: PointerEvent) {
+    if (e.pressure === 0 || window.innerWidth > 1240) {
+      return;
+    }
+
+    if (this.isTheaterMode) {
+      const py = e.pageY;
+      if (this.initialPageY === 0) {
+        this.initialPageY = py;
+      }
+
+      this.sumMovementY = py - this.initialPageY;
+
+      const el = this.$el as HTMLElement;
+      if (this.sumMovementY > 0) {
+        el.style.transform = `translateY(${this.sumMovementY}px)`;
+      }
+    }
+  }
+
+  public async onPointerEnd(e: PointerEvent) {
+    if (window.innerWidth > 1240) {
+      return;
+    }
+
+    const el = this.$el as HTMLElement;
+    el.style.removeProperty('height');
+    el.style.setProperty('transition', 'height .3s ease, transform .3s ease-in-out');
+
+    const dy = this.sumMovementY / (Date.now() - this.pointerEventStartAt);
+    if (dy > 1 || this.sumMovementY > 200) {
+      this.isTheaterMode = false;
+    }
+    el.style.removeProperty('transform');
   }
 }
 </script>
@@ -585,11 +645,12 @@ export default class PlayerController extends Vue {
 
 @media screen and (max-width: 640px) {
   .player-controller {
-    height: 50px;
-    transition: height 0.3s ease;
     display: flex;
     flex-direction: column-reverse;
+    height: 50px;
     touch-action: none;
+    // transition: height 0.3s ease, transform 0.3s ease-in-out;
+    transition: height 0.3s ease;
 
     .controller-container {
       width: 100%;
@@ -624,6 +685,7 @@ export default class PlayerController extends Vue {
     &.is-theater {
       height: 500px;
       border-radius: 10px 10px 0 0;
+      user-select: none;
 
       .controller-container {
         height: 200px;
@@ -644,6 +706,7 @@ export default class PlayerController extends Vue {
         height: 250px;
         margin: 40px auto 30px;
         pointer-events: auto;
+        touch-action: none;
 
         .player,
         iframe {
