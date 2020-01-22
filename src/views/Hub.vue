@@ -1,56 +1,57 @@
 <template>
   <div class="hub">
-    <div class="columns">
-      <div class="column input-container">
-        <h1>MusicHub</h1>
-        <h2>RoomId: {{ roomId }}</h2>
-        <span class="version">v0.15.3 on 20200120</span>
+    <div class="swiper-container">
+      <div class="columns swiper-wrapper">
+        <div class="column swiper-slide input-container">
+          <h1>MusicHub</h1>
+          <h2>RoomId: {{ roomId }}</h2>
+          <span class="version">v0.15.5 on 20200122</span>
 
-        <div class="room-users">
-          <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+          <div class="room-users">
+            <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+          </div>
+
+          <input-area @parsed="addQueue"></input-area>
+
+          <div class="ad-container"></div>
+
+          <div class="jumper">
+            <input type="text" v-model="jumpTo" />
+            <button @click="jump">Jump</button>
+          </div>
+          <button @click="$auth.signOut()">Sign out</button>
         </div>
 
-        <input-area @parsed="addQueue"></input-area>
-
-        <div class="ad-container"></div>
-
-        <div class="jumper">
-          <input type="text" v-model="jumpTo" />
-          <button @click="jump">Jump</button>
+        <div class="column swiper-slide">
+          <p class="header">Queue</p>
+          <div class="no-music" v-if="queues.length === 0">
+            No music in queue
+          </div>
+          <music-queue
+            v-model="queues"
+            @interrupt="interrupt"
+            :is-draggable="!isQueueUpdating"
+            class="music-list"
+            v-else
+          ></music-queue>
         </div>
-        <button @click="$auth.signOut()">Sign out</button>
-      </div>
 
-      <div class="column">
-        <p class="header">Queue</p>
-        <div class="no-music" v-if="queues.length === 0">
-          No music in queue
+        <div class="column swiper-slide">
+          <p class="header">History</p>
+          <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
+          <div class="no-music" v-if="history.length === 0">
+            No music in history
+          </div>
+          <history-list
+            :list="history"
+            @add="addQueue"
+            @del="deleteMusicFromHistory"
+            class="music-list"
+            v-else
+          ></history-list>
         </div>
-        <music-queue
-          v-model="queues"
-          @interrupt="interrupt"
-          :is-draggable="!isQueueUpdating"
-          class="music-list"
-          v-else
-        ></music-queue>
-      </div>
-
-      <div class="column">
-        <p class="header">History</p>
-        <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
-        <div class="no-music" v-if="history.length === 0">
-          No music in history
-        </div>
-        <history-list
-          :list="history"
-          @add="addQueue"
-          @del="deleteMusicFromHistory"
-          class="music-list"
-          v-else
-        ></history-list>
       </div>
     </div>
-
     <!-- <pre>{{ roomStatus }}</pre>
     <pre>{{ userStatus }}</pre>
     <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre> -->
@@ -67,6 +68,8 @@ import {
 } from 'vue-property-decorator';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import Swiper from 'swiper';
+import isMobile from 'ismobilejs';
 
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
@@ -309,7 +312,6 @@ export default class Hub extends Vue {
     }
   }
 
-  // TODO: use transaction
   public async updateHistory(music: Music) {
     const { source } = music;
 
@@ -330,7 +332,20 @@ export default class Hub extends Vue {
     await batch.commit();
   }
 
+  public initSwiper() {
+    const swiper = new Swiper('.swiper-container', {
+      direction: 'horizontal',
+      loop: false,
+    });
+  }
+
   public async mounted() {
+    const { phone, tablet } = isMobile();
+    const isPC = !(phone || tablet);
+    if (!isPC) {
+      this.initSwiper();
+    }
+
     await Promise.all([
       this.initUser(),
       this.init(),
@@ -511,10 +526,6 @@ export default class Hub extends Vue {
 
 <style lang="scss" scoped>
 .hub {
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: space-between;
-
   width: 100%;
   height: 100%;
   margin: auto;
@@ -533,7 +544,7 @@ export default class Hub extends Vue {
 
   .input-container {
     width: 300px;
-    z-index: 100;
+    // z-index: 100;
   }
 }
 
@@ -595,19 +606,19 @@ export default class Hub extends Vue {
     margin: 0;
   }
 
-  .columns {
-    justify-content: flex-start;
+  .swiper-container {
+    width: 100vw;
+    height: 100%;
+    overflow-y: auto;
   }
 
   .column,
   .input-container {
-    width: 90vw;
     padding: 10px 5vw;
     overflow-x: hidden;
     overflow-y: hidden;
 
     &:nth-child(1) {
-      // background: #aaa;
       overflow-y: auto;
     }
   }

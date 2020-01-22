@@ -64,7 +64,7 @@ export default class HistoryList extends Vue {
 .history-list {
   width: 100%;
   padding: 0 5px;
-  overflow: hidden;
+  overflow: hidden !important;
 
   .button {
     margin: 0 10px;
