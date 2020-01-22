@@ -1,11 +1,11 @@
 <template>
-  <div class="hub" @resize="() => swiper.update()">
+  <div class="hub">
     <div class="swiper-container">
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <h1>MusicHub</h1>
           <h2>RoomId: {{ roomId }}</h2>
-          <span class="version">v0.15.7 on 20200122</span>
+          <span class="version">v0.15.8 on 20200122</span>
 
           <div class="room-users">
             <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
@@ -83,6 +83,7 @@ import PlayerStatus from '../models/playerStatus';
 import HistoryList from '@/components/HistoryList.vue';
 import PlayerController from '@/components/PlayerContoroller.vue';
 import sleep from '../utils/sleep';
+import setEvent from '../utils/eventUtil';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -332,7 +333,7 @@ export default class Hub extends Vue {
     await batch.commit();
   }
 
-  public swiper!: Swiper;
+  public swiper?: Swiper;
 
   public initSwiper() {
     this.swiper = new Swiper('.swiper-container', {
@@ -348,8 +349,21 @@ export default class Hub extends Vue {
     });
   }
 
+  public updateSwiper() {
+    if (window.innerWidth < 1240 && !this.swiper) {
+      this.initSwiper();
+      return;
+    }
+
+    this.swiper?.update();
+  }
+
   public async mounted() {
-    this.initSwiper();
+    if (window.innerWidth < 1240) {
+      this.initSwiper();
+    }
+
+    setEvent(window, 'resize', this.updateSwiper);
 
     await Promise.all([
       this.initUser(),
