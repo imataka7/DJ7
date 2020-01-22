@@ -5,7 +5,7 @@
         <div class="column swiper-slide input-container">
           <h1>MusicHub</h1>
           <h2>RoomId: {{ roomId }}</h2>
-          <span class="version">v0.15.5 on 20200122</span>
+          <span class="version">v0.15.6 on 20200122</span>
 
           <div class="room-users">
             <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
@@ -530,6 +530,11 @@ export default class Hub extends Vue {
   height: 100%;
   margin: auto;
   overflow: hidden;
+}
+
+.swiper-container {
+  width: 100%;
+  height: 100%;
 }
 
 .columns {
