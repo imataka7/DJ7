@@ -21,13 +21,6 @@
           >
             <fa-icon icon="pause" size="lg"></fa-icon>
           </button>
-          <!-- <button
-            v-else-if="currentPlayer && currentPlayer.state === 3"
-            key="spin"
-            :disabled="isControllerDisable"
-          >
-            <fa-icon icon="spinner" size="lg" pulse></fa-icon>
-          </button> -->
           <button
             @click="updateStatus(1)"
             v-else
@@ -105,7 +98,7 @@
           "
         ></div>
       </transition> -->
-      <div class="youtube-player"></div>
+      <youtube-player ref="youtube" class="youtube-player"></youtube-player>
     </div>
   </div>
 </template>
@@ -136,6 +129,7 @@ interface SupportedPlatform {
     VolumePicker,
     SeekBar,
     PlayerMusicInfo,
+    'youtube-player': YouTubePlayer,
   },
 })
 export default class PlayerController extends Vue {
@@ -152,15 +146,9 @@ export default class PlayerController extends Vue {
   public timer?: number;
 
   public async initPlayers() {
-    const ytel = this.$el.querySelector('.youtube-player') as HTMLElement;
-
-    const youtube = new YouTubePlayer({
-      el: ytel,
-      propsData: {
-        class: 'youtube-player',
-      },
-    }).$mount();
+    const youtube = this.$refs.youtube as YouTubePlayer;
     youtube.$on('end', this.onMusicEnd);
+    // youtube.$on('error', this.onError);
 
     this.players.youtube = youtube;
 
@@ -215,9 +203,17 @@ export default class PlayerController extends Vue {
   }
 
   public async onMusicEnd() {
+    const music = this.currentMusic;
     this.clearMusicInfo();
-    this.$emit('end');
+    this.$emit('end', music);
   }
+
+  // public onError() {
+  //   const music = this.currentMusic;
+  //   this.clearMusicInfo();
+  //   console.log('error', music);
+  //   this.$emit('error', music);
+  // }
 
   public moveMusic(direction: 'forward' | 'backword') {
     this.clearMusicInfo();

@@ -45,9 +45,6 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
       this.player.mute();
     }
 
-    // It's playable even when set `display: none`.
-    // (await this.player.getIframe()).style.display = 'none';
-
     this.player.on('stateChange', async (e) => {
       this.state = e.data;
       // console.log(e, await this.getCurrentPlayedTime());
@@ -55,53 +52,23 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
         this.end();
       }
     });
+
+    this.player.on('error', async (e) => {
+      // this.$emit('error');
+      this.$emit('end');
+    });
   }
 
   public async play() {
-    // if (this.state === PlayerStatus.BUFFERING) {
-    //   return;
-    // }
-
-    // this.$emit('update', PlayerStatus.PLAY, await this.player.getCurrentTime());
     this.player.playVideo();
   }
 
   public async pause() {
-    // if (this.state === PlayerStatus.BUFFERING) {
-    //   return;
-    // }
-
-    // this.$emit('update', PlayerStatus.PAUSE, await this.player.getCurrentTime());
     this.player.pauseVideo();
   }
 
   public async end() {
     this.$emit('end');
-  }
-
-  // FIXME: たまに更新したときにシークされない
-  // なおったか？
-  /**
-   * @deprecated
-   */
-  public async setStatus(status: PlayerStatus, seekTo: number) {
-    await this.player.seekTo(seekTo, true);
-
-    switch (status) {
-      case PlayerStatus.PLAY:
-        await this.player.playVideo();
-        break;
-      case PlayerStatus.PAUSE:
-        await this.player.pauseVideo();
-        break;
-      case PlayerStatus.NO_MUSIC:
-        await this.player.stopVideo();
-        break;
-      default:
-    }
-
-    // console.log(await this.player.getPlayerState());
-    // console.log(status, seekTo, await this.player.getPlayerState());
   }
 
   public async getCurrentPlayedTime() {

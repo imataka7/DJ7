@@ -5,7 +5,7 @@
         <div class="column swiper-slide input-container">
           <h1>MusicHub</h1>
           <h2>RoomId: {{ roomId }}</h2>
-          <span class="version">v0.15.8 on 20200122</span>
+          <span class="version">v0.16.1 on 20200122</span>
 
           <div class="room-users">
             <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
@@ -200,6 +200,7 @@ export default class Hub extends Vue {
     this.controller.$on('end', this.onMusicEnded);
     this.controller.$on('forward', this.forwardMusic);
     this.controller.$on('seeked', this.onSeeked);
+    // this.controller.$on('error', this.onError);
 
     await this.controller.initPlayers();
 
@@ -431,23 +432,37 @@ export default class Hub extends Vue {
     });
   }
 
-  private async onMusicEnded() {
-    if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
-      return;
-    }
+  // private async onMusicEnded() {
+  //   if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
+  //     return;
+  //   }
 
+  //   const snapshot = await this.roomRef.get();
+  //   const status = snapshot.data() as Room;
+
+  //   const { player, queues } = status;
+  //   const { music, playedTime, updatedAt } = player;
+
+  //   // チャタリング対策
+  //   if (playedTime === 0 && Date.now() - updatedAt < 3000) {
+  //     return;
+  //   }
+
+  //   this.setMusicFromQueue(queues);
+  // }
+
+  public async onMusicEnded(errorMusic: Musicx) {
     const snapshot = await this.roomRef.get();
     const status = snapshot.data() as Room;
 
     const { player, queues } = status;
     const { music, playedTime, updatedAt } = player;
 
-    // チャタリング対策
-    if (playedTime === 0 && Date.now() - updatedAt < 3000) {
-      return;
-    }
+    // console.log(music, errorMusic);
 
-    this.setMusicFromQueue(queues);
+    if (music.id === errorMusic.id) {
+      this.setMusicFromQueue(queues);
+    }
   }
 
   private async forwardMusic() {
