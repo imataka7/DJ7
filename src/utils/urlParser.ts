@@ -49,13 +49,19 @@ function generateRandomId() {
   return Math.random().toString(36).slice(2);
 }
 
-async function createYTInfo(videoId: string, title?: string) {
+async function createYTInfo(videoId: string, titlePrefetched?: string) {
+  const title = titlePrefetched || await getYTVideoTitle(videoId);
+
+  if (!title) {
+    return null;
+  }
+
   return {
     source: `https://www.youtube.com/embed/${videoId}`,
     platform: 'YouTube',
     id: generateRandomId(),
     thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-    title: title || await getYTVideoTitle(videoId),
+    title,
   } as Musicx;
 }
 

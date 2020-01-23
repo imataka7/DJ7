@@ -48,7 +48,7 @@ async function getYTVideoTitle(id: string) {
   const res = await dataAPIBase(`videos?id=${id}&fields=items(id,snippet(title))&part=snippet`);
 
   if (res) {
-    return res.items[0].snippet.title as string;
+    return res.items[0]?.snippet.title as string;
   }
 }
 
