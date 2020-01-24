@@ -18,6 +18,7 @@ import PlayerStatus from '@/models/playerStatus';
 import MusicPlayer from '@/models/musicPlayer';
 import sleep from '../utils/sleep';
 import Music from '../models/music';
+import { Musicx } from '../models/room';
 
 @Component
 export default class PlayerYoutube extends Vue implements MusicPlayer {
@@ -55,7 +56,8 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
 
     this.player.on('error', async (e) => {
       // this.$emit('error');
-      this.$emit('end');
+      // this.$emit('end');
+      this.end();
     });
   }
 
@@ -68,7 +70,8 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   }
 
   public async end() {
-    this.$emit('end');
+    this.$emit('end', this.currentMusic);
+    this.currentMusic = undefined;
   }
 
   public async getCurrentPlayedTime() {
@@ -88,7 +91,9 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
     await this.player.loadVideoByUrl(this.query);
   }
 
-  async loadMusic(music: Music): Promise<void> {
+  public currentMusic?: Musicx;
+
+  async loadMusic(music: Musicx): Promise<void> {
     return new Promise<void>(async (r) => {
       const listener = this.player.on('stateChange', async (e) => {
         if (e.data === 1) {
@@ -99,6 +104,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
         }
       });
 
+      this.currentMusic = music;
       await this.player.loadVideoByUrl({ mediaContentUrl: music.source, startSeconds: 0 });
     });
   }

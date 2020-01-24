@@ -202,8 +202,8 @@ export default class PlayerController extends Vue {
     this.range = 0;
   }
 
-  public async onMusicEnd() {
-    const music = this.currentMusic;
+  public async onMusicEnd(music: Musicx) {
+    // const music = this.currentMusic;
     this.clearMusicInfo();
     this.$emit('end', music);
   }
