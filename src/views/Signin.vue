@@ -1,6 +1,7 @@
 <template>
   <div class="signin">
-    <h1>Welcome!</h1>
+    <h1>Welcome to MusicHub!</h1>
+    <h2>v0.16.5</h2>
     <div class="firebaseui-auth-container"></div>
   </div>
 </template>
@@ -40,6 +41,9 @@ export default class Signin extends Vue {
 
 <style lang="scss" scoped>
 .signin {
+  width: 100%;
+  height: 100%;
+
   text-align: center;
 }
 </style>
