@@ -14,8 +14,8 @@ import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 
-const uiConfig = {
-  signInSuccessUrl: '/about',
+const configureUi = (to?: string) => ({
+  signInSuccessUrl: to || '/about',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
@@ -23,7 +23,7 @@ const uiConfig = {
   ],
   tosUrl: '/term-of-service',
   privacyPolicyUrl: '/privacy-policy',
-} as firebaseui.auth.Config;
+} as firebaseui.auth.Config);
 
 @Component
 export default class Signin extends Vue {
@@ -32,7 +32,8 @@ export default class Signin extends Vue {
   }
 
   public mounted() {
-    this.ui.start('.firebaseui-auth-container', uiConfig);
+    const to = this.$route.query.redirect as string;
+    this.ui.start('.firebaseui-auth-container', configureUi(to));
   }
 }
 </script>

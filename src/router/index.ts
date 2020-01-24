@@ -62,6 +62,9 @@ router.beforeEach((to, from, next) => {
       } else {
         next({
           path: '/signin',
+          query: {
+            redirect: to.fullPath,
+          },
         });
       }
     });
