@@ -3,9 +3,11 @@
     <div class="swiper-container">
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
-          <h1>MusicHub</h1>
-          <h2>RoomId: {{ roomId }}</h2>
-          <span class="version">{{ version }}</span>
+          <div class="room-desc">
+            <h2>MusicHub</h2>
+            <h2>RoomId: {{ roomId }}</h2>
+            <span class="version">{{ version }}</span>
+          </div>
 
           <div class="room-users">
             <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
@@ -586,10 +588,14 @@ export default class Hub extends Vue {
   padding: 10px;
   font-family: "Roboto Mono", monospace;
 
-  .input-container {
+  &.input-container {
     width: 300px;
-    // z-index: 100;
+    overflow: auto;
   }
+}
+
+.room-desc {
+  margin-bottom: 30px;
 }
 
 .room-users {
@@ -616,7 +622,7 @@ export default class Hub extends Vue {
   margin: 0;
   height: 30px;
   text-align: center;
-  border-bottom: solid 1px #ddd;
+  border-bottom: solid 1px var(--hub-header-border);
   font-size: 1.2em;
   font-weight: 700;
 }
@@ -632,8 +638,8 @@ export default class Hub extends Vue {
   width: 420px;
   padding: 10px;
   margin-top: 10px;
-  background: #333;
-  color: #fff;
+  background: var(--hub-no-music-bg);
+  color: var(--hub-no-music-fc);
   text-align: center;
 }
 

@@ -70,7 +70,7 @@ export default class MusicListItem extends Vue {
   transition: background 0.2s;
 
   &:hover {
-    background: #eee;
+    background: var(--list-item-bg-hover);
   }
 }
 
@@ -100,14 +100,14 @@ export default class MusicListItem extends Vue {
     text-overflow: ellipsis;
 
     .original-link {
-      color: #000;
+      color: var(--fc);
       transition: color 0.2s;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
 
       &:hover {
-        color: #f50;
+        color: var(--list-item-link-fc-hover);
       }
     }
   }

@@ -31,24 +31,21 @@ export default class ActionButton extends Vue {
   width: 70px;
   height: 25px;
   border-radius: 9999px;
-  border: 1px solid #ccc;
-  background: #fff;
+  color: var(--button-fc);
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
   font-size: 0.9em;
   user-select: none;
 }
 
 .action-button.has-effect {
-  --button-color: rgba(255, 85, 0, 1);
-  --border-color: #ccc;
-  --border-color-hover: #777;
-
   position: relative;
   cursor: pointer;
 
   &:not(:disabled) {
     &:hover {
-      border-color: var(--button-color);
-      color: var(--button-color);
+      border-color: var(--button-hover);
+      color: var(--button-hover);
     }
 
     &:after {
@@ -60,7 +57,7 @@ export default class ActionButton extends Vue {
       left: 0;
       border-radius: 9999px;
       opacity: 0;
-      background: #f50;
+      background: var(--button-active);
       transition: all 0.8s;
     }
 
@@ -72,13 +69,13 @@ export default class ActionButton extends Vue {
 
     &:focus {
       outline: 0;
-      box-shadow: 0px 0px 3px var(--button-color);
-      border-color: var(--button-color);
+      box-shadow: 0px 0px 3px var(--button-focus);
+      border-color: var(--button-focus);
     }
   }
 
   &:disabled {
-    color: #ddd;
+    color: var(--button-disabled);
     cursor: not-allowed;
   }
 }
@@ -96,7 +93,7 @@ export default class ActionButton extends Vue {
   }
 
   50% {
-    background: #f50;
+    background: var(--button-active);
   }
 }
 </style>

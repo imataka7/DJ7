@@ -35,11 +35,11 @@ export default class VolumePicker extends Vue {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #eee;
+  background-color: var(--volume-picker-bg);
   padding: 15px;
   width: 180px;
   box-sizing: border-box;
-  border: solid 1px #bbb;
+  border: solid 1px var(--volume-picker-border);
 
   &:before {
     content: "";
@@ -51,8 +51,8 @@ export default class VolumePicker extends Vue {
     height: 0;
     border-style: solid;
     border-width: 10px 10px 10px 0;
-    border-color: transparent #eee transparent transparent;
-    filter: drop-shadow(-1px 0px 0px #aaa);
+    border-color: transparent var(--volume-picker-bg) transparent transparent;
+    filter: drop-shadow(-1px 0px 0px var(--volume-picker-shadow));
   }
 }
 

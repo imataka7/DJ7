@@ -439,8 +439,8 @@ export default class PlayerController extends Vue {
 <style lang="scss">
 .player-controller {
   width: 100%;
-  background-color: #eee;
-  border-top: solid 1px #bbb;
+  background-color: var(--controller-bg);
+  border-top: solid 1px var(--controller-border);
   // font-family: "Roboto Mono", "Meiryo UI", monospace;
   z-index: 20;
 }
@@ -465,13 +465,14 @@ export default class PlayerController extends Vue {
     background: transparent;
     border: none;
     transition: color 0.2s;
+    color: var(--controller-button-fc);
 
     &:focus {
       outline: none;
     }
 
     &:disabled {
-      color: #555;
+      color: var(--controller-button-disabled);
       cursor: not-allowed;
     }
 
@@ -481,7 +482,7 @@ export default class PlayerController extends Vue {
       }
 
       &:hover {
-        color: #f50;
+        color: var(--controller-button-hover);
       }
     }
   }
@@ -519,7 +520,7 @@ export default class PlayerController extends Vue {
   transition: background 0.2s;
 
   &:hover {
-    background: #ddd;
+    background: var(--controller-info-hover);
   }
 
   .no-music-indicator {
@@ -533,8 +534,8 @@ export default class PlayerController extends Vue {
     bottom: 150%;
     left: 30%;
     transform: translateX(-50%);
-    background: #333;
-    color: #fff;
+    background: var(--controller-clickme-bg);
+    color: var(--controller-clickme-fc);
     border-radius: 5px;
     text-align: center;
     animation: hovering 1s infinite;
@@ -549,7 +550,8 @@ export default class PlayerController extends Vue {
       height: 0;
       border-style: solid;
       border-width: 12px 12px 0 12px;
-      border-color: #333 transparent transparent transparent;
+      border-color: var(--controller-clickme-bg) transparent transparent
+        transparent;
     }
   }
 }
@@ -725,7 +727,7 @@ export default class PlayerController extends Vue {
         transform: translateX(-50%);
         width: 50px;
         height: 5px;
-        background: #aaa;
+        background: var(--controller-swipe-handler);
         border-radius: 9999px;
       }
     }
