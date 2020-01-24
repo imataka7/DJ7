@@ -5,7 +5,7 @@
         <div class="column swiper-slide input-container">
           <h1>MusicHub</h1>
           <h2>RoomId: {{ roomId }}</h2>
-          <span class="version">v0.16.1 on 20200122</span>
+          <span class="version">{{ version }}</span>
 
           <div class="room-users">
             <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
@@ -97,6 +97,10 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
   },
 })
 export default class Hub extends Vue {
+  get version() {
+    return process.env.VUE_APP_VERSION;
+  }
+
   get currentUser() {
     return this.$auth.currentUser!;
   }
@@ -451,7 +455,7 @@ export default class Hub extends Vue {
   //   this.setMusicFromQueue(queues);
   // }
 
-  public async onMusicEnded(errorMusic: Musicx) {
+  public async onMusicEnded(playedMusic: Musicx) {
     const snapshot = await this.roomRef.get();
     const status = snapshot.data() as Room;
 
@@ -460,7 +464,7 @@ export default class Hub extends Vue {
 
     // console.log(music, errorMusic);
 
-    if (music.id === errorMusic.id) {
+    if (music.id === playedMusic.id) {
       this.setMusicFromQueue(queues);
     }
   }

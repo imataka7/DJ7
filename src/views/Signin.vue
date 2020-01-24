@@ -1,7 +1,7 @@
 <template>
   <div class="signin">
     <h1>Welcome to MusicHub!</h1>
-    <h2>v0.16.5</h2>
+    <h2>{{ version }}</h2>
     <div class="firebaseui-auth-container"></div>
   </div>
 </template>
@@ -28,6 +28,10 @@ const configureUi = (to?: string) => ({
 
 @Component
 export default class Signin extends Vue {
+  get version() {
+    return process.env.VUE_APP_VERSION;
+  }
+
   private get ui() {
     return new firebaseui.auth.AuthUI(this.$auth);
   }
