@@ -11,7 +11,7 @@ const routes = [
     name: 'landing',
     redirect: '/debug',
     meta: {
-      requreAuth: true,
+      requireAuth: true,
     },
   },
   {
@@ -27,7 +27,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {
-      requreAuth: true,
+      requireAuth: true,
     },
   },
   {
@@ -36,7 +36,7 @@ const routes = [
     component: Hub,
     alias: '/:roomId/req',
     meta: {
-      requreAuth: true,
+      requireAuth: true,
     },
   },
   {
@@ -52,7 +52,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isReqiredAuth = to.matched.some(r => r.meta.requreAuth);
+  const isReqiredAuth = to.matched.some(r => r.meta.requireAuth);
 
   if (isReqiredAuth) {
     // eslint-disable-next-line
