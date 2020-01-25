@@ -190,7 +190,7 @@ export default class Hub extends Vue {
   private controller!: PlayerController;
 
   public async init() {
-    this.roomId = this.$route.params.roomId;
+    this.roomId = this.$route.params.roomId || 'general';
     this.registerEvents();
 
     const snapshot = await this.roomRef.get();
@@ -602,9 +602,11 @@ export default class Hub extends Vue {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  min-height: 50px;
+  height: 50px;
+  width: 100%;
   margin-bottom: 5px;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
+  overflow-x: overlay;
 
   img {
     height: 50px;
