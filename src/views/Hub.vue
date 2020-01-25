@@ -86,7 +86,6 @@ import HistoryList from '@/components/HistoryList.vue';
 import PlayerController from '@/components/PlayerContoroller.vue';
 import sleep from '../utils/sleep';
 import setEvent from '../utils/eventUtil';
-import user from '@/store/modules/user';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
