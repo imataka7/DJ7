@@ -86,6 +86,7 @@ import HistoryList from '@/components/HistoryList.vue';
 import PlayerController from '@/components/PlayerContoroller.vue';
 import sleep from '../utils/sleep';
 import setEvent from '../utils/eventUtil';
+import user from '@/store/modules/user';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -127,16 +128,8 @@ export default class Hub extends Vue {
 
   public roomId = '';
 
-  get isRequestOnly() {
-    return !!this.$route.path.match(/\/req$/);
-  }
-
   get roomRef() {
     return this.$firestore.collection('rooms').doc(this.roomId);
-  }
-
-  get isHost() {
-    return this.currentUser.uid === this.roomStatus?.users[0]?.uid;
   }
 
   public roomStatus: Room | null = null;
@@ -206,7 +199,7 @@ export default class Hub extends Vue {
     this.controller.$on('end', this.onMusicEnded);
     this.controller.$on('forward', this.forwardMusic);
     this.controller.$on('seeked', this.onSeeked);
-    // this.controller.$on('error', this.onError);
+    this.controller.$on('error', this.onError);
 
     await this.controller.initPlayers();
 
@@ -438,26 +431,26 @@ export default class Hub extends Vue {
     });
   }
 
-  // private async onMusicEnded() {
-  //   if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
-  //     return;
-  //   }
+  private async onMusicEnded() {
+    if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
+      return;
+    }
 
-  //   const snapshot = await this.roomRef.get();
-  //   const status = snapshot.data() as Room;
+    const snapshot = await this.roomRef.get();
+    const status = snapshot.data() as Room;
 
-  //   const { player, queues } = status;
-  //   const { music, playedTime, updatedAt } = player;
+    const { player, queues } = status;
+    const { music, playedTime, updatedAt } = player;
 
-  //   // チャタリング対策
-  //   if (playedTime === 0 && Date.now() - updatedAt < 3000) {
-  //     return;
-  //   }
+    // チャタリング対策
+    if (playedTime === 0 && Date.now() - updatedAt < 3000) {
+      return;
+    }
 
-  //   this.setMusicFromQueue(queues);
-  // }
+    this.setMusicFromQueue(queues);
+  }
 
-  public async onMusicEnded(playedMusic: Musicx) {
+  public async onError(playedMusic: Musicx) {
     const snapshot = await this.roomRef.get();
     const status = snapshot.data() as Room;
 
