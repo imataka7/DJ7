@@ -180,6 +180,7 @@ body,
 :root[data-scrollbar="custom"] {
   ::-webkit-scrollbar {
     width: 7px;
+    height: 7px;
   }
 
   ::-webkit-scrollbar-track {
