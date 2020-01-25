@@ -28,7 +28,7 @@ export default class ActionButton extends Vue {
 
 <style lang="scss" scoped>
 .action-button {
-  width: 70px;
+  min-width: 70px;
   height: 25px;
   border-radius: 9999px;
   color: var(--button-fc);
@@ -36,6 +36,12 @@ export default class ActionButton extends Vue {
   background: var(--button-bg);
   font-size: 0.9em;
   user-select: none;
+
+  &.is-large {
+    width: 130px;
+    height: 30px;
+    font-size: 1em;
+  }
 }
 
 .action-button.has-effect {
