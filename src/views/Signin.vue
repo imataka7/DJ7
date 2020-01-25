@@ -16,7 +16,7 @@ import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 
 const configureUi = (to?: string) => ({
-  signInSuccessUrl: to || '/about',
+  signInSuccessUrl: to || '/',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,

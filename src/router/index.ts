@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Hub from '../views/Hub.vue';
+import General from '../views/General.vue';
 import { app as firebase } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -8,8 +9,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'landing',
-    redirect: '/debug',
+    name: 'general',
+    component: General,
     meta: {
       requireAuth: true,
     },
@@ -27,7 +28,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {
-      requireAuth: true,
+      authRequired: true,
     },
   },
   {
@@ -36,7 +37,7 @@ const routes = [
     component: Hub,
     alias: '/:roomId/req',
     meta: {
-      requireAuth: true,
+      authRequired: true,
     },
   },
   {
@@ -52,12 +53,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isReqiredAuth = to.matched.some(r => r.meta.requireAuth);
+  const isAuthRequired = to.matched.some(r => r.meta.authRequired);
 
-  if (isReqiredAuth) {
+  if (isAuthRequired) {
     // eslint-disable-next-line
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
+      if (user || to.fullPath === '/') {
         next();
       } else {
         next({
