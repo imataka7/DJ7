@@ -114,11 +114,12 @@ export default class InputArea extends Vue {
     // padding: 0;
     margin: 0 auto;
 
+    color: var(--input-fc);
     background: var(--input-bg);
     border-color: var(--input-border);
 
     &::placeholder {
-      color: var(--input-fc);
+      color: var(--input-placeholder-fc);
     }
   }
 }

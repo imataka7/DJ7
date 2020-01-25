@@ -81,8 +81,9 @@ $sairi-orange: #f50;
   --button-disabled: #{$gray-13};
 
   --input-bg: #{$white};
-  --input-fc: #{$gray-5};
-  --input-border: initial;
+  --input-fc: #{$black};
+  --input-placeholder-fc: #{$gray-5};
+  --input-border: #a9a9a9;
 
   --controller-bg: #{$gray-14};
   --controller-border: #{$gray-11};
@@ -123,7 +124,8 @@ $sairi-orange: #f50;
   --button-disabled: #{$gray-2};
 
   --input-bg: #{$gray-2};
-  --input-fc: #{$gray-9};
+  --input-fc: #{$gray-14};
+  --input-placeholder-fc: #{$gray-9};
   --input-border: #{$gray-5};
 
   --controller-bg: #{$gray-1};
