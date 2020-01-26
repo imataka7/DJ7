@@ -10,11 +10,11 @@
     <div class="confirm-field">
       <label class="checkbox">
         <input type="checkbox" v-model="isPlaylist" />
-        Queue as playlist
+        Add playlist
       </label>
-      <abutton class="button" @click="parse" :disabled="searching"
-        >Queue</abutton
-      >
+      <abutton class="button" @click="parse" :disabled="searching">
+        Queue
+      </abutton>
     </div>
   </div>
 </template>
@@ -28,6 +28,19 @@ import { getMusicInfo, getPlaylistInfo, getPlaylistId } from '@/utils/urlParser'
 import { Musicx } from '@/models/room';
 import ActionButton from './molecules/ActionButton.vue';
 
+const queryMessage = `Enter specific YouTube URLs or queries to search!
+
+examples:
+Shape of you
+https://youtu.be/SC4xMk98Pdc`;
+
+const playlistMessage = `Enter playlist URLs or playlistIds!
+
+examples:
+PLlcDhwyfvStrW2hpnIu9HBNfvkH_-x4um
+https://www.youtube.com/playlist?list=PLlcDhwyfvStrW2hpnIu9HBNfvkH_-x4um`;
+
+
 @Component({
   components: {
     abutton: ActionButton,
@@ -38,9 +51,9 @@ export default class InputArea extends Vue {
 
   public isPlaylist = false;
 
-  public queryMessage = 'Enter specific YouTube URLs or queries to search!';
+  public queryMessage = queryMessage;
 
-  public playlistMessage = 'Enter playlist URLs or playlistIds!'
+  public playlistMessage = playlistMessage;
 
   public searching = false;
 
