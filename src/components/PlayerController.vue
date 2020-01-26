@@ -98,7 +98,12 @@
           "
         ></div>
       </transition> -->
-      <youtube-player ref="youtube" class="youtube-player"></youtube-player>
+      <youtube-player
+        ref="youtube"
+        class="youtube-player"
+        @end="onMusicEnd"
+        @error="onError"
+      ></youtube-player>
     </div>
   </div>
 </template>
@@ -109,16 +114,15 @@ import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
 import isMobile from 'ismobilejs';
-import YouTubePlayer from '@/components/YoutubePlayer.vue';
-import MusicPlayer from '@/models/musicPlayer';
-import Music from '../models/music';
-import { Musicx, Player } from '../models/room';
-import PlayerStatus from '../models/playerStatus';
-import VolumePicker from './molecules/VolumePicker.vue';
-import SeekBar from './molecules/SeekBar.vue';
-import PlayerMusicInfo from './molecules/PlayerMusicInfo.vue';
-import sleep from '../utils/sleep';
-import setEvent from '@/utils/eventUtil';
+
+import YouTubePlayer from './YoutubePlayer.vue';
+import {
+  MusicPlayer, Music, Musicx, Player, PlayerStatus,
+} from '@/models';
+import {
+  VolumePicker, SeekBar, PlayerMusicInfo,
+} from './molecules';
+import { sleep, setEvent } from '@/utils';
 import { adate } from '../store/modules';
 
 interface SupportedPlatform {
@@ -147,11 +151,7 @@ export default class PlayerController extends Vue {
   public timer?: number;
 
   public async initPlayers() {
-    const youtube = this.$refs.youtube as YouTubePlayer;
-    youtube.$on('end', this.onMusicEnd);
-    youtube.$on('error', this.onError);
-
-    this.players.youtube = youtube;
+    this.players.youtube = this.$refs.youtube as YouTubePlayer;
 
     await Promise.all(this.allPlayers.map(p => p!.init()));
 
@@ -272,7 +272,7 @@ export default class PlayerController extends Vue {
   }
 
   public async stop() {
-    this.currentPlayer?.stop();
+    await this.currentPlayer?.stop();
   }
 
   public async seekTo(to: number) {
