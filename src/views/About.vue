@@ -4,6 +4,10 @@
     <p>Send to firestore at {{ firestoreTime }} by {{ updater }}</p>
     <p>You received at {{ currentTime }}</p>
     <p>Diff: {{ currentTime - firestoreTime }} msec</p>
+    <p>Adjust</p>
+    <p>Send to firestore at {{ adjustedDBTime }} by {{ updater }}</p>
+    <p>You received at {{ adjustedTime }}</p>
+    <p>Diff: {{ adjustedTime - adjustedDBTime }} msec</p>
     <button @click="push">push</button>
 
     <input type="text" v-model="text" />
@@ -20,10 +24,11 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
-import YouTube from 'youtube-player';
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import sleep from '../utils/sleep';
-import searchVideo from '@/utils/search';
+
+import YouTube from 'youtube-player';
+import { sleep, search as searchVideo } from '@/utils';
+import { adate } from '@/store/modules';
 
 @Component
 export default class About extends Vue {
@@ -34,6 +39,10 @@ export default class About extends Vue {
   public firestoreTime: number = 0;
 
   public currentTime: number = 0;
+
+  public adjustedTime = 0;
+
+  public adjustedDBTime = 0;
 
   public updater = '';
 
@@ -46,6 +55,9 @@ export default class About extends Vue {
     this.unsubscribe = this.ref.onSnapshot((doc) => {
       this.firestoreTime = doc.data()?.test;
       this.currentTime = Date.now();
+      this.adjustedTime = adate.now();
+      this.adjustedDBTime = doc.data()?.atest;
+
       this.updater = doc.data()?.pushedBy;
     });
 
@@ -59,6 +71,7 @@ export default class About extends Vue {
   public push() {
     this.ref.update({
       test: Date.now(),
+      atest: adate.now(),
       pushedBy: this.$auth.currentUser?.displayName,
     });
   }

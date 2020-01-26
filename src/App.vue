@@ -10,6 +10,7 @@ import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
 import setEvent from '@/utils/eventUtil';
+import { adate } from '@/store/modules';
 
 @Component
 export default class MusicHub extends Vue {
@@ -25,11 +26,13 @@ export default class MusicHub extends Vue {
     setEvent(window, 'orientatoinchange', this.setVh);
   }
 
-  public created() {
+  public async created() {
     if (!/Mac OS/.test(navigator.userAgent)) {
       const root = document.querySelector(':root') as HTMLElement;
       root.dataset.scrollbar = 'custom';
     }
+
+    await adate.init();
   }
 }
 </script>
