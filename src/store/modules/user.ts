@@ -4,13 +4,14 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
 import Music from '@/models/music';
 import User from '@/models/user';
 import getClone from '@/utils/getClone';
 import setEvent from '@/utils/eventUtil';
 
-const firestore = firebase.firestore();
+const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Module({

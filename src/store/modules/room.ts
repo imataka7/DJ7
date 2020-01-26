@@ -4,11 +4,12 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
 import PlayerStatus from '@/models/playerStatus';
-import Room, { RoomUser, Musicx, Player } from '@/models/room';
+import Room, { RoomUser, Musicx } from '@/models/room';
 
-const firestore = firebase.firestore();
+const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Module({
