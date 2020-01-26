@@ -10,7 +10,7 @@ import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
 import setEvent from '@/utils/eventUtil';
-import { adate } from '@/store/modules';
+import { adate, user } from '@/store/modules';
 
 @Component
 export default class MusicHub extends Vue {
@@ -33,6 +33,8 @@ export default class MusicHub extends Vue {
     }
 
     await adate.init();
+
+    this.$auth.onAuthStateChanged(firebaseUser => firebaseUser && user.init(firebaseUser));
   }
 }
 </script>
@@ -81,7 +83,8 @@ $sairi-orange: #f50;
   --button-hover: #{$sairi-orange};
   --button-active: #{$sairi-orange};
   --button-focus: #{$sairi-orange};
-  --button-disabled: #{$gray-13};
+  --button-fc-disabled: #{$gray-13};
+  --button-bg-disabled: #{$gray-6};
 
   --input-bg: #{$white};
   --input-fc: #{$black};
@@ -124,7 +127,8 @@ $sairi-orange: #f50;
   --button-hover: #{$sairi-orange};
   --button-active: #{$sairi-orange};
   --button-focus: #{$sairi-orange};
-  --button-disabled: #{$gray-2};
+  --button-fc-disabled: #{$gray-6};
+  --button-bg-disabled: #{$gray-4};
 
   --input-bg: #{$gray-2};
   --input-fc: #{$gray-14};
@@ -197,6 +201,34 @@ body,
     background: var(--scrollbar-thumb);
     border-radius: 10px;
     box-shadow: none;
+  }
+}
+
+:root {
+  input[type="text"] {
+    border-radius: 3px;
+    background: var(--input-bg);
+    color: var(--input-fc);
+    border: 1px solid;
+    border-color: var(--input-border);
+    padding: 3px;
+
+    &::placeholder {
+      color: var(--input-placeholder-fc);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background: var(--button-bg-disabled);
+
+      &::placeholder {
+        color: var(--button-fc-disabled);
+      }
+    }
+  }
+
+  a:visited {
+    color: var(--fc);
   }
 }
 

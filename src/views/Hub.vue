@@ -18,10 +18,15 @@
           <div class="ad-container"></div>
 
           <div class="jumper">
-            <input type="text" v-model="jumpTo" />
-            <button @click="jump">Jump</button>
+            <input
+              type="text"
+              v-model="jumpTo"
+              :disabled="!currentUser"
+              placeholder="Room id"
+            />
+            <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
           </div>
-          <button @click="$auth.signOut()">Sign out</button>
+          <abutton @click="signOut" :disabled="!currentUser">Sign out</abutton>
         </div>
 
         <div class="column swiper-slide">
@@ -40,8 +45,17 @@
 
         <div class="column swiper-slide">
           <p class="header">History</p>
-          <!-- <button @click="migrateHistory">Upgrade history yah</button> -->
-          <div class="no-music" v-if="history.length === 0">
+          <template v-if="!currentUser">
+            <div class="no-music">
+              Only available for signed in users
+            </div>
+            <div class="button-container">
+              <abutton class="is-large" @click="$router.push('/signin')">
+                Sign in
+              </abutton>
+            </div>
+          </template>
+          <div class="no-music" v-else-if="history.length === 0">
             No music in history
           </div>
           <history-list
@@ -87,6 +101,7 @@ import {
   sleep, setEvent, getEmbedUrl, getMusicInfo,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
+import { ActionButton } from '../components/molecules';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -97,6 +112,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
     MusicQueue,
     HistoryList,
     PlayerController,
+    abutton: ActionButton,
   },
 })
 export default class Hub extends Vue {
@@ -118,6 +134,19 @@ export default class Hub extends Vue {
       uid,
       photo: photoURL,
     } as RoomUser;
+  }
+
+  @Watch('currentUser', { immediate: true })
+  public onAuthStateChanged() {
+    if (this.me) {
+      room.addUser(this.me);
+      user.addVisitedRooms(this.roomId);
+    }
+  }
+
+  public signOut() {
+    room.removeUser(this.me!);
+    user.signOut();
   }
 
   get history() {
@@ -387,7 +416,7 @@ export default class Hub extends Vue {
 }
 
 .room-desc {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .room-users {
@@ -396,7 +425,7 @@ export default class Hub extends Vue {
   align-items: center;
   height: 50px;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   // flex-wrap: wrap;
   overflow-x: overlay;
 
@@ -437,10 +466,21 @@ export default class Hub extends Vue {
   text-align: center;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
 .player-controller {
   position: fixed;
   bottom: 0;
   z-index: 100;
+}
+
+.jumper {
+  margin-bottom: 15px;
 }
 
 @media screen and (max-width: 1200px) {

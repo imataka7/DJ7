@@ -28,6 +28,10 @@ class FirebaseUser extends VuexModule {
     return this.status?.history;
   }
 
+  get visitedRooms() {
+    return this.status?.visitedRooms;
+  }
+
   get userRef() {
     return firestore.collection('users').doc(this.user?.uid);
   }
@@ -103,6 +107,17 @@ class FirebaseUser extends VuexModule {
   public deleteHistoryItem(music: Music) {
     this.userRef.update({
       history: arrayRemove(music),
+    });
+  }
+
+  @Action({})
+  public async addVisitedRooms(roomId: string) {
+    if (this.visitedRooms && this.visitedRooms.indexOf(roomId) > -1) {
+      return;
+    }
+
+    await this.userRef.update({
+      visitedRooms: arrayUnion(roomId),
     });
   }
 

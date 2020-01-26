@@ -11,27 +11,30 @@
       <template v-else>
         <h2>Welcome back {{ currentUser.displayName }}!</h2>
         <div class="input-field">
+          <p>Where will you go?</p>
+          <template v-if="visitedRooms.length">
+            <p>
+              You've visited
+              <a :href="`/${id}`" v-for="id in visitedRooms" :key="id"
+                >{{ id }}
+              </a>
+            </p>
+          </template>
           <label>
-            <p>Where will you go?</p>
-            <input type="text" placeholder="Room id" v-model="jumpTo" />
-            <button @click="jump">Jump</button>
+            <input
+              type="text"
+              placeholder="or enter Room id!"
+              v-model="jumpTo"
+            />
+            <abutton @click="jump">Jump</abutton>
           </label>
         </div>
-        <!-- <button @click="$auth.signOut()">Sign out</button> -->
       </template>
     </div>
 
-    <!-- <div class="demo-room">
-      <div class="swiper-container">
-        <div class="columns swiper-wrapper">
-          <div class="column"></div>
-          <div class="column"></div>
-          <div class="column"></div>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- <player-controller class="controller"></player-controller> -->
+    <div class="hub-container">
+      <hub></hub>
+    </div>
   </div>
 </template>
 
@@ -43,6 +46,7 @@ import {
 import Hub from './Hub.vue';
 import ActionButton from '@/components/molecules/ActionButton.vue';
 import { PlayerController } from '@/components';
+import { user } from '@/store/modules';
 
 @Component({
   components: {
@@ -52,39 +56,57 @@ import { PlayerController } from '@/components';
   },
 })
 export default class General extends Vue {
-  public currentUser: firebase.User | null = null;
-
-  public created() {
-    this.$auth.onAuthStateChanged((user) => { this.currentUser = user; });
+  get currentUser() {
+    return user.user;
   }
 
   public jumpTo = '';
 
   public jump() {
+    if (!this.jumpTo) {
+      return;
+    }
+
     this.$router.push(`/${this.jumpTo}`);
+  }
+
+  get visitedRooms() {
+    console.log(user.visitedRooms);
+    return user.visitedRooms?.filter(r => r !== 'general') || [];
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .general {
-  text-align: center;
+  overflow: hidden;
+  height: calc(100vh + 230px);
 }
 
-.input-field {
-  width: 300px;
-  margin: auto;
-  text-align: left;
+.desc-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  label {
-    p {
-      margin: 0;
-    }
+  height: 230px;
+  text-align: center;
+
+  h1 {
+    margin: 0;
   }
 }
 
-// .controller {
-//   position: fixed;
-//   bottom: 0;
-// }
+.input-field {
+  text-align: left;
+  p {
+    margin: 3px;
+  }
+}
+
+.hub-container {
+  height: 100vh;
+  overflow-y: auto;
+  margin-bottom: 50px;
+}
 </style>

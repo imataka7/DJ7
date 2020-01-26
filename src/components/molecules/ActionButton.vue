@@ -81,7 +81,8 @@ export default class ActionButton extends Vue {
   }
 
   &:disabled {
-    color: var(--button-disabled);
+    color: var(--button-fc-disabled);
+    background: var(--button-bg-disabled);
     cursor: not-allowed;
   }
 }
