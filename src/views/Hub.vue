@@ -54,12 +54,15 @@
         </div>
       </div>
     </div>
-    <!-- <pre>{{ roomStatus }}</pre>
-    <pre>{{ userStatus }}</pre>
-    <pre>{{ JSON.stringify(currentUser, null, "  ") }}</pre> -->
 
-    <!-- <div class="player-controller"></div> -->
-    <player-controller ref="controller"></player-controller>
+    <player-controller
+      ref="controller"
+      @update="onStatusChanged"
+      @end="onMusicEnded"
+      @error="onError"
+      @forward="forwardMusic"
+      @seeked="onSeeked"
+    ></player-controller>
   </div>
 </template>
 
@@ -83,6 +86,7 @@ import {
 import {
   sleep, setEvent, getEmbedUrl, getMusicInfo,
 } from '@/utils';
+import { user, room } from '@/store/modules';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -101,128 +105,107 @@ export default class Hub extends Vue {
   }
 
   get currentUser() {
-    return this.$auth.currentUser!;
+    return user.user;
   }
 
-  get me(): RoomUser {
+  get me() {
+    if (!this.currentUser) {
+      return null;
+    }
+
     const { uid, photoURL } = this.currentUser;
     return {
       uid,
       photo: photoURL,
-    };
-  }
-
-  public userStatus: User | null = null;
-
-  get userRef() {
-    return this.$firestore.collection('users').doc(this.currentUser.uid);
+    } as RoomUser;
   }
 
   get history() {
-    return this.userStatus?.history || [];
+    return user.history || [];
   }
-
-  public roomId = '';
-
-  get roomRef() {
-    return this.$firestore.collection('rooms').doc(this.roomId);
-  }
-
-  public roomStatus: Room | null = null;
 
   public isQueueUpdating = false;
 
   get queues() {
-    return this.roomStatus?.queues || [];
+    return room.queues || [];
   }
 
   set queues(newVal) {
-    this.roomRef.update({
-      queues: newVal,
-    });
+    if (!newVal) {
+      return;
+    }
+
+    room.updateQueue(newVal);
   }
 
   get playingMusic() {
-    return this.roomStatus?.player.music;
+    return room?.player?.music;
   }
 
   get users() {
-    return this.roomStatus?.users;
-  }
-
-  public unsubscribeListers: (() => void)[] = [];
-
-  public registerEvents() {
-    window.addEventListener('beforeunload', this.destructor);
-  }
-
-  public unregisterEvents() {
-    window.removeEventListener('beforeunload', this.destructor);
-  }
-
-  private previousPlayedTime?: number;
-
-  public addRoom() {
-    this.roomRef.set({
-      player: {
-        music: null,
-        playedTime: 0,
-        status: PlayerStatus.NO_MUSIC,
-        updatedAt: Date.now(),
-      },
-      queues: [],
-      roomId: this.roomId,
-      users: [],
-    });
+    return room?.users || [];
   }
 
   private controller!: PlayerController;
 
+  get roomId() {
+    return this.$route.params.roomId || 'general';
+  }
+
   public async init() {
-    this.roomId = this.$route.params.roomId || 'general';
-    this.registerEvents();
-
-    const snapshot = await this.roomRef.get();
-    let roomStatus = snapshot.data() as Room;
-
-    if (!snapshot.exists) {
-      this.addRoom();
-      roomStatus = (await this.roomRef.get()).data() as Room;
-    }
-
     this.controller = this.$refs.controller as PlayerController;
-    this.controller.$on('update', this.onStatusChanged);
-    this.controller.$on('end', this.onMusicEnded);
-    this.controller.$on('forward', this.forwardMusic);
-    this.controller.$on('seeked', this.onSeeked);
-    this.controller.$on('error', this.onError);
-
     await this.controller.initPlayers();
 
-    await this.updateRoomStatus(roomStatus);
+    await room.init(this.roomId);
 
-    this.roomRef.update({
-      users: arrayUnion(this.me),
-    });
+    if (this.me) {
+      room.addUser(this.me);
+    }
+  }
 
-    const listener = this.roomRef.onSnapshot(async (doc) => {
-      const previousRoomState = this.roomStatus;
-      await this.updateRoomStatus(doc.data() as Room);
+  get roomStatus() {
+    return room.status;
+  }
 
-      const { updatedAt, playedTime, status } = this.roomStatus!.player;
+  @Watch('roomStatus', { deep: true })
+  public async onRoomStatusChanged(newStatus: Room, oldStatus: Room) {
+    this.isQueueUpdating = true;
 
-      if (this.previousPlayedTime === playedTime && status === previousRoomState?.player.status) {
-        return;
-      }
+    const previousId = oldStatus?.player.music?.id;
+    this.controller.currentPlayerInfo = newStatus.player;
 
-      this.previousPlayedTime = playedTime;
-      const seekTo = status === PlayerStatus.PLAY
-        ? ((Date.now() - updatedAt) / 1000) + playedTime : playedTime;
+    setTimeout(() => {
+      this.isQueueUpdating = false;
+    }, 100);
 
-      await this.setStatus(status, seekTo);
-    });
+    const {
+      music, updatedAt, playedTime, status,
+    } = newStatus.player;
 
-    this.unsubscribeListers.push(listener);
+    if (!music || status === PlayerStatus.NO_MUSIC) {
+      return;
+    }
+
+    const {
+      source, platform, id, thumbnail, title,
+    } = music;
+
+    if (id && id !== previousId) {
+      await this.controller.loadMusic(music);
+
+      user.updateHistory(music);
+    }
+
+    if (oldStatus?.player.playedTime === playedTime
+    && status === oldStatus?.player.status) {
+      return;
+    }
+
+    const seekTo = status === PlayerStatus.PLAY
+      ? ((Date.now() - updatedAt) / 1000) + playedTime
+      : playedTime;
+
+    await this.setStatus(status, seekTo);
   }
 
   private async setStatus(status: PlayerStatus, to: number) {
@@ -245,88 +228,11 @@ export default class Hub extends Vue {
   }
 
   public async onSeeked(time: number) {
-    this.roomRef.update({
-      'player.playedTime': time,
-      'player.updatedAt': Date.now(),
-    });
-  }
-
-  public async initUser() {
-    let snapshot = await this.userRef.get();
-
-    if (!snapshot.exists) {
-      await this.userRef.set({
-        uid: this.currentUser.uid,
-        history: [],
-      });
-      snapshot = await this.userRef.get();
-    }
-
-    this.userStatus = snapshot.data() as User;
-
-    const listener = this.userRef.onSnapshot(async (doc) => {
-      this.userStatus = doc.data() as User;
-    });
-
-    this.unsubscribeListers.push(listener);
-  }
-
-  public async updateRoomStatus(roomStatus: Room) {
-    this.isQueueUpdating = true;
-
-    const previousId = this.roomStatus?.player.music?.id;
-    this.roomStatus = roomStatus;
-    this.controller.currentPlayerInfo = roomStatus.player;
-
-    setTimeout(() => {
-      this.isQueueUpdating = false;
-    }, 100);
-
-    const {
-      music, updatedAt, playedTime, status,
-    } = roomStatus.player;
-
-    if (!music || status === PlayerStatus.NO_MUSIC) {
-      this.musicSource = '';
-      return;
-    }
-
-    const {
-      source, platform, id, thumbnail, title,
-    } = music;
-
-    if (id && id !== previousId) {
-      this.musicSource = source;
-
-      await this.controller.loadMusic(music);
-
-      await this.updateHistory({
-        source,
-        platform,
-        thumbnail,
-        title,
-      });
-    }
+    room.seek(time);
   }
 
   public async updateHistory(music: Music) {
-    const { source } = music;
-
-    const isExists = this.history.some(h => h.source === source);
-
-    const batch = this.$firestore.batch();
-
-    if (isExists) {
-      batch.update(this.userRef, {
-        history: arrayRemove(music),
-      });
-    }
-
-    batch.update(this.userRef, {
-      history: arrayUnion(music),
-    });
-
-    await batch.commit();
+    await user.updateHistory(music);
   }
 
   public swiper?: Swiper;
@@ -362,78 +268,32 @@ export default class Hub extends Vue {
     setEvent(window, 'resize', this.updateSwiper);
 
     await Promise.all([
-      this.initUser(),
       this.init(),
     ]);
   }
 
-  public unsubscribeUser() {
-    this.roomRef.update({
-      users: arrayRemove(this.me),
-    });
-  }
-
-  private destructor() {
-    this.unsubscribeUser();
-    this.unsubscribeListers.forEach(u => u());
-  }
-
   public beforeDestroy() {
-    this.unregisterEvents();
-    this.destructor();
+    if (this.me) {
+      room.removeUser(this.me);
+    }
+    room.listener?.();
+    room.setListener(() => undefined);
   }
-
-  public musicSource: string = '';
-
-  public musicSourceInner: string = 'https://www.youtube.com/embed/oOv98YTPkUs';
 
   public async addQueue(items: Musicx[]) {
-    const batch = this.$firestore.batch();
-
-    if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
-      const nextMusic = items[0];
-
-      batch.update(this.roomRef, {
-        'player.status': PlayerStatus.PLAY,
-        'player.music': nextMusic,
-        'player.updatedAt': nextMusic.extraStatus?.playedTime || Date.now(),
-      });
-
-      if (items.length === 1) {
-        await batch.commit();
-        return;
-      }
-
-      items.shift();
-    }
-
-    batch.update(this.roomRef, {
-      queues: arrayUnion(...items),
-    });
-
-    await batch.commit();
+    room.queueMusic(items);
   }
 
-  private onStatusChanged(status: number, playedTime: number) {
-    if (status === this.roomStatus?.player.status
-    || this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
-      return;
-    }
-
-    this.roomRef.update({
-      'player.status': status,
-      'player.playedTime': playedTime,
-      'player.updatedAt': Date.now(),
-    });
+  private onStatusChanged(status: PlayerStatus, playedTime: number) {
+    room.changeState({ status, playedTime });
   }
 
   private async onMusicEnded(playedMusic: Musicx) {
-    if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
+    if (room?.player?.status === PlayerStatus.NO_MUSIC) {
       return;
     }
 
-    const snapshot = await this.roomRef.get();
-    const status = snapshot.data() as Room;
+    const status = await room.fetchCurrentStatus();
 
     const { player, queues } = status;
     const { music, playedTime, updatedAt } = player;
@@ -449,12 +309,11 @@ export default class Hub extends Vue {
       return;
     }
 
-    this.setMusicFromQueue(queues);
+    room.setMusicFromQueue(queues);
   }
 
   public async onError(playedMusic: Musicx) {
-    const snapshot = await this.roomRef.get();
-    const status = snapshot.data() as Room;
+    const status = await room.fetchCurrentStatus();
 
     const { player, queues } = status;
     const { music, playedTime, updatedAt } = player;
@@ -462,41 +321,12 @@ export default class Hub extends Vue {
     // console.log(music, errorMusic);
 
     if (music.id === playedMusic.id) {
-      this.setMusicFromQueue(queues);
+      room.setMusicFromQueue(queues);
     }
   }
 
   private async forwardMusic() {
-    const { queues } = this.roomStatus!;
-    this.setMusicFromQueue(queues);
-  }
-
-  private setMusicFromQueue(queues: Musicx[]) {
-    if (queues.length === 0) {
-      this.roomRef.update({
-        player: {
-          music: null,
-          playedTime: 0,
-          status: PlayerStatus.NO_MUSIC,
-          updatedAt: Date.now(),
-        },
-      });
-
-      return;
-    }
-
-    const nextMusic = queues[0];
-    queues.shift();
-
-    this.roomRef.update({
-      player: {
-        music: nextMusic,
-        playedTime: nextMusic.extraStatus?.playedTime || 0,
-        status: PlayerStatus.PLAY,
-        updatedAt: Date.now(),
-      },
-      queues,
-    });
+    room.forwardMusic();
   }
 
   public jumpTo = '';
@@ -517,44 +347,11 @@ export default class Hub extends Vue {
       return;
     }
 
-    const queues = JSON.parse(JSON.stringify(this.queues)) as Musicx[];
-    queues.unshift({
-      ...this.playingMusic!,
-      extraStatus: {
-        playedTime,
-      },
-    });
-
-    this.roomRef.update({
-      queues: queues.filter(q => q.id !== music.id),
-      player: {
-        music,
-        playedTime: music.extraStatus?.playedTime || 0,
-        status: PlayerStatus.PLAY,
-        updatedAt: Date.now(),
-      },
-    });
+    await room.interrupt({ music, playedTime });
   }
 
   public async deleteMusicFromHistory(music: Music) {
-    this.userRef.update({
-      history: arrayRemove(music),
-    });
-  }
-
-  public async migrateHistory() {
-    const newHistory = [];
-
-    for (let i = 0; i < this.history.length; i += 1) {
-      // eslint-disable-next-line
-      const m = await getMusicInfo(this.history[i].source);
-      delete m!.id;
-      newHistory.push(m);
-    }
-
-    this.userRef.update({
-      history: newHistory,
-    });
+    await user.deleteHistoryItem(music);
   }
 }
 </script>

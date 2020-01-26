@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Hub from '../views/Hub.vue';
 import General from '../views/General.vue';
 import { app as firebase } from '@/plugins/firebase';
+import { user } from '@/store/modules';
 
 Vue.use(VueRouter);
 
@@ -57,8 +58,9 @@ router.beforeEach((to, from, next) => {
 
   if (isAuthRequired) {
     // eslint-disable-next-line
-    firebase.auth().onAuthStateChanged(user => {
-      if (user || to.fullPath === '/') {
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+      if (firebaseUser) {
+        user.init(firebaseUser);
         next();
       } else {
         next({

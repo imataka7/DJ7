@@ -2,7 +2,7 @@
   <div class="history-list">
     <!-- <p>{{ size }}</p> -->
     <virtual-list :size="size" :remain="10" :key="size">
-      <music-list-item v-for="m in reversedList" :key="m.id" :music="m">
+      <music-list-item v-for="m in reversedList" :key="m.source" :music="m">
         <template v-slot:buttons>
           <abutton class="button" title="Delete music" @click="del(m)">
             <fa-icon icon="times"></fa-icon>
@@ -21,9 +21,8 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
-import Music from '@/models/music';
-import { Musicx } from '../models/room';
-import { generateRandomId } from '@/utils/urlParser';
+import { Music } from '@/models';
+import { generateRandomId, getClone } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -34,14 +33,11 @@ import ActionButton from './molecules/ActionButton.vue';
   },
 })
 export default class HistoryList extends Vue {
-  // @Prop({ default: () => [] })
-  // value!: HistoryItem[];
-
   @Prop({ default: () => [] })
   list!: Music[];
 
   get reversedList() {
-    return this.list.reverse();
+    return getClone(this.list).reverse();
   }
 
   public add(music: Music) {
