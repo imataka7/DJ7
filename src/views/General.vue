@@ -71,7 +71,6 @@ export default class General extends Vue {
   }
 
   get visitedRooms() {
-    console.log(user.visitedRooms);
     return user.visitedRooms?.filter(r => r !== 'general') || [];
   }
 }
