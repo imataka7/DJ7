@@ -86,7 +86,7 @@ import {
 import {
   sleep, setEvent, getEmbedUrl, getMusicInfo,
 } from '@/utils';
-import { user, room } from '@/store/modules';
+import { user, room, adate } from '@/store/modules';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -202,7 +202,7 @@ export default class Hub extends Vue {
     }
 
     const seekTo = status === PlayerStatus.PLAY
-      ? ((Date.now() - updatedAt) / 1000) + playedTime
+      ? ((adate.now() - updatedAt) / 1000) + playedTime
       : playedTime;
 
     await this.setStatus(status, seekTo);
@@ -302,7 +302,7 @@ export default class Hub extends Vue {
     // 更新時間が近いとき
     // 再生された時間が0のときに限定しているのは
     // 一時停止のタイミングなどによって切り替わらなくなってしまうため
-    const isUpdateAtTooNear = playedTime === 0 && Date.now() - updatedAt < 3000;
+    const isUpdateAtTooNear = playedTime === 0 && adate.now() - updatedAt < 3000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
     const isDifferentMusic = playedMusic.id !== music.id;
     if (isUpdateAtTooNear || isDifferentMusic) {
