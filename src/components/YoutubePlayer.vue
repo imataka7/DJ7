@@ -55,9 +55,8 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
     });
 
     this.player.on('error', async (e) => {
-      // this.$emit('error');
-      // this.$emit('end');
-      this.end();
+      this.$emit('error', this.currentMusic);
+      this.currentMusic = undefined;
     });
   }
 

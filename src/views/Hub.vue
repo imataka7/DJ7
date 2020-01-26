@@ -427,7 +427,7 @@ export default class Hub extends Vue {
     });
   }
 
-  private async onMusicEnded() {
+  private async onMusicEnded(playedMusic: Musicx) {
     if (this.roomStatus?.player.status === PlayerStatus.NO_MUSIC) {
       return;
     }
@@ -439,7 +439,13 @@ export default class Hub extends Vue {
     const { music, playedTime, updatedAt } = player;
 
     // チャタリング対策
-    if (playedTime === 0 && Date.now() - updatedAt < 3000) {
+    // 更新時間が近いとき
+    // 再生された時間が0のときに限定しているのは
+    // 一時停止のタイミングなどによって切り替わらなくなってしまうため
+    const isUpdateAtTooNear = playedTime === 0 && Date.now() - updatedAt < 3000;
+    // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
+    const isDifferentMusic = playedMusic.id !== music.id;
+    if (isUpdateAtTooNear || isDifferentMusic) {
       return;
     }
 
