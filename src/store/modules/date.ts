@@ -8,7 +8,7 @@ import {
 import store from '..';
 
 @Module({
-  name: 'Date', namespaced: true, store, dynamic: true,
+  name: 'date', namespaced: true, store, dynamic: true,
 })
 class AdjustedDate extends VuexModule {
   public diff = 0;

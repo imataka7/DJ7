@@ -60,7 +60,7 @@ class RoomManager extends VuexModule {
         music: null,
         playedTime: 0,
         status: PlayerStatus.NO_MUSIC,
-        updatedAt: Date.now(),
+        updatedAt: store.getters['date/now'](),
       },
       queues: [],
       roomId: this.roomId,
@@ -126,7 +126,7 @@ class RoomManager extends VuexModule {
     this.roomRef.update({
       'player.status': status,
       'player.playedTime': playedTime,
-      'player.updatedAt': Date.now(),
+      'player.updatedAt': store.getters['date/now'](),
     });
   }
 
@@ -134,7 +134,7 @@ class RoomManager extends VuexModule {
   public async seek(to: number) {
     this.roomRef.update({
       'player.playedTime': to,
-      'player.updatedAt': Date.now(),
+      'player.updatedAt': store.getters['date/now'](),
     });
   }
 
@@ -152,7 +152,7 @@ class RoomManager extends VuexModule {
       batch.update(this.roomRef, {
         'player.status': PlayerStatus.PLAY,
         'player.music': nextMusic,
-        'player.updatedAt': nextMusic.extraStatus?.playedTime || Date.now(),
+        'player.updatedAt': nextMusic.extraStatus?.playedTime || store.getters['date/now'](),
       });
 
       if (items.length === 1) {
@@ -178,7 +178,7 @@ class RoomManager extends VuexModule {
           music: null,
           playedTime: 0,
           status: PlayerStatus.NO_MUSIC,
-          updatedAt: Date.now(),
+          updatedAt: store.getters['date/now'](),
         },
       });
 
@@ -193,7 +193,7 @@ class RoomManager extends VuexModule {
         music: nextMusic,
         playedTime: nextMusic.extraStatus?.playedTime || 0,
         status: PlayerStatus.PLAY,
-        updatedAt: Date.now(),
+        updatedAt: store.getters['date/now'](),
       },
       queues,
     });
@@ -222,7 +222,7 @@ class RoomManager extends VuexModule {
         music,
         playedTime: music.extraStatus?.playedTime || 0,
         status: PlayerStatus.PLAY,
-        updatedAt: Date.now(),
+        updatedAt: store.getters['date/now'](),
       },
     });
   }

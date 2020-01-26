@@ -4,7 +4,7 @@
     <p>Send to firestore at {{ firestoreTime }} by {{ updater }}</p>
     <p>You received at {{ currentTime }}</p>
     <p>Diff: {{ currentTime - firestoreTime }} msec</p>
-    <p>Adjust</p>
+    <p>Adjusted (latency: {{ latency }})</p>
     <p>Send to firestore at {{ adjustedDBTime }} by {{ updater }}</p>
     <p>You received at {{ adjustedTime }}</p>
     <p>Diff: {{ adjustedTime - adjustedDBTime }} msec</p>
@@ -34,6 +34,10 @@ import { adate } from '@/store/modules';
 export default class About extends Vue {
   get ref() {
     return this.$firestore.collection('test').doc('test');
+  }
+
+  get latency() {
+    return adate.diff;
   }
 
   public firestoreTime: number = 0;

@@ -119,6 +119,7 @@ import SeekBar from './molecules/SeekBar.vue';
 import PlayerMusicInfo from './molecules/PlayerMusicInfo.vue';
 import sleep from '../utils/sleep';
 import setEvent from '@/utils/eventUtil';
+import { adate } from '../store/modules';
 
 interface SupportedPlatform {
   youtube?: MusicPlayer;
@@ -328,7 +329,7 @@ export default class PlayerController extends Vue {
   public updateSeekBarRange() {
     const { updatedAt, playedTime } = this.currentPlayerInfo!;
     const diff = this.currentPlayerInfo?.status === PlayerStatus.PLAY
-      ? (Date.now() - updatedAt)
+      ? (adate.now() - updatedAt)
       : 0;
     const per = (playedTime + diff / 1000) / this.musicDuration;
 
@@ -390,7 +391,7 @@ export default class PlayerController extends Vue {
       const el = this.$el as HTMLElement;
       el.style.removeProperty('transition');
       this.sumMovementY = 0;
-      this.pointerEventStartAt = Date.now();
+      this.pointerEventStartAt = adate.now();
       this.initialPageY = 0;
     }
   }
@@ -424,7 +425,7 @@ export default class PlayerController extends Vue {
     el.style.removeProperty('height');
     el.style.setProperty('transition', 'height .3s ease, transform .3s ease-in-out');
 
-    const dy = this.sumMovementY / (Date.now() - this.pointerEventStartAt);
+    const dy = this.sumMovementY / (adate.now() - this.pointerEventStartAt);
     if (dy > 1 || this.sumMovementY > 200) {
       this.isTheaterMode = false;
     }

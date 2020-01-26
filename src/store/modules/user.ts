@@ -15,7 +15,7 @@ const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Module({
-  name: 'User', namespaced: true, store, dynamic: true,
+  name: 'user', namespaced: true, store, dynamic: true,
 })
 class FirebaseUser extends VuexModule {
   public user: firebase.User | null = null;
