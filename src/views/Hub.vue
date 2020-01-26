@@ -72,20 +72,17 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import Swiper from 'swiper';
 import isMobile from 'ismobilejs';
-
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
-import { getEmbedUrl, getMusicInfo } from '@/utils/urlParser';
-import YoutubePlayer from '@/components/YoutubePlayer.vue';
-import InputArea from '@/components/InputArea.vue';
-import MusicQueue from '@/components/MusicQueue.vue';
-import Room, { RoomUser, Musicx } from '@/models/room';
-import Music from '@/models/music';
-import User from '@/models/user';
-import PlayerStatus from '../models/playerStatus';
-import HistoryList from '@/components/HistoryList.vue';
-import PlayerController from '@/components/PlayerContoroller.vue';
-import sleep from '../utils/sleep';
-import setEvent from '../utils/eventUtil';
+
+import {
+  YoutubePlayer, InputArea, MusicQueue, HistoryList, PlayerController,
+} from '@/components';
+import {
+  Room, RoomUser, Musicx, Music, User, PlayerStatus,
+} from '@/models';
+import {
+  sleep, setEvent, getEmbedUrl, getMusicInfo,
+} from '@/utils';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 

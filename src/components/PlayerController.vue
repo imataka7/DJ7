@@ -148,7 +148,7 @@ export default class PlayerController extends Vue {
   public async initPlayers() {
     const youtube = this.$refs.youtube as YouTubePlayer;
     youtube.$on('end', this.onMusicEnd);
-    // youtube.$on('error', this.onError);
+    youtube.$on('error', this.onError);
 
     this.players.youtube = youtube;
 
@@ -203,17 +203,14 @@ export default class PlayerController extends Vue {
   }
 
   public async onMusicEnd(music: Musicx) {
-    // const music = this.currentMusic;
     this.clearMusicInfo();
     this.$emit('end', music);
   }
 
-  // public onError() {
-  //   const music = this.currentMusic;
-  //   this.clearMusicInfo();
-  //   console.log('error', music);
-  //   this.$emit('error', music);
-  // }
+  public async onError(music: Musicx) {
+    this.clearMusicInfo();
+    this.$emit('error', music);
+  }
 
   public moveMusic(direction: 'forward' | 'backword') {
     this.clearMusicInfo();

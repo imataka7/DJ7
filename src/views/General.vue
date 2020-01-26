@@ -42,7 +42,7 @@ import {
 } from 'vue-property-decorator';
 import Hub from './Hub.vue';
 import ActionButton from '@/components/molecules/ActionButton.vue';
-import PlayerController from '@/components/PlayerContoroller.vue';
+import { PlayerController } from '@/components';
 
 @Component({
   components: {
