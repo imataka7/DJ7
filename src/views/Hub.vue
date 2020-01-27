@@ -4,7 +4,7 @@
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <div class="room-desc">
-            <h2>MusicHub</h2>
+            <h2>DJ7</h2>
             <h2>RoomId: {{ roomId }}</h2>
             <span class="version">{{ version }}</span>
           </div>
