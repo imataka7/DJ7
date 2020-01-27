@@ -32,6 +32,16 @@ const routes = [
     },
   },
   {
+    path: '/terms-of-service',
+    name: 'tos',
+    component: () => import(/* webpackChunkName: "signin" */ '../views/Tos.vue'),
+  },
+  {
+    path: '/privacy-policy',
+    name: 'pp',
+    component: () => import(/* webpackChunkName: "signin" */ '../views/Privacy.vue'),
+  },
+  {
     path: '/:roomId',
     name: 'hub',
     component: Hub,

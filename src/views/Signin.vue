@@ -22,7 +22,7 @@ const configureUi = (to?: string) => ({
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
-  tosUrl: '/term-of-service',
+  tosUrl: '/terms-of-service',
   privacyPolicyUrl: '/privacy-policy',
 } as firebaseui.auth.Config);
 
