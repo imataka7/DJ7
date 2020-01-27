@@ -37,6 +37,7 @@
           class="has-bounce"
           @click="moveMusic('forward')"
           :disabled="isControllerDisable"
+          aria-label="Forward"
         >
           <fa-icon icon="forward" size="lg"></fa-icon>
         </button>

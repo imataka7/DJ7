@@ -1,11 +1,14 @@
 <template>
   <div class="input-area">
     <div class="textarea-wrapper">
-      <textarea
-        v-model="value"
-        :disabled="searching"
-        :placeholder="isPlaylist ? playlistMessage : queryMessage"
-      ></textarea>
+      <label>
+        Add music
+        <textarea
+          v-model="value"
+          :disabled="searching"
+          :placeholder="isPlaylist ? playlistMessage : queryMessage"
+        ></textarea>
+      </label>
     </div>
     <div class="confirm-field">
       <label class="checkbox">
