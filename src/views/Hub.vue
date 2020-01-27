@@ -18,13 +18,16 @@
           <div class="ad-container"></div>
 
           <div class="jumper">
-            <input
-              type="text"
-              v-model="jumpTo"
-              :disabled="!currentUser"
-              placeholder="Room id"
-            />
-            <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
+            <label>
+              <p class="label-desc">Do you want to change the room?</p>
+              <input
+                type="text"
+                v-model="jumpTo"
+                :disabled="!currentUser"
+                placeholder="Room id"
+              />
+              <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
+            </label>
           </div>
           <abutton @click="signOut" :disabled="!currentUser">Sign out</abutton>
         </div>
@@ -439,6 +442,10 @@ export default class Hub extends Vue {
   height: 250px;
   margin: 10px auto;
   background: #ddd;
+}
+
+.label-desc {
+  margin: 0;
 }
 
 .header {
