@@ -18,6 +18,7 @@
             key="pause"
             size="lg"
             :disabled="isControllerDisable"
+            aria-label="Pause"
           >
             <fa-icon icon="pause" size="lg"></fa-icon>
           </button>
@@ -26,6 +27,7 @@
             v-else
             key="play"
             :disabled="isControllerDisable"
+            aria-label="Play"
           >
             <fa-icon icon="play" size="lg"></fa-icon>
           </button>
@@ -66,7 +68,7 @@
         @mouseleave="isVolumePickerActive = false"
         v-if="!isPhone && !isTablet"
       >
-        <button @click="toggleMute">
+        <button @click="toggleMute" aria-label="Volume">
           <fa-icon :icon="speakerIcon" size="lg"></fa-icon>
         </button>
         <transition name="fade">
