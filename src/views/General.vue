@@ -1,7 +1,7 @@
 <template>
   <div class="general">
     <div class="desc-container">
-      <h1>MusicHub</h1>
+      <h1>DJ7</h1>
       <template v-if="!currentUser">
         <h2>Share your moments with music!</h2>
         <abutton class="is-large" @click="$router.push('/signin')">
