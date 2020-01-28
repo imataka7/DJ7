@@ -101,7 +101,7 @@ import {
   Room, RoomUser, Musicx, Music, User, PlayerStatus,
 } from '@/models';
 import {
-  sleep, setEvent, getEmbedUrl, getMusicInfo,
+  sleep, setEvent, getEmbedUrl, getMusicInfo, getClone,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '../components/molecules';
@@ -175,7 +175,8 @@ export default class Hub extends Vue {
   }
 
   get users() {
-    return room?.users || [];
+    const users = (room?.users) || [];
+    return getClone(users).reverse();
   }
 
   private controller!: PlayerController;
