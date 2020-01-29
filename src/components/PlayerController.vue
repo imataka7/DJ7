@@ -375,6 +375,7 @@ export default class PlayerController extends Vue {
   }
 
   public togglePlayerActive() {
+    this.isPopupShowing = false;
     this.isTheaterMode = !this.isTheaterMode;
   }
 
