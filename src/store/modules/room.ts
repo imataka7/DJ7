@@ -244,6 +244,12 @@ class RoomManager extends VuexModule {
 
     return status;
   }
+
+  @Action({})
+  public async leaveRoom(me: RoomUser) {
+    this.listener?.();
+    await this.removeUser(me);
+  }
 }
 
 export default getModule(RoomManager);

@@ -147,9 +147,10 @@ export default class Hub extends Vue {
     }
   }
 
-  public signOut() {
-    room.removeUser(this.me!);
-    user.signOut();
+  public async signOut() {
+    this.$router.push('/signin');
+    await room.leaveRoom(this.me!);
+    await user.signOut();
   }
 
   get history() {
