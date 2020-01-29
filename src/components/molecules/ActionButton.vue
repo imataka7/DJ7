@@ -29,6 +29,7 @@ export default class ActionButton extends Vue {
 <style lang="scss" scoped>
 .action-button {
   min-width: 70px;
+  padding: 0 10px;
   height: 25px;
   border-radius: 9999px;
   color: var(--button-fc);
@@ -89,7 +90,7 @@ export default class ActionButton extends Vue {
 
 @media screen and (max-width: 480px) {
   .action-button {
-    width: 50px;
+    min-width: 50px;
   }
 }
 
