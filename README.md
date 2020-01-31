@@ -5,7 +5,7 @@ Share your moments with music.
 https://sairilab-musichub.web.app/
 
 # Features
-* Play in sync
+* Play synchronously
 * Pause
 * Skip
 * Add music to the queue
