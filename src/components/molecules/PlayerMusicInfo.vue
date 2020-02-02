@@ -32,7 +32,7 @@ export default class PlayerMusicInfo extends Vue {
   public marqueeEnable = false;
 
   @Watch('music')
-  private decideMarqueeEnable() {
+  private async decideMarqueeEnable() {
     const el = this.$el.querySelector('.music-title') as HTMLElement;
 
     if (el.classList.contains('marquee')) {
@@ -43,7 +43,7 @@ export default class PlayerMusicInfo extends Vue {
       return;
     }
 
-    // console.log(el.clientWidth);
+    await this.$nextTick();
 
     if (el.clientWidth > 200) {
       this.marqueeEnable = true;
