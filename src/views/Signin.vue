@@ -20,7 +20,7 @@ const configureUi = (to?: string) => ({
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    // firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
   tosUrl: '/terms-of-service',
   privacyPolicyUrl: '/privacy-policy',
@@ -47,6 +47,7 @@ export default class Signin extends Vue {
 .signin {
   width: 100%;
   height: 100%;
+  padding-top: 50px;
 
   text-align: center;
 }
