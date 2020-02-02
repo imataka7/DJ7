@@ -18,6 +18,7 @@ import {
   faCircle,
   faHandPaper,
 } from '@fortawesome/free-solid-svg-icons';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
 import VueLazyload from 'vue-lazyload';
 
@@ -45,6 +46,7 @@ library.add(...[
   faPlus,
   faCircle,
   faHandPaper,
+  faTwitter,
 ]);
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.component('fa-layers', FontAwesomeLayers);
