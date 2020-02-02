@@ -7,7 +7,10 @@
             <h2>DJ7</h2>
             <p>
               RoomId: {{ roomId }}
-              <share-button :room-id="roomId"></share-button>
+              <share-button
+                :room-id="roomId"
+                :now-playing="playingMusic && playingMusic.title"
+              ></share-button>
             </p>
             <span class="version">{{ version }}</span>
           </div>

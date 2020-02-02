@@ -15,8 +15,8 @@
           <template v-if="visitedRooms.length">
             <p>
               You've visited
-              <a :href="`/${id}`" v-for="id in visitedRooms" :key="id"
-                >{{ id }}
+              <a :href="`/${id}`" v-for="id in visitedRooms" :key="id">
+                {{ id }}
               </a>
             </p>
           </template>
@@ -97,7 +97,7 @@ export default class General extends Vue {
 }
 
 .input-field {
-  text-align: left;
+  // text-align: left;
   p {
     margin: 3px;
   }
