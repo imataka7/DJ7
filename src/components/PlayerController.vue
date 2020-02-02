@@ -271,7 +271,7 @@ export default class PlayerController extends Vue {
   }
 
   private async initVolume() {
-    const vol = localStorage.getItem('volume') || '30';
+    const vol = localStorage.getItem('volume') || '0';
     this.currentVolume = parseInt(vol, 10);
     await Promise.all(this.allPlayers.map(p => p!.setVolume(this.currentVolume)));
   }
