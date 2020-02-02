@@ -5,7 +5,10 @@
         <div class="column swiper-slide input-container">
           <div class="room-desc">
             <h2>DJ7</h2>
-            <h2>RoomId: {{ roomId }}</h2>
+            <p>
+              RoomId: {{ roomId }}
+              <share-button :room-id="roomId"></share-button>
+            </p>
             <span class="version">{{ version }}</span>
           </div>
 
@@ -95,7 +98,7 @@ import isMobile from 'ismobilejs';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import {
-  YoutubePlayer, InputArea, MusicQueue, HistoryList, PlayerController,
+  YoutubePlayer, InputArea, MusicQueue, HistoryList, PlayerController, ShareButton,
 } from '@/components';
 import {
   Room, RoomUser, Musicx, Music, User, PlayerStatus,
@@ -115,6 +118,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
     MusicQueue,
     HistoryList,
     PlayerController,
+    ShareButton,
     abutton: ActionButton,
   },
 })
