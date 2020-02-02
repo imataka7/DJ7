@@ -1,1 +1,1 @@
-process.env.VUE_APP_VERSION = 'v0.20.7 on 20200201';
+process.env.VUE_APP_VERSION = 'v0.21.2 on 20200201';

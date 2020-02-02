@@ -229,7 +229,6 @@ export default class PlayerController extends Vue {
     const { BUFFERING, NO_MUSIC } = PlayerStatus;
     const isPlayerDisable = [BUFFERING, NO_MUSIC].some(s => s === this.currentPlayer?.state);
     const isNoMusic = this.currentStatus === PlayerStatus.NO_MUSIC;
-    console.log(this.currentPlayer, this.currentStatus);
     return isPlayerDisable || isNoMusic;
   }
 
@@ -329,7 +328,7 @@ export default class PlayerController extends Vue {
 
   public range = 0;
 
-  public currentPlayerInfo?: Player;
+  public currentPlayerInfo: Player | null = null;
 
   public isRangeDragging = false;
 
