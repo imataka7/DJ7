@@ -36,7 +36,7 @@
         <button
           class="has-bounce"
           @click="moveMusic('forward')"
-          :disabled="isControllerDisable"
+          :disabled="currentStatus === 8"
           aria-label="Forward"
         >
           <fa-icon icon="forward" size="lg"></fa-icon>
@@ -216,7 +216,7 @@ export default class PlayerController extends Vue {
     this.$emit('error', music);
   }
 
-  public moveMusic(direction: 'forward' | 'backword') {
+  public moveMusic(direction: 'forward' | 'backward') {
     this.clearMusicInfo();
     this.$emit(direction);
   }
@@ -229,6 +229,7 @@ export default class PlayerController extends Vue {
     const { BUFFERING, NO_MUSIC } = PlayerStatus;
     const isPlayerDisable = [BUFFERING, NO_MUSIC].some(s => s === this.currentPlayer?.state);
     const isNoMusic = this.currentStatus === PlayerStatus.NO_MUSIC;
+    console.log(this.currentPlayer, this.currentStatus);
     return isPlayerDisable || isNoMusic;
   }
 
@@ -238,7 +239,10 @@ export default class PlayerController extends Vue {
 
   public currentVolume = 50;
 
-  public currentStatus = PlayerStatus.NO_MUSIC;
+  // public currentStatus = PlayerStatus.NO_MUSIC;
+  get currentStatus() {
+    return this.currentPlayerInfo?.status;
+  }
 
   public musicDuration = 0;
 

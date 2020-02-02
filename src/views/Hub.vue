@@ -128,15 +128,7 @@ export default class Hub extends Vue {
   }
 
   get me() {
-    if (!this.currentUser) {
-      return null;
-    }
-
-    const { uid, photoURL } = this.currentUser;
-    return {
-      uid,
-      photo: photoURL,
-    } as RoomUser;
+    return user.me;
   }
 
   @Watch('currentUser', { immediate: true })
@@ -217,6 +209,7 @@ export default class Hub extends Vue {
     } = newStatus.player;
 
     if (!music || status === PlayerStatus.NO_MUSIC) {
+      await this.setStatus(status, 0);
       return;
     }
 
@@ -243,7 +236,6 @@ export default class Hub extends Vue {
   }
 
   private async setStatus(status: PlayerStatus, to: number) {
-    this.controller.currentStatus = status;
     await this.controller.seekTo(to);
 
     const { PLAY, PAUSE, NO_MUSIC } = PlayerStatus;
@@ -377,11 +369,11 @@ export default class Hub extends Vue {
   public async interrupt(music: Musicx) {
     const playedTime = await this.controller.getPlayedTime();
 
-    if (!playedTime) {
-      return;
-    }
+    // if (!playedTime) {
+    //   return;
+    // }
 
-    await room.interrupt({ music, playedTime });
+    await room.interrupt({ music, playedTime: playedTime || 0 });
   }
 
   public async deleteMusicFromHistory(music: Music) {

@@ -6,10 +6,8 @@ import 'firebase/firestore';
 
 import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
-import Music from '@/models/music';
-import User from '@/models/user';
-import getClone from '@/utils/getClone';
-import setEvent from '@/utils/eventUtil';
+import { getClone, setEvent } from '@/utils';
+import { RoomUser, Music, User } from '@/models';
 
 const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -32,7 +30,22 @@ class FirebaseUser extends VuexModule {
     return this.status?.visitedRooms;
   }
 
+  get me() {
+    if (!this.user) {
+      return null;
+    }
+
+    return {
+      uid: this.user.uid,
+      photo: this.user.photoURL,
+    } as RoomUser;
+  }
+
   get userRef() {
+    if (!this.user) {
+      return null;
+    }
+
     return firestore.collection('users').doc(this.user?.uid);
   }
 
@@ -56,20 +69,20 @@ class FirebaseUser extends VuexModule {
   public async init(user: firebase.User) {
     this.setUser(user);
 
-    const userSnapshot = await this.userRef.get();
+    const userSnapshot = await this.userRef!.get();
 
     if (!userSnapshot.exists) {
       const initial = {
         uid: user.uid,
         history: [],
       };
-      await this.userRef.set(initial);
+      await this.userRef!.set(initial);
       this.setStatus(initial);
     } else {
       this.setStatus(userSnapshot.data() as User);
     }
 
-    const listener = this.userRef.onSnapshot(async (doc) => {
+    const listener = this.userRef!.onSnapshot(async (doc) => {
       this.setStatus(doc.data() as User);
     });
 
@@ -98,14 +111,14 @@ class FirebaseUser extends VuexModule {
       history.splice(0, history.length - 2000);
     }
 
-    await this.userRef.update({
+    await this.userRef!.update({
       history,
     });
   }
 
   @Action({})
   public deleteHistoryItem(music: Music) {
-    this.userRef.update({
+    this.userRef!.update({
       history: arrayRemove(music),
     });
   }
@@ -116,7 +129,7 @@ class FirebaseUser extends VuexModule {
       return;
     }
 
-    await this.userRef.update({
+    await this.userRef!.update({
       visitedRooms: arrayUnion(roomId),
     });
   }

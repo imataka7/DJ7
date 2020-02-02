@@ -6,8 +6,9 @@ import 'firebase/firestore';
 
 import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
-import PlayerStatus from '@/models/playerStatus';
-import Room, { RoomUser, Musicx } from '@/models/room';
+import {
+  Room, RoomUser, Musicx, PlayerStatus,
+} from '@/models';
 
 const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -35,6 +36,10 @@ class RoomManager extends VuexModule {
   }
 
   get roomRef() {
+    if (!this.roomId) {
+      return null;
+    }
+
     return firestore.collection('rooms').doc(this.roomId);
   }
 
@@ -66,21 +71,35 @@ class RoomManager extends VuexModule {
       roomId: this.roomId,
       users: [],
     };
-    await this.roomRef.set(initial);
+    await this.roomRef!.set(initial);
 
     return initial;
   }
 
   @Action({})
   public async addUser(user: RoomUser) {
-    await this.roomRef.update({
+    if (!this.roomRef) {
+      return;
+    }
+
+    const batch = firestore.batch();
+
+    if (this.users!.indexOf(user) > -1) {
+      batch.update(this.roomRef, {
+        users: arrayRemove(user),
+      });
+    }
+
+    batch.update(this.roomRef, {
       users: arrayUnion(user),
     });
+
+    await batch.commit();
   }
 
   @Action({})
   public async removeUser(user: RoomUser) {
-    await this.roomRef.update({
+    await this.roomRef!.update({
       users: arrayRemove(user),
     });
   }
@@ -91,7 +110,7 @@ class RoomManager extends VuexModule {
 
     this.setRoomId(roomId);
 
-    const snapshot = await this.roomRef.get();
+    const snapshot = await this.roomRef!.get();
 
     if (!snapshot.exists) {
       await this.addRoom(roomId);
@@ -99,13 +118,13 @@ class RoomManager extends VuexModule {
       this.setStatus(snapshot.data() as Room);
     }
 
-    const listener = this.roomRef.onSnapshot(async doc => this.setStatus(doc.data() as Room));
+    const listener = this.roomRef!.onSnapshot(async doc => this.setStatus(doc.data() as Room));
     this.setListener(listener);
   }
 
   @Action({})
   public async updateQueue(queues: Musicx[]) {
-    this.roomRef.update({
+    this.roomRef!.update({
       queues,
     });
   }
@@ -123,7 +142,7 @@ class RoomManager extends VuexModule {
       return;
     }
 
-    this.roomRef.update({
+    this.roomRef!.update({
       'player.status': status,
       'player.playedTime': playedTime,
       'player.updatedAt': store.getters['date/now'](),
@@ -132,7 +151,7 @@ class RoomManager extends VuexModule {
 
   @Action({})
   public async seek(to: number) {
-    this.roomRef.update({
+    this.roomRef!.update({
       'player.playedTime': to,
       'player.updatedAt': store.getters['date/now'](),
     });
@@ -149,7 +168,7 @@ class RoomManager extends VuexModule {
     if (this.status.player.status === PlayerStatus.NO_MUSIC) {
       const nextMusic = items[0];
 
-      batch.update(this.roomRef, {
+      batch.update(this.roomRef!, {
         'player.status': PlayerStatus.PLAY,
         'player.music': nextMusic,
         'player.updatedAt': nextMusic.extraStatus?.playedTime || store.getters['date/now'](),
@@ -163,7 +182,7 @@ class RoomManager extends VuexModule {
       items.shift();
     }
 
-    batch.update(this.roomRef, {
+    batch.update(this.roomRef!, {
       queues: arrayUnion(...items),
     });
 
@@ -173,7 +192,7 @@ class RoomManager extends VuexModule {
   @Action({})
   public async setMusicFromQueue(queues: Musicx[]) {
     if (queues.length === 0) {
-      await this.roomRef.update({
+      await this.roomRef!.update({
         player: {
           music: null,
           playedTime: 0,
@@ -188,7 +207,7 @@ class RoomManager extends VuexModule {
     const nextMusic = queues[0];
     queues.shift();
 
-    await this.roomRef.update({
+    await this.roomRef!.update({
       player: {
         music: nextMusic,
         playedTime: nextMusic.extraStatus?.playedTime || 0,
@@ -216,7 +235,7 @@ class RoomManager extends VuexModule {
       },
     });
 
-    this.roomRef.update({
+    this.roomRef!.update({
       queues: queues.filter(q => q.id !== music.id),
       player: {
         music,
@@ -239,7 +258,7 @@ class RoomManager extends VuexModule {
 
   @Action({})
   public async fetchCurrentStatus() {
-    const snapshot = await this.roomRef.get();
+    const snapshot = await this.roomRef!.get();
     const status = snapshot.data() as Room;
 
     return status;
