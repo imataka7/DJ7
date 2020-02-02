@@ -141,6 +141,9 @@ interface SupportedPlatform {
   },
 })
 export default class PlayerController extends Vue {
+  @Prop({ default: false })
+  public mute!: boolean;
+
   public isTheaterMode = false;
 
   private players: SupportedPlatform = {};
@@ -174,6 +177,7 @@ export default class PlayerController extends Vue {
     if (v) {
       this.isPopupShowing = false;
     }
+    await this.initVolume();
 
     this.listeners.push(setEvent(window, 'keydown', (e) => {
       if ((e as KeyboardEvent).keyCode === 27) { // Esc
@@ -212,6 +216,10 @@ export default class PlayerController extends Vue {
   }
 
   public async onError(music: Musicx) {
+    if (this.currentStatus === PlayerStatus.NO_MUSIC) {
+      return;
+    }
+
     this.clearMusicInfo();
     this.$emit('error', music);
   }
@@ -252,7 +260,6 @@ export default class PlayerController extends Vue {
 
     if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
       this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
-      await this.initVolume();
     }
 
     this.currentMusic = music;
@@ -266,7 +273,7 @@ export default class PlayerController extends Vue {
   private async initVolume() {
     const vol = localStorage.getItem('volume') || '30';
     this.currentVolume = parseInt(vol, 10);
-    await this.currentPlayer!.setVolume(this.currentVolume);
+    await Promise.all(this.allPlayers.map(p => p!.setVolume(this.currentVolume)));
   }
 
   public async play() {
