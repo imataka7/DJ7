@@ -1,5 +1,5 @@
 <template>
-  <div class="player-music-info">
+  <div class="player-music-info" :key="music.source">
     <img :src="music.thumbnail" alt="thumbnail" class="thumbnail" />
     <div class="music-title-wrapper">
       <div ref="title" :class="`music-title ${marqueeEnable ? 'marquee' : ''}`">
