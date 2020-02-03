@@ -1,8 +1,8 @@
-process.env.VUE_APP_VERSION = 'v0.22.4 on 20200202';
+process.env.VUE_APP_VERSION = 'v0.22.6 on 20200203';
 
 const manifestJSON = require('./public/manifest.json');
 
-pwaArgs = {
+const pwaArgs = {
   themeColor: manifestJSON.theme_color,
   name: manifestJSON.short_name,
   msTileColor: manifestJSON.background_color,

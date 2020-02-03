@@ -39,6 +39,7 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
         disablekb: 0,
         playsinline: 1,
         enablejsapi: 1,
+        origin: window.location.origin,
       },
     });
 

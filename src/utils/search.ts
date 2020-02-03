@@ -4,7 +4,12 @@ const dummyEl = document.createElement('div');
 dummyEl.style.display = 'none';
 document.body.insertAdjacentElement('beforeend', dummyEl);
 
-const player = YouTubePlayer(dummyEl);
+const player = YouTubePlayer(dummyEl, {
+  playerVars: {
+    enablejsapi: 1,
+    origin: window.location.origin,
+  },
+});
 
 /**
  * wait until playlist will be updated and returns videoId.
