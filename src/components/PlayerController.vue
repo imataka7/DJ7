@@ -83,11 +83,7 @@
         <div v-if="!isPhone && isPopupShowing" class="click-me">
           <p>Click Me!</p>
         </div>
-        <player-music-info
-          v-if="currentMusic"
-          :music="currentMusic"
-        ></player-music-info>
-        <p class="no-music-indicator" v-else>No music playing</p>
+        <player-music-info :music="currentMusic"></player-music-info>
       </div>
     </div>
     <div class="player-container" @pointermove.stop>
@@ -533,10 +529,6 @@ export default class PlayerController extends Vue {
 
   &:hover {
     background: var(--controller-info-hover);
-  }
-
-  .no-music-indicator {
-    text-align: center;
   }
 
   .click-me {

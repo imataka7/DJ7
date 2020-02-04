@@ -1,11 +1,17 @@
 <template>
-  <div class="player-music-info" :key="music.source">
-    <img :src="music.thumbnail" alt="thumbnail" class="thumbnail" />
-    <div class="music-title-wrapper">
-      <div ref="title" :class="`music-title ${marqueeEnable ? 'marquee' : ''}`">
-        {{ music.title }}
+  <div class="player-music-info">
+    <template v-if="music">
+      <img :src="music.thumbnail" alt="thumbnail" class="thumbnail" />
+      <div class="music-title-wrapper">
+        <div
+          ref="title"
+          :class="`music-title ${marqueeEnable ? 'marquee' : ''}`"
+        >
+          {{ music.title }}
+        </div>
       </div>
-    </div>
+    </template>
+    <p class="no-music-indicator" v-else>No music playing</p>
   </div>
 </template>
 
@@ -26,24 +32,24 @@ const music = {
 
 @Component
 export default class PlayerMusicInfo extends Vue {
-  @Prop({ default: () => music })
-  public music!: Music;
+  @Prop({ default: null })
+  public music!: Music | null;
 
   public marqueeEnable = false;
 
   @Watch('music')
   private async decideMarqueeEnable() {
+    await this.$nextTick();
+
     const el = this.$el.querySelector('.music-title') as HTMLElement;
+
+    if (!music || !el) {
+      return;
+    }
 
     if (el.classList.contains('marquee')) {
       el.classList.remove('marquee');
     }
-
-    if (!el) {
-      return;
-    }
-
-    await this.$nextTick();
 
     if (el.clientWidth > 200) {
       this.marqueeEnable = true;
@@ -73,21 +79,18 @@ export default class PlayerMusicInfo extends Vue {
 
 .music-title-wrapper {
   width: 200px;
-  // height: 40px;
   display: flex;
   align-items: center;
   white-space: nowrap;
   overflow: hidden;
-  // box-shadow: 0px 0px 6px 3px #ddd inset;
-
-  // &:hover > .marquee {
-  //   padding-left: 100%;
-  //   animation: marquee 10s linear infinite;
-  // }
 }
 
 .music-title {
   display: inline-block;
+}
+
+.no-music-indicator {
+  text-align: center;
 }
 
 .marquee {
