@@ -37,7 +37,7 @@ export default class PlayerMusicInfo extends Vue {
 
   public marqueeEnable = false;
 
-  @Watch('music')
+  @Watch('music', { immediate: true })
   private async decideMarqueeEnable() {
     await this.$nextTick();
 
@@ -47,15 +47,11 @@ export default class PlayerMusicInfo extends Vue {
       return;
     }
 
-    if (el.classList.contains('marquee')) {
-      el.classList.remove('marquee');
-    }
+    this.marqueeEnable = false;
 
     if (el.clientWidth > 200) {
       this.marqueeEnable = true;
       el.style.animationDuration = `${el.clientWidth * 10 / 350}s`;
-    } else {
-      this.marqueeEnable = false;
     }
   }
 
