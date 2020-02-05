@@ -32,7 +32,8 @@
     "vuedraggable": "^2.23.2",
     "vuex": "^3.1.2",
     "vuex-module-decorators": "^0.11.0",
-    "youtube-player": "^5.5.2"
+    "youtube-player": "^5.5.2",
+    "workbox-build": "^5.0.0"
   },
   "devDependencies": {
     "@types/sortablejs": "^1.10.2",
@@ -54,7 +55,9 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "typescript": "3.7.3",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "workbox-sw": "^5.0.0",
+    "workbox-webpack-plugin": "^5.0.0"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
