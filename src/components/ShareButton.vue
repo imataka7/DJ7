@@ -29,7 +29,8 @@ export default class ShareButton extends Vue {
 ${this.nowPlaying ? `Now playing ♫ ${this.nowPlaying}\n\n` : ''}`;
     const hashtags = `DJ7,DJ7_${this.roomId}`;
     const url = `https://www.dj7.io/${this.roomId}`;
-    return encodeURI(`${baseUrl}?text=${text}&hashtags=${hashtags}&url=${url}`);
+    const related = 'dj7app,imataka7';
+    return encodeURI(`${baseUrl}?text=${text}&hashtags=${hashtags}&url=${url}&related=${related}`);
   }
 
   public showPopup() {
