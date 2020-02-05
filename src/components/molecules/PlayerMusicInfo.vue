@@ -51,7 +51,7 @@ export default class PlayerMusicInfo extends Vue {
 
     if (el.clientWidth > 200) {
       this.marqueeEnable = true;
-      el.style.animationDuration = `${el.clientWidth * 10 / 350}s`;
+      el.style.animationDuration = `${Math.ceil(el.clientWidth / 25)}s`;
     }
   }
 
