@@ -22,14 +22,6 @@ import {
 } from 'vue-property-decorator';
 import Music from '../../models/music';
 
-const music = {
-  platform: 'YouTube',
-  source: 'https://www.youtube.com/embed/ALZHF5UqnU4',
-  thumbnail: 'https://i.ytimg.com/vi/ALZHF5UqnU4/hqdefault.jpg',
-  title: 'Marshmello - Alone (Official Music Video)',
-  // title: 'Marshmello',
-};
-
 @Component
 export default class PlayerMusicInfo extends Vue {
   @Prop({ default: null })
@@ -37,21 +29,22 @@ export default class PlayerMusicInfo extends Vue {
 
   public marqueeEnable = false;
 
-  @Watch('music', { immediate: true })
+  @Watch('music')
   private async decideMarqueeEnable() {
     await this.$nextTick();
 
     const el = this.$el.querySelector('.music-title') as HTMLElement;
 
-    if (!music || !el) {
+    if (!this.music || !el) {
       return;
     }
 
     this.marqueeEnable = false;
 
     if (el.clientWidth > 200) {
+      const duration = Math.ceil((240 + el.clientWidth) / 50);
+      el.style.animationDuration = `${duration}s`;
       this.marqueeEnable = true;
-      el.style.animationDuration = `${Math.ceil(el.clientWidth / 25)}s`;
     }
   }
 

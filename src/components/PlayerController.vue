@@ -201,7 +201,6 @@ export default class PlayerController extends Vue {
   }
 
   public clearMusicInfo() {
-    this.currentMusic = null;
     this.musicDuration = 0;
     this.range = 0;
   }
@@ -236,13 +235,14 @@ export default class PlayerController extends Vue {
     return isPlayerDisable || isNoMusic;
   }
 
-  private currentMusic: Musicx | null = null;
+  get currentMusic() {
+    return this.currentPlayerInfo?.music;
+  }
 
   private currentPlayer: MusicPlayer | null = null;
 
   public currentVolume = 50;
 
-  // public currentStatus = PlayerStatus.NO_MUSIC;
   get currentStatus() {
     return this.currentPlayerInfo?.status;
   }
@@ -250,15 +250,10 @@ export default class PlayerController extends Vue {
   public musicDuration = 0;
 
   public async loadMusic(music: Musicx) {
-    if (this.currentMusic?.id === music.id) {
-      return;
-    }
-
     if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
       this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
     }
 
-    this.currentMusic = music;
     await this.currentPlayer.loadMusic(music);
 
     this.musicDuration = await this.currentPlayer.getDuration();

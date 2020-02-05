@@ -353,7 +353,7 @@ export default class Hub extends Vue {
 
     // console.log(music, errorMusic);
 
-    if (music.id === playedMusic.id) {
+    if (music.id === playedMusic?.id) {
       room.setMusicFromQueue(queues);
     }
   }
