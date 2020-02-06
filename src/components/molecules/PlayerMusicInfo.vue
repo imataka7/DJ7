@@ -42,7 +42,7 @@ export default class PlayerMusicInfo extends Vue {
     this.marqueeEnable = false;
 
     if (el.clientWidth > 200) {
-      const duration = Math.ceil((240 + el.clientWidth) / 50);
+      const duration = Math.ceil((240 + el.clientWidth) / 60);
       el.style.animationDuration = `${duration}s`;
       this.marqueeEnable = true;
     }
