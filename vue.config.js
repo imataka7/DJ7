@@ -17,17 +17,8 @@ module.exports = {
       swDest: `${dist}/service-worker.js`,
       skipWaiting: true,
       clientsClaim: true,
+      navigateFallback: '/index.html',
       runtimeCaching: [
-        // {
-        //   handler: 'NetworkFirst',
-        //   urlPattern: /.+(\.html|\/)$/,
-        //   options: {
-        //     cacheName: 'dj7-index',
-        //     expiration: {
-        //       maxAgeSeconds: 60 * 60 * 24,
-        //     },
-        //   },
-        // },
         {
           handler: 'StaleWhileRevalidate',
           urlPattern: /^https:\/\/fonts\.googleapis\.com/,
@@ -47,9 +38,9 @@ module.exports = {
         },
         {
           handler: 'StaleWhileRevalidate',
-          urlPattern: /favicon-.+-\.png/,
+          urlPattern: /\/img\/.+/,
           options: {
-            cacheName: 'dj7-favicon',
+            cacheName: 'dj7-images',
             expiration: {
               maxAgeSeconds: 60 * 60 * 24 * 365,
             },
