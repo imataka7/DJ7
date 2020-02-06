@@ -1,4 +1,4 @@
-process.env.VUE_APP_VERSION = 'v0.23.8 on 20200205';
+process.env.VUE_APP_VERSION = 'v0.24.1 on 20200206';
 
 const manifestJSON = require('./public/manifest.json');
 
@@ -46,6 +46,23 @@ module.exports = {
             },
           },
         },
+        {
+          handler: 'CacheFirst',
+          urlPattern: /.+\.(?:png|gif|jpg|jpeg|webp|svg)$/,
+          options: {
+            cacheName: 'third-party-images',
+            expiration: {
+              maxAgeSeconds: 60 * 60 * 24 * 7,
+            },
+          },
+        },
+        // {
+        //   handler: 'StaleWhileRevalidate',
+        //   urlPattern: /.+\.(?:js|css)$/,
+        //   options: {
+        //     cacheName: 'third-party-resources',
+        //   },
+        // },
       ],
     },
   },
