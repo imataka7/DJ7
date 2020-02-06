@@ -1,4 +1,4 @@
-process.env.VUE_APP_VERSION = 'v0.23.7 on 20200205';
+process.env.VUE_APP_VERSION = 'v0.23.8 on 20200205';
 
 const manifestJSON = require('./public/manifest.json');
 
@@ -18,19 +18,19 @@ module.exports = {
       skipWaiting: true,
       clientsClaim: true,
       runtimeCaching: [
-        {
-          handler: 'NetworkFirst',
-          urlPattern: /.+(\.html|\/)$/,
-          options: {
-            cacheName: 'dj7-index',
-            expiration: {
-              maxAgeSeconds: 60 * 60 * 24,
-            },
-          },
-        },
+        // {
+        //   handler: 'NetworkFirst',
+        //   urlPattern: /.+(\.html|\/)$/,
+        //   options: {
+        //     cacheName: 'dj7-index',
+        //     expiration: {
+        //       maxAgeSeconds: 60 * 60 * 24,
+        //     },
+        //   },
+        // },
         {
           handler: 'StaleWhileRevalidate',
-          urlPattern: /^https:\/\/fonts\.google\.com/,
+          urlPattern: /^https:\/\/fonts\.googleapis\.com/,
           options: {
             cacheName: 'google-fonts-stylesheets',
           },
