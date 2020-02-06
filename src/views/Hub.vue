@@ -225,9 +225,9 @@ export default class Hub extends Vue {
     } = music;
 
     if (id && id !== previousId) {
-      await this.controller.loadMusic(music);
-
       user.updateHistory(music);
+
+      await this.controller.loadMusic(music);
     }
 
     if (oldStatus?.player.playedTime === playedTime
