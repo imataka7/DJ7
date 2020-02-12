@@ -264,7 +264,7 @@ export default class Hub extends Vue {
     room.seek(time);
   }
 
-  public async updateHistory(music: Music) {
+  public async updateHistory(music: Musicx) {
     await user.updateHistory(music);
   }
 

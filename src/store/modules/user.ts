@@ -7,7 +7,9 @@ import 'firebase/firestore';
 import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
 import { getClone, setEvent } from '@/utils';
-import { RoomUser, Music, User } from '@/models';
+import {
+  RoomUser, Music, User, Musicx,
+} from '@/models';
 
 const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -90,7 +92,7 @@ class FirebaseUser extends VuexModule {
   }
 
   @Action({})
-  public async updateHistory(music: Music) {
+  public async updateHistory(music: Musicx) {
     if (!this.status) {
       return;
     }
@@ -104,7 +106,8 @@ class FirebaseUser extends VuexModule {
       // item.count += 1;
       history.push(item);
     } else {
-      history.push(music);
+      const { id, extraStatus, ...item } = music;
+      history.push(item);
     }
 
     if (history.length > 2000) {
