@@ -25,12 +25,13 @@ export default class ShareButton extends Vue {
 
   get link() {
     const baseUrl = 'https://twitter.com/intent/tweet';
-    const text = `Share your moments on DJ7! I'm at ${this.roomId}!\n
-${this.nowPlaying ? `Now playing ♫ ${this.nowPlaying}\n\n` : ''}`;
+    const playing = this.nowPlaying ? `Now playing ♫ ${this.nowPlaying}\n\n` : '';
+    const text = `Share your moments on DJ7! I'm at ${this.roomId}!\n\n${playing}`;
     const hashtags = `DJ7,DJ7_${this.roomId},NowPlaying`;
     const url = `https://www.dj7.io/${this.roomId}`;
     const related = 'dj7app,imataka7';
-    return encodeURI(`${baseUrl}?text=${text}&hashtags=${hashtags}&url=${url}&related=${related}`);
+
+    return encodeURI(`${baseUrl}?hashtags=${hashtags}&url=${url}&related=${related}&text=${text}`);
   }
 
   public showPopup() {
