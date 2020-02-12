@@ -32,9 +32,10 @@ export default class MusicHub extends Vue {
       root.dataset.scrollbar = 'custom';
     }
 
-    await adate.init();
-
     this.$auth.onAuthStateChanged(firebaseUser => firebaseUser && user.init(firebaseUser));
+
+    await adate.init();
+    this.$set(window, 'getAdjustedDate', () => `${adate.now()} ${adate.diff}`);
   }
 }
 </script>
