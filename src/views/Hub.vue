@@ -21,7 +21,9 @@
 
           <input-area @parsed="addQueue"></input-area>
 
-          <div class="ad-container"></div>
+          <div class="ad-container">
+            <ad-square></ad-square>
+          </div>
 
           <div class="jumper">
             <label>
@@ -101,7 +103,7 @@ import isMobile from 'ismobilejs';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import {
-  YoutubePlayer, InputArea, MusicQueue, HistoryList, PlayerController, ShareButton,
+  YoutubePlayer, InputArea, MusicQueue, HistoryList, PlayerController, ShareButton, AdSquare,
 } from '@/components';
 import {
   Room, RoomUser, Musicx, Music, User, PlayerStatus,
@@ -123,6 +125,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
     PlayerController,
     ShareButton,
     abutton: ActionButton,
+    AdSquare,
   },
 })
 export default class Hub extends Vue {
@@ -439,10 +442,9 @@ export default class Hub extends Vue {
 }
 
 .ad-container {
-  width: 250px;
-  height: 250px;
+  min-width: 50px;
+  min-height: 50px;
   margin: 10px auto;
-  background: #ddd;
 }
 
 .label-desc {
