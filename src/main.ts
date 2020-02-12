@@ -22,6 +22,11 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
 import VueLazyload from 'vue-lazyload';
 
+// @ts-ignore
+import VueScript2 from 'vue-script2';
+// @ts-ignore
+import Ads from 'vue-google-adsense';
+
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
@@ -53,6 +58,11 @@ Vue.component('fa-layers', FontAwesomeLayers);
 
 Vue.use(VueLazyload);
 Vue.use(firebase);
+
+Vue.use(VueScript2);
+Vue.use(Ads.Adsense);
+Vue.use(Ads.InFeedAdsense);
+
 Vue.config.productionTip = false;
 
 new Vue({
