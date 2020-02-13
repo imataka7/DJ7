@@ -1,4 +1,4 @@
-process.env.VUE_APP_VERSION = 'v0.25.5 on 20200213';
+process.env.VUE_APP_VERSION = 'v0.25.7 on 20200213';
 
 const manifestJSON = require('./public/manifest.json');
 
@@ -11,6 +11,10 @@ const pwaArgs = {
 const dist = `${__dirname}/dist`;
 
 module.exports = {
+  productionSourceMap: process.env.NODE_ENV !== 'production',
+  chainWebpack: (config) => {
+    config.plugin('pwa').tap(() => [pwaArgs]);
+  },
   pwa: {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
@@ -65,8 +69,5 @@ module.exports = {
         // },
       ],
     },
-  },
-  chainWebpack: (config) => {
-    config.plugin('pwa').tap(() => [pwaArgs]);
   },
 };
