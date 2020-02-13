@@ -373,7 +373,7 @@ export default class Hub extends Vue {
     }
 
     const { origin } = window.location;
-    window.location.href = `${origin}/${this.jumpTo}`;
+    window.location.href = `${origin}/${this.jumpTo.trim()}`;
   }
 
   public async interrupt(music: Musicx) {

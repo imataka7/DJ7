@@ -67,7 +67,7 @@ export default class General extends Vue {
       return;
     }
 
-    this.$router.push(`/${this.jumpTo}`);
+    this.$router.push(`/${this.jumpTo.trim()}`);
   }
 
   get visitedRooms() {
