@@ -1,4 +1,4 @@
-process.env.VUE_APP_VERSION = 'v0.25.7 on 20200213';
+process.env.VUE_APP_VERSION = 'v0.25.9 on 20200213';
 
 const manifestJSON = require('./public/manifest.json');
 
@@ -21,6 +21,7 @@ module.exports = {
       swDest: `${dist}/service-worker.js`,
       skipWaiting: true,
       clientsClaim: true,
+      exclude: ['ads.txt', /.+png/],
       navigateFallback: '/index.html',
       runtimeCaching: [
         {
