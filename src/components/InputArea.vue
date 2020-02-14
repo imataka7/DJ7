@@ -27,7 +27,9 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
-import { getMusicInfo, getPlaylistInfo, getPlaylistId } from '@/utils/urlParser';
+import {
+  getMusicInfo, getPlaylistInfo, getPlaylistId, showToast,
+} from '@/utils';
 import { Musicx } from '@/models/room';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -41,7 +43,7 @@ const playlistMessage = `Enter playlist URLs or playlistIds!
 
 examples:
 PLlcDhwyfvStrW2hpnIu9HBNfvkH_-x4um
-https://www.youtube.com/playlist?list=PLlcDhwyfvStrW2hpnIu9HBNfvkH_-x4um`;
+https://www.youtube.com/playlist?list=PLlcDhwyfvStrW2`;
 
 
 @Component({
@@ -60,13 +62,7 @@ export default class InputArea extends Vue {
 
   public searching = false;
 
-  public async searchAsQuery() {
-    const queries = this.value.split('\n').filter(q => q !== '');
-
-    if (queries.length === 0) {
-      return null;
-    }
-
+  public async searchAsQuery(queries: string[]) {
     const musicList: Musicx[] = [];
 
     for (let i = 0; i < queries.length; i += 1) {
@@ -75,32 +71,40 @@ export default class InputArea extends Vue {
 
       if (searchResult) {
         musicList.push(searchResult);
+      } else {
+        showToast('error', `Not found: ${queries[i]}`);
       }
     }
 
     return musicList;
   }
 
-  public async searchAsPlaylist() {
-    const params = this.value.split('\n').filter(q => q !== '');
+  public async searchAsPlaylist(queries: string[]) {
+    const ids = queries.map(getPlaylistId);
 
-    if (params.length === 0) {
-      return null;
+    const res = await Promise.all(ids.map(getPlaylistInfo));
+
+    const musicList = (res.filter(m => m !== null) as Musicx[][]).flat();
+
+    if (musicList.length === 0) {
+      showToast('error', 'No playlists found');
     }
 
-    const ids = params.map(getPlaylistId);
-
-    const musicList = await Promise.all(ids.map(getPlaylistInfo));
-
-    return (musicList.filter(m => m !== null) as Musicx[][]).flat();
+    return musicList;
   }
 
   public async parse() {
     this.searching = true;
 
-    const musicList = this.isPlaylist ? await this.searchAsPlaylist() : await this.searchAsQuery();
+    const queries = this.value.split('\n').filter(q => q !== '');
 
-    // console.log(musicList);
+    if (queries.length === 0) {
+      return;
+    }
+
+    const musicList = this.isPlaylist
+      ? await this.searchAsPlaylist(queries)
+      : await this.searchAsQuery(queries);
 
     if (Array.isArray(musicList) && musicList.length) {
       this.$emit('parsed', musicList);
