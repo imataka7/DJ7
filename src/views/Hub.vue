@@ -16,7 +16,13 @@
           </div>
 
           <div class="room-users">
-            <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+            <img
+              v-for="u in users"
+              :key="u.id"
+              :src="u.photo"
+              alt="icon"
+              loading="lazy"
+            />
           </div>
 
           <input-area @parsed="addQueue"></input-area>
