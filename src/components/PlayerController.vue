@@ -210,13 +210,13 @@ export default class PlayerController extends Vue {
     this.$emit('end', music);
   }
 
-  public async onError(music: Musicx) {
+  public async onError(music: Musicx, code: number) {
     if (this.currentStatus === PlayerStatus.NO_MUSIC) {
       return;
     }
 
     this.clearMusicInfo();
-    this.$emit('error', music);
+    this.$emit('error', music, code);
   }
 
   public moveMusic(direction: 'forward' | 'backward') {

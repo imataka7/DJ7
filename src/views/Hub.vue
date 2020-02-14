@@ -109,7 +109,7 @@ import {
   Room, RoomUser, Musicx, Music, User, PlayerStatus,
 } from '@/models';
 import {
-  sleep, setEvent, getEmbedUrl, getMusicInfo, getClone,
+  sleep, setEvent, getEmbedUrl, getMusicInfo, getClone, showToast,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '../components/molecules';
@@ -348,7 +348,7 @@ export default class Hub extends Vue {
     room.setMusicFromQueue(queues);
   }
 
-  public async onError(playedMusic: Musicx) {
+  public async onError(playedMusic: Musicx, code: number) {
     const status = await room.fetchCurrentStatus();
 
     const { player, queues } = status;
@@ -359,6 +359,8 @@ export default class Hub extends Vue {
     if (music.id === playedMusic?.id) {
       room.setMusicFromQueue(queues);
     }
+
+    showToast('error', `An error occurs in the player. code: ${code}`);
   }
 
   private async forwardMusic() {

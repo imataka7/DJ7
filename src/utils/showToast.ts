@@ -7,7 +7,7 @@ export default function showToast(icon: BuiltInIcons, text: string) {
     icon,
     text,
     toast: true,
-    showCancelButton: false,
+    showConfirmButton: false,
     timer: 3000,
     position: 'bottom-right',
   });
