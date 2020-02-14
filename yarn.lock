@@ -1907,6 +1907,11 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
+"@sweetalert2/theme-dark@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@sweetalert2/theme-dark/-/theme-dark-3.1.0.tgz#b0289b775f65bb17090ad23e4efc4e348939cdb0"
+  integrity sha512-tXChn56erfY02Ie82mEc/Pp4RFQ40FoaS4Ys7moQgePZOlOoyZd/o4Z1H7dzA4bpHEF6ItYXZCk+e0RkW7CKPA==
+
 "@types/bytebuffer@^5.0.40":
   version "5.0.40"
   resolved "https://registry.yarnpkg.com/@types/bytebuffer/-/bytebuffer-5.0.40.tgz#d6faac40dcfb09cd856cdc4c01d3690ba536d3ee"

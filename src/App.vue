@@ -42,6 +42,7 @@ export default class MusicHub extends Vue {
 
 <style lang="scss">
 @import "~normalize.css";
+@import "~@sweetalert2/theme-dark/dark.scss";
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 
 $black: #000;
