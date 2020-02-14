@@ -24,7 +24,7 @@ class AdjustedDate extends VuexModule {
       'https://ntp-b1.nict.go.jp/cgi-bin/json',
     ];
 
-    for (let i = 1; i < urls.length; i += 1) {
+    for (let i = 0; i < urls.length; i += 1) {
       const beforeFetch = Date.now();
       const res = await fetch(urls[i]);
       const timeSpentForFetch = Date.now() - beforeFetch;
