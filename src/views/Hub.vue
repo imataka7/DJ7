@@ -22,6 +22,8 @@
               :src="u.photo"
               alt="icon"
               loading="lazy"
+              width="50"
+              height="50"
             />
           </div>
 
