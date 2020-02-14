@@ -31,7 +31,7 @@ export default class ShareButton extends Vue {
 
     const text = encodeURIComponent(`Share your moments on DJ7! I'm at ${this.roomId}!\n\n${playing}`);
     const hashtags = `DJ7,DJ7_${roomId},NowPlaying`;
-    const url = `https://www.dj7.io/${roomId}`;
+    const url = `https://dj7.io/${roomId}`;
     const related = 'dj7app,imataka7';
 
     return `${baseUrl}?hashtags=${hashtags}&url=${url}&related=${related}&text=${text}`;
