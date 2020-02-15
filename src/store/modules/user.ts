@@ -52,19 +52,18 @@ class FirebaseUser extends VuexModule {
   }
 
   @Mutation
-  public setUser(user: firebase.User) {
+  public setUser(user: firebase.User | null) {
     this.user = user;
   }
 
   @Mutation
-  public setStatus(state: User) {
+  public setStatus(state: User | null) {
     this.status = state;
   }
 
   @Mutation
-  public setListener(listener: () => void) {
+  public setListener(listener: (() => void) | null) {
     this.listener = listener;
-    setEvent(window, 'beforeunload', () => listener);
   }
 
   @Action({})
@@ -137,17 +136,15 @@ class FirebaseUser extends VuexModule {
     });
   }
 
-  @MutationAction({ mutate: ['user', 'status', 'listener'] })
+  @Action({})
   public async signOut() {
     this.listener?.();
 
     await firebase.auth().signOut();
 
-    return {
-      user: null,
-      status: null,
-      listener: null,
-    };
+    this.setUser(null);
+    this.setStatus(null);
+    this.setListener(null);
   }
 }
 
