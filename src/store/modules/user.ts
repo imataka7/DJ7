@@ -10,7 +10,7 @@ import { getClone, setEvent, convertProviderIdToName } from '@/utils';
 import {
   RoomUser, Music, User, Musicx,
 } from '@/models';
-import { setUserInfo } from '@/logger';
+import { setUserInfo, initUserInfo } from '@/logger';
 
 const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -158,6 +158,8 @@ class FirebaseUser extends VuexModule {
     this.setUser(null);
     this.setStatus(null);
     this.setListener(null);
+
+    initUserInfo();
   }
 }
 
