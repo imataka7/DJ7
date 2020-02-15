@@ -1,7 +1,8 @@
-import { getPlaylistVideos, getYTVideoTitle } from './dataAPIConnector';
 import {
   generateRandomId, getEmbedUrl, getMusicInfo, getPlaylistId, getPlaylistInfo, getYTVideoId,
 } from './urlParser';
+import { getPlaylistVideos, getYTVideoTitle } from './dataAPIConnector';
+import convertProviderIdToName from './convertProviderIdToName';
 import showToast from './showToast';
 import setEvent from './eventUtil';
 import getClone from './getClone';
@@ -9,6 +10,7 @@ import search from './search';
 import sleep from './sleep';
 
 export {
+  convertProviderIdToName,
   getPlaylistVideos,
   generateRandomId,
   getYTVideoTitle,

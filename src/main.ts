@@ -1,22 +1,22 @@
 import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faPlay,
-  faPause,
-  faForward,
-  faVolumeMute,
-  faVolumeUp,
-  faVolumeDown,
-  faVolumeOff,
-  faSpinner,
   faCog,
-  faArrowAltCircleUp,
-  faExchangeAlt,
-  faTrashAlt,
-  faTimes,
+  faPlay,
   faPlus,
+  faPause,
+  faTimes,
   faCircle,
+  faSpinner,
+  faForward,
+  faVolumeUp,
+  faTrashAlt,
   faHandPaper,
+  faVolumeOff,
+  faVolumeDown,
+  faVolumeMute,
+  faExchangeAlt,
+  faArrowAltCircleUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
@@ -33,25 +33,26 @@ import router from './router';
 import store from './store';
 
 import firebase from './plugins/firebase';
+import logger, { initUserInfo, captureException } from '@/logger';
 
 library.add(...[
-  faPlay,
-  faPause,
-  faForward,
-  faVolumeMute,
-  faVolumeUp,
-  faVolumeDown,
-  faVolumeOff,
-  faSpinner,
   faCog,
-  faArrowAltCircleUp,
-  faExchangeAlt,
-  faTrashAlt,
-  faTimes,
+  faPlay,
   faPlus,
+  faPause,
+  faTimes,
   faCircle,
-  faHandPaper,
+  faSpinner,
+  faForward,
   faTwitter,
+  faVolumeUp,
+  faTrashAlt,
+  faHandPaper,
+  faVolumeOff,
+  faVolumeDown,
+  faVolumeMute,
+  faExchangeAlt,
+  faArrowAltCircleUp,
 ]);
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.component('fa-layers', FontAwesomeLayers);
@@ -64,6 +65,18 @@ Vue.use(Ads.Adsense);
 Vue.use(Ads.InFeedAdsense);
 
 Vue.config.productionTip = false;
+
+initUserInfo();
+// Object.defineProperty(window, 'logger', { value: logger, enumerable: true });
+
+Vue.config.errorHandler = (err, vm, info) => {
+  console.log(err, vm, info);
+  captureException(err);
+};
+
+Vue.config.warnHandler = (message, vm, trace) => {
+  captureException(new Error(message));
+};
 
 new Vue({
   router,

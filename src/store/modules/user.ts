@@ -6,10 +6,11 @@ import 'firebase/firestore';
 
 import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
-import { getClone, setEvent } from '@/utils';
+import { getClone, setEvent, convertProviderIdToName } from '@/utils';
 import {
   RoomUser, Music, User, Musicx,
 } from '@/models';
+import { setUserInfo } from '@/logger';
 
 const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
@@ -88,6 +89,18 @@ class FirebaseUser extends VuexModule {
     });
 
     this.setListener(listener);
+
+    const {
+      uid, displayName, providerData,
+    } = this.user!;
+
+    const userInfo = {
+      provider: convertProviderIdToName(providerData[0]!.providerId),
+      uid,
+      username: displayName || '',
+    };
+
+    setUserInfo(userInfo);
   }
 
   @Action({})
