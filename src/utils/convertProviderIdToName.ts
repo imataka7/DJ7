@@ -1,6 +1,6 @@
-type SupportedProvider = 'Twitter' | 'Google';
+type SupportedAuthProvider = 'Twitter' | 'Google';
 
-export default function convertProviderToName(id: string): SupportedProvider {
+export default function convertProviderToName(id: string): SupportedAuthProvider {
   switch (id) {
     case 'google.com':
       return 'Google';
