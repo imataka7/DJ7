@@ -10,11 +10,13 @@ declare module 'vue/types/vue' {
   interface Vue {
     $auth: firebase.auth.Auth;
     $firestore: firebase.firestore.Firestore;
+    $ga: firebase.analytics.Analytics;
   }
 
   interface VueConstructor {
     $auth: firebase.auth.Auth;
     $firestore: firebase.firestore.Firestore;
+    $ga: firebase.analytics.Analytics;
   }
 }
 
@@ -30,11 +32,12 @@ const firebaseConfig = {
 };
 
 export const app = firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+const anal = firebase.analytics();
 
 export default {
   install(vue: VueConstructor, options: any) {
     vue.prototype.$firestore = app.firestore();
     vue.prototype.$auth = app.auth();
+    vue.prototype.$ga = app.analytics();
   },
 } as PluginObject<Vue>;
