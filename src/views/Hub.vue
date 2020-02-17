@@ -121,6 +121,7 @@ import {
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '../components/molecules';
+import logger from '@/logger';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
