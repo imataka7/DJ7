@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { VueConstructor, PluginObject } from 'vue';
 import * as Sentry from '@sentry/browser';
 import { Vue as IntegrationsVue } from '@sentry/integrations';
 
@@ -49,16 +49,28 @@ const info = (m: string, c: Partial<Context> = {}) => loggerBase(Sentry.Severity
 const warn = (m: string, c: Partial<Context> = {}) => loggerBase(Sentry.Severity.Warning, m, c);
 const error = (m: string, c: Partial<Context> = {}) => loggerBase(Sentry.Severity.Error, m, c);
 
-const logger = {
+export const logger = {
   info,
   warn,
   error,
-};
-
-export {
   setUserInfo,
   initUserInfo,
   captureException,
 };
 
-export default logger;
+declare module 'vue/types/vue' {
+  interface Vue {
+    $logger: typeof logger;
+  }
+
+  interface VueConstructor {
+    $logger: typeof logger;
+  }
+}
+
+export default {
+  install(vue: VueConstructor, options: any) {
+    // eslint-disable-next-line no-param-reassign
+    vue.prototype.$logger = logger;
+  },
+} as PluginObject<Vue>;

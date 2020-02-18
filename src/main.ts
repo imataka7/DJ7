@@ -33,7 +33,9 @@ import router from './router';
 import store from './store';
 
 import firebase from './plugins/firebase';
-import logger, { initUserInfo, captureException } from '@/logger';
+import logInstaller, { logger } from '@/plugins/logger';
+
+const { initUserInfo, captureException } = logger;
 
 library.add(...[
   faCog,
@@ -57,9 +59,10 @@ library.add(...[
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.component('fa-layers', FontAwesomeLayers);
 
-Vue.use(VueLazyload);
 Vue.use(firebase);
+Vue.use(logInstaller);
 
+Vue.use(VueLazyload);
 Vue.use(VueScript2);
 Vue.use(Ads.Adsense);
 Vue.use(Ads.InFeedAdsense);

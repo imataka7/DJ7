@@ -10,7 +10,9 @@ import { getClone, setEvent, convertProviderIdToName } from '@/utils';
 import {
   RoomUser, Music, User, Musicx,
 } from '@/models';
-import { setUserInfo, initUserInfo } from '@/logger';
+import { logger } from '@/plugins/logger';
+
+const { setUserInfo, initUserInfo } = logger;
 
 const firestore = firebaseApp.firestore();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
