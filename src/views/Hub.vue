@@ -121,7 +121,7 @@ import {
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '../components/molecules';
-import logger from '@/logger';
+import { logger } from '@/plugins/logger';
 
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
@@ -159,6 +159,8 @@ export default class Hub extends Vue {
   }
 
   public async signOut() {
+    this.$ga.logEvent('sign_out');
+
     this.$router.push('/signin');
     await room.leaveRoom(this.me!);
     await user.signOut();
@@ -382,6 +384,15 @@ export default class Hub extends Vue {
     if (!this.jumpTo) {
       return;
     }
+
+    this.$ga.logEvent('jump', {
+      roomId: this.jumpTo,
+    });
+    this.$logger.info('jump', {
+      content: {
+        roomId: this.jumpTo,
+      },
+    });
 
     const { origin } = window.location;
     window.location.href = `${origin}/${this.jumpTo.trim()}`;
