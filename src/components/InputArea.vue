@@ -62,7 +62,24 @@ export default class InputArea extends Vue {
 
   public searching = false;
 
+  public log(type: 'video' | 'playlist', terms: string[]) {
+    this.$ga.logEvent('search', {
+      type,
+      search_term: terms.join(', '),
+    });
+
+    this.$logger.info('search', {
+      width: window.innerWidth,
+      content: {
+        type,
+        terms,
+      },
+    });
+  }
+
   public async searchAsQuery(queries: string[]) {
+    this.log('video', queries);
+
     const musicList: Musicx[] = [];
 
     for (let i = 0; i < queries.length; i += 1) {
@@ -80,6 +97,8 @@ export default class InputArea extends Vue {
   }
 
   public async searchAsPlaylist(queries: string[]) {
+    this.log('playlist', queries);
+
     const ids = queries.map(getPlaylistId);
 
     const res = await Promise.all(ids.map(getPlaylistInfo));
