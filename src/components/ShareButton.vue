@@ -38,6 +38,16 @@ export default class ShareButton extends Vue {
   }
 
   public showPopup() {
+    this.$ga.logEvent('share', {
+      method: 'Twitter',
+    });
+    this.$logger.info('share', {
+      roomId: this.roomId,
+      content: {
+        link: this.link,
+      },
+    });
+
     window.open(this.link);
   }
 }
