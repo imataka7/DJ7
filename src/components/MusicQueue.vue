@@ -91,6 +91,8 @@ export default class MusicQueue extends Vue {
   }
 
   set queues(newVal) {
+    this.$ga.logEvent('drag');
+
     this.queueTemp = newVal;
     this.$emit('input', newVal);
   }
@@ -99,16 +101,31 @@ export default class MusicQueue extends Vue {
     this.queueTemp = this.value;
   }
 
+  public log(action: string, music: Musicx) {
+    this.$ga.logEvent(action);
+    this.$logger.info(action, {
+      content: {
+        music,
+      },
+    });
+  }
+
   public del(music: Musicx) {
+    this.log('delete_queue', music);
+
     const newQueue = this.queues.filter(q => q.id !== music.id);
     this.$emit('input', newQueue);
   }
 
   public interrupt(music: Musicx) {
+    this.log('interrupt', music);
+
     this.$emit('interrupt', music);
   }
 
   public moveToTop(music: Musicx) {
+    this.log('move_to_top', music);
+
     const newQueue = this.queues.filter(q => q.id !== music.id);
 
     newQueue.unshift(music);
