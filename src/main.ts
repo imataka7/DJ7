@@ -73,7 +73,6 @@ initUserInfo();
 // Object.defineProperty(window, 'logger', { value: logger, enumerable: true });
 
 Vue.config.errorHandler = (err, vm, info) => {
-  console.log(err, vm, info);
   captureException(err);
 };
 
