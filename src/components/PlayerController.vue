@@ -140,6 +140,11 @@ export default class PlayerController extends Vue {
   @Prop({ default: false })
   public mute!: boolean;
 
+  public log(action: string, content: any) {
+    this.$ga.logEvent(action);
+    this.$logger.info(action, { content });
+  }
+
   public isTheaterMode = false;
 
   private players: SupportedPlatform = {};
@@ -193,6 +198,8 @@ export default class PlayerController extends Vue {
   }
 
   public async updateStatus(s: PlayerStatus) {
+    this.log('update_player_status', { status: s });
+
     if (!this.currentPlayer || this.currentPlayer!.state === PlayerStatus.BUFFERING) {
       return;
     }
@@ -206,6 +213,12 @@ export default class PlayerController extends Vue {
   }
 
   public async onMusicEnd(music: Musicx) {
+    this.$logger.info('music end', {
+      content: {
+        music,
+      },
+    });
+
     this.clearMusicInfo();
     this.$emit('end', music);
   }
@@ -215,11 +228,19 @@ export default class PlayerController extends Vue {
       return;
     }
 
+    this.$logger.error('player error', {
+      content: {
+        music,
+      },
+    });
+
     this.clearMusicInfo();
     this.$emit('error', music, code);
   }
 
   public moveMusic(direction: 'forward' | 'backward') {
+    this.log(direction, {});
+
     this.clearMusicInfo();
     this.$emit(direction);
   }
@@ -253,6 +274,12 @@ export default class PlayerController extends Vue {
     if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
       this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
     }
+
+    this.$logger.info('load music', {
+      content: {
+        music,
+      },
+    });
 
     await this.currentPlayer.loadMusic(music);
 
@@ -293,6 +320,8 @@ export default class PlayerController extends Vue {
   public isMute = false;
 
   public toggleMute() {
+    this.$ga.logEvent('toggle_mute');
+
     if (this.currentVolume === 0) {
       const vol = localStorage.getItem('volume') || '30';
       this.currentVolume = parseInt(vol, 10);
@@ -346,8 +375,19 @@ export default class PlayerController extends Vue {
   }
 
   public onSeeked(r: number) {
+    const to = r * this.musicDuration / 100;
+
+    this.$ga.logEvent('seek');
+    this.$logger.info('seek', {
+      content: {
+        to,
+        music: this.currentMusic,
+        duration: this.musicDuration,
+      },
+    });
+
     this.isRangeDragging = false;
-    this.$emit('seeked', r * this.musicDuration / 100);
+    this.$emit('seeked', to);
   }
 
   public formatDuration(duration: number) {
@@ -376,6 +416,10 @@ export default class PlayerController extends Vue {
   }
 
   public togglePlayerActive() {
+    if (this.isTheaterMode) {
+      this.$ga.logEvent('enter_theater_mode');
+    }
+
     this.isPopupShowing = false;
     this.isTheaterMode = !this.isTheaterMode;
   }
@@ -390,7 +434,6 @@ export default class PlayerController extends Vue {
     if (window.innerWidth > 1240) {
       return;
     }
-
 
     if (this.isTheaterMode) {
       const el = this.$el as HTMLElement;
