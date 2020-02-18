@@ -40,11 +40,24 @@ export default class HistoryList extends Vue {
     return getClone(this.list).reverse();
   }
 
+  public log(action: string, music: Music) {
+    this.$ga.logEvent(action);
+    this.$logger.info(action, {
+      content: {
+        music,
+      },
+    });
+  }
+
   public add(music: Music) {
+    this.log('add_history', music);
+
     this.$emit('add', [{ ...music, id: generateRandomId() }]);
   }
 
   public del(music: Music) {
+    this.log('delete_history', music);
+
     this.$emit('del', music);
   }
 
