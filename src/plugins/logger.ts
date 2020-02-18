@@ -19,7 +19,7 @@ type Context = {
   action: string;
   roomId: string;
   content: any;
-  width: number;
+  // width: number;
 }
 
 function initUserInfo() {
@@ -41,7 +41,7 @@ function captureException(error: any) {
 }
 
 const loggerBase = (level: Sentry.Severity, message: string, context: Partial<Context> = {}) => {
-  Sentry.setExtras(context);
+  Sentry.setExtras({ ...context, width: window.innerWidth });
   Sentry.captureMessage(message, level);
 };
 

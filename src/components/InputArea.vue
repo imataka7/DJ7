@@ -69,7 +69,6 @@ export default class InputArea extends Vue {
     });
 
     this.$logger.info('search', {
-      width: window.innerWidth,
       content: {
         type,
         terms,
