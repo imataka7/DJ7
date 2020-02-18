@@ -9,6 +9,7 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
+import isMobile from 'ismobilejs';
 import setEvent from '@/utils/eventUtil';
 import { adate, user } from '@/store/modules';
 
@@ -19,14 +20,22 @@ export default class MusicHub extends Vue {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
-  public mounted() {
-    this.setVh();
+  public emitAccessEvent() {
+    const pwa = window.matchMedia('(display-mode: standalone)').matches;
 
-    setEvent(window, 'resize', this.setVh);
-    setEvent(window, 'orientatoinchange', this.setVh);
+    if (pwa) {
+      const mobile = isMobile().phone || isMobile().tablet;
+      this.$ga.logEvent('PWA', {
+        device: mobile ? 'mobile' : 'PC',
+      });
+    }
+
+    // this.$set(window, 'ga', this.$ga);
   }
 
   public async created() {
+    this.emitAccessEvent();
+
     if (!/Mac OS/.test(navigator.userAgent)) {
       const root = document.querySelector(':root') as HTMLElement;
       root.dataset.scrollbar = 'custom';
@@ -36,6 +45,13 @@ export default class MusicHub extends Vue {
 
     await adate.init();
     this.$set(window, 'getAdjustedDate', () => `${adate.now()} ${adate.diff}`);
+  }
+
+  public mounted() {
+    this.setVh();
+
+    setEvent(window, 'resize', this.setVh);
+    setEvent(window, 'orientatoinchange', this.setVh);
   }
 }
 </script>
