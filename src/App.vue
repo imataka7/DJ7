@@ -29,8 +29,6 @@ export default class MusicHub extends Vue {
         device: mobile ? 'mobile' : 'PC',
       });
     }
-
-    // this.$set(window, 'ga', this.$ga);
   }
 
   public async created() {
