@@ -17,7 +17,7 @@ class AdjustedDate extends VuexModule {
     return () => Date.now() + this.diff;
   }
 
-  @MutationAction({ mutate: ['diff'] })
+  @MutationAction({ mutate: ['diff'], rawError: true })
   public async init() {
     const urls = [
       'https://ntp-a1.nict.go.jp/cgi-bin/json',

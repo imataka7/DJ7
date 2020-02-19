@@ -69,7 +69,7 @@ class FirebaseUser extends VuexModule {
     this.listener = listener;
   }
 
-  @Action({})
+  @Action({ rawError: true })
   public async init(user: firebase.User) {
     this.setUser(user);
 
@@ -105,7 +105,7 @@ class FirebaseUser extends VuexModule {
     setUserInfo(userInfo);
   }
 
-  @Action({})
+  @Action({ rawError: true })
   public async updateHistory(music: Musicx) {
     if (!this.status) {
       return;
@@ -133,14 +133,14 @@ class FirebaseUser extends VuexModule {
     });
   }
 
-  @Action({})
+  @Action({ rawError: true })
   public deleteHistoryItem(music: Music) {
     this.userRef!.update({
       history: arrayRemove(music),
     });
   }
 
-  @Action({})
+  @Action({ rawError: true })
   public async addVisitedRooms(roomId: string) {
     if (this.visitedRooms && this.visitedRooms.indexOf(roomId) > -1) {
       return;
@@ -151,7 +151,7 @@ class FirebaseUser extends VuexModule {
     });
   }
 
-  @Action({})
+  @Action({ rawError: true })
   public async signOut() {
     this.listener?.();
 
