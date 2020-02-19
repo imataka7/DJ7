@@ -231,7 +231,7 @@ export default class PlayerController extends Vue {
   }
 
   public moveMusic(direction: 'forward' | 'backward') {
-    this.log(direction, {});
+    this.log(direction, { music: this.currentMusic });
 
     this.clearMusicInfo();
     this.$emit(direction);
