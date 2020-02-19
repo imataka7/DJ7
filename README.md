@@ -1,4 +1,5 @@
 # MusicHub
+![.github/workflows/deploy.yml](https://github.com/imataka7/MusicHub/workflows/.github/workflows/deploy.yml/badge.svg?branch=master)
 
 Share your moments with music.
 
