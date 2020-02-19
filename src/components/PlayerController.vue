@@ -213,12 +213,6 @@ export default class PlayerController extends Vue {
   }
 
   public async onMusicEnd(music: Musicx) {
-    this.$logger.info('music end', {
-      content: {
-        music,
-      },
-    });
-
     this.clearMusicInfo();
     this.$emit('end', music);
   }
@@ -227,12 +221,6 @@ export default class PlayerController extends Vue {
     if (this.currentStatus === PlayerStatus.NO_MUSIC) {
       return;
     }
-
-    this.$logger.error('player error', {
-      content: {
-        music,
-      },
-    });
 
     this.clearMusicInfo();
     this.$emit('error', music, code);

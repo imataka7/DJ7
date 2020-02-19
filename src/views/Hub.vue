@@ -349,7 +349,9 @@ export default class Hub extends Vue {
     // 更新時間が近いとき
     // 再生された時間が0のときに限定しているのは
     // 一時停止のタイミングなどによって切り替わらなくなってしまうため
-    const isUpdateAtTooNear = playedTime === 0 && adate.now() - updatedAt < 3000;
+    const currentTime = adate.now();
+    const timeElapsedFromUpdated = currentTime - updatedAt;
+    const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 3000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
     const isDifferentMusic = playedMusic.id !== music.id;
     if (isUpdateAtTooNear || isDifferentMusic) {
@@ -357,6 +359,16 @@ export default class Hub extends Vue {
     }
 
     room.setMusicFromQueue(queues);
+
+    this.$logger.info('music end', {
+      content: {
+        playedMusic,
+        remoteStatus: status,
+        localStatus: this.roomStatus,
+        timeElapsedFromUpdated,
+        currentTime,
+      },
+    });
   }
 
   public async onError(playedMusic: Musicx, code: number) {
@@ -369,6 +381,13 @@ export default class Hub extends Vue {
 
     if (music.id === playedMusic?.id) {
       room.setMusicFromQueue(queues);
+
+      this.$logger.error('player error', {
+        content: {
+          music: playedMusic,
+          code,
+        },
+      });
     }
 
     showToast('error', `An error occurs in the player. code: ${code}`);
