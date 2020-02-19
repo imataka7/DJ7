@@ -41,6 +41,10 @@
         >
           <fa-icon icon="forward" size="lg"></fa-icon>
         </button>
+
+        <button :disabled="isControllerDisable" aria-label="Sync" @click="sync">
+          <fa-icon icon="sync-alt" size="lg"></fa-icon>
+        </button>
       </div>
 
       <div class="seek-bar-container">
@@ -410,6 +414,21 @@ export default class PlayerController extends Vue {
 
     this.isPopupShowing = false;
     this.isTheaterMode = !this.isTheaterMode;
+  }
+
+  public sync() {
+    if (!this.currentPlayerInfo) {
+      return;
+    }
+
+    if (this.currentStatus !== PlayerStatus.PLAY) {
+      return;
+    }
+
+    const { updatedAt, playedTime } = this.currentPlayerInfo;
+    const elapsedTime = (adate.now() - updatedAt) / 1000 + playedTime;
+
+    this.seekTo(elapsedTime);
   }
 
   public sumMovementY = 0;
