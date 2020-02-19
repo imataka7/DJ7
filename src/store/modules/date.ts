@@ -4,6 +4,7 @@
 import {
   VuexModule, Mutation, Action, Module, getModule, MutationAction,
 } from 'vuex-module-decorators';
+import { logger } from '@/plugins/logger';
 
 import store from '..';
 
@@ -32,6 +33,17 @@ class AdjustedDate extends VuexModule {
       if (res.ok) {
         const serverTime = (await res.json()).st * 1000;
         const diff = serverTime - Math.floor(timeSpentForFetch / 2) - beforeFetch;
+
+        logger.info('adjust date', {
+          content: {
+            source: urls[i],
+            now: beforeFetch,
+            serverTime,
+            timeSpentForFetch,
+            diff,
+          },
+        });
+
         return {
           diff,
         };
