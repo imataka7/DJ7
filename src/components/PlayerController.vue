@@ -416,7 +416,7 @@ export default class PlayerController extends Vue {
     this.isTheaterMode = !this.isTheaterMode;
   }
 
-  public sync() {
+  public sync(e: Event) {
     if (!this.currentPlayerInfo) {
       return;
     }
@@ -425,10 +425,32 @@ export default class PlayerController extends Vue {
       return;
     }
 
-    const { updatedAt, playedTime } = this.currentPlayerInfo;
-    const elapsedTime = (adate.now() - updatedAt) / 1000 + playedTime;
 
-    this.seekTo(elapsedTime);
+    this.spinElement(e.currentTarget as HTMLElement);
+
+    const { updatedAt, playedTime } = this.currentPlayerInfo;
+    const to = (adate.now() - updatedAt) / 1000 + playedTime;
+
+    this.log('sync', {
+      music: this.currentMusic,
+      to,
+      diff: to - this.range * this.musicDuration / 100,
+    });
+
+    this.seekTo(to);
+  }
+
+  public spinElement(e: HTMLElement) {
+    e.animate(
+      [
+        { transform: 'rotate(0)' },
+        { transform: 'rotate(360deg)' },
+      ],
+      {
+        duration: 300,
+        easing: 'ease-in-out',
+      },
+    );
   }
 
   public sumMovementY = 0;
