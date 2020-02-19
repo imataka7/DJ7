@@ -117,6 +117,7 @@ export default class InputArea extends Vue {
     const queries = this.value.split('\n').filter(q => q !== '');
 
     if (queries.length === 0) {
+      this.searching = false;
       return;
     }
 
