@@ -99,8 +99,6 @@ class RoomManager extends VuexModule {
 
   @Action({ rawError: true })
   public async removeUser(user: RoomUser) {
-    console.log(this.roomRef, this.roomId);
-
     await this.roomRef!.update({
       users: arrayRemove(user),
     });
