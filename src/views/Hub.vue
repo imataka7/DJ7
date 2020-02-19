@@ -358,17 +358,17 @@ export default class Hub extends Vue {
       return;
     }
 
-    room.setMusicFromQueue(queues);
-
     this.$logger.info('music end', {
       content: {
         playedMusic,
-        remoteStatus: status,
-        localStatus: this.roomStatus,
         timeElapsedFromUpdated,
         currentTime,
+        nextMusic: queues[0],
+        remoteMusic: player.music,
       },
     });
+
+    room.setMusicFromQueue(queues);
   }
 
   public async onError(playedMusic: Musicx, code: number) {
