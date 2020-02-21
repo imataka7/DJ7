@@ -441,6 +441,10 @@ export default class PlayerController extends Vue {
   }
 
   public spinElement(e: HTMLElement) {
+    if (!e.animate) {
+      return;
+    }
+
     e.animate(
       [
         { transform: 'rotate(0)' },
