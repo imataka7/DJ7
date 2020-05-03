@@ -19,6 +19,7 @@
     "@types/swiper": "^5.2.1",
     "@types/youtube-player": "^5.5.1",
     "core-js": "^3.4.4",
+    "dayjs": "^1.8.26",
     "firebase": "^7.6.1",
     "firebaseui": "^4.4.0",
     "ismobilejs": "^1.0.3",
