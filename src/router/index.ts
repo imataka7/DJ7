@@ -34,12 +34,12 @@ const routes = [
   {
     path: '/terms-of-service',
     name: 'tos',
-    component: () => import(/* webpackChunkName: "signin" */ '../views/Tos.vue'),
+    component: () => import(/* webpackChunkName: "tos" */ '../views/Tos.vue'),
   },
   {
     path: '/privacy-policy',
     name: 'pp',
-    component: () => import(/* webpackChunkName: "signin" */ '../views/Privacy.vue'),
+    component: () => import(/* webpackChunkName: "pp" */ '../views/Privacy.vue'),
   },
   {
     path: '/:roomId',
@@ -66,8 +66,7 @@ router.beforeEach((to, from, next) => {
   const isAuthRequired = to.matched.some(r => r.meta.authRequired);
 
   if (isAuthRequired) {
-    // eslint-disable-next-line
-    firebase.auth().onAuthStateChanged(firebaseUser => {
+    firebase.auth().onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         next();
       } else {
