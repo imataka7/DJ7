@@ -4,7 +4,11 @@
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <div class="room-desc">
-            <h2>DJ7</h2>
+            <img
+              class="dj7-logo"
+              :src="require('@/assets/logo.png')"
+              alt="DJ7"
+            />
             <p>
               RoomId: {{ roomId }}
               <share-button
@@ -532,6 +536,10 @@ export default class Hub extends Vue {
 
 .jumper {
   margin-bottom: 15px;
+}
+
+.dj7-logo {
+  height: 50px;
 }
 
 @media screen and (max-width: 1200px) {

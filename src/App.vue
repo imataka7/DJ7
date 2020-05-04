@@ -168,6 +168,9 @@ $sairi-orange: #f50;
   // img {
   //   filter: grayscale(30%);
   // }
+  .dj7-logo {
+    filter: invert(0.85);
+  }
 }
 
 :root {

@@ -1,7 +1,7 @@
 <template>
   <div class="general">
     <div class="desc-container">
-      <h1>DJ7</h1>
+      <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="" />
       <template v-if="!currentUser">
         <h2>Share your moments with everyone!</h2>
         <abutton class="is-large" @click="$router.push('/signin')">
@@ -107,5 +107,9 @@ export default class General extends Vue {
   height: 100vh;
   overflow-y: auto;
   margin-bottom: 50px;
+}
+
+.dj7-logo {
+  height: 50px;
 }
 </style>
