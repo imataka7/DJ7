@@ -117,6 +117,8 @@ import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
 import isMobile from 'ismobilejs';
+import dayjs from 'dayjs';
+import dayjsDuration from 'dayjs/plugin/duration';
 
 import YouTubePlayer from './YoutubePlayer.vue';
 import {
@@ -127,6 +129,8 @@ import {
 } from './molecules';
 import { sleep, setEvent } from '@/utils';
 import { adate } from '../store/modules';
+
+dayjs.extend(dayjsDuration);
 
 interface SupportedPlatform {
   youtube?: MusicPlayer;
@@ -383,13 +387,19 @@ export default class PlayerController extends Vue {
   }
 
   public formatDuration(duration: number) {
-    const d = new Date(duration * 1000);
+    let d = dayjs.duration(duration * 1000);
 
-    const h = Math.floor(d.getTime() / 3600000);
-    const m = d.getMinutes() + h * 60;
-    const s = `0${d.getSeconds() + h * 60}`.slice(-2);
+    const h = Math.floor(d.asHours());
+    d = d.subtract(h, 'hour');
 
-    return `${m}:${s}`;
+    const m = Math.floor(d.asMinutes());
+    d = d.subtract(m, 'minutes');
+
+    const s = Math.floor(d.asSeconds());
+
+    return h
+      ? `${h}:${`${m}`.padStart(2, '0')}:${`${s}`.padStart(2, '0')}`
+      : `${m}:${`${s}`.padStart(2, '0')}`;
   }
 
   public isPopupShowing = true;
