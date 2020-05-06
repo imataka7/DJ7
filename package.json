@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "build:dev": "NODE_ENV=development vue-cli-service build",
+    "build:dev": "vue-cli-service build --mode development",
+    "build:prod": "vue-cli-service build",
+    "build": "npm run build:dev",
     "deploy": "firebase deploy",
     "lint": "vue-cli-service lint"
   },
