@@ -20,29 +20,16 @@ declare module 'vue/types/vue' {
   }
 }
 
-const firebaseConfigProd = {
-  apiKey: 'AIzaSyDNymPlrtN1h5LM7DSg7YLyEw2CEQa8gNY',
-  authDomain: 'sairilab-musichub.firebaseapp.com',
-  databaseURL: 'https://sairilab-musichub.firebaseio.com',
-  projectId: 'sairilab-musichub',
-  storageBucket: 'sairilab-musichub.appspot.com',
-  messagingSenderId: '1040913343225',
-  appId: '1:1040913343225:web:55642f366ef729023a7828',
-  measurementId: 'G-80Z8YSTCVZ',
+const firebaseConfig = {
+  apiKey: process.env.VUE_APP_apiKey,
+  authDomain: process.env.VUE_APP_authDomain,
+  databaseURL: process.env.VUE_APP_databaseURL,
+  projectId: process.env.VUE_APP_projectId,
+  storageBucket: process.env.VUE_APP_storageBucket,
+  messagingSenderId: process.env.VUE_APP_messagingSenderId,
+  appId: process.env.VUE_APP_appId,
+  measurementId: process.env.VUE_APP_measurementId,
 };
-
-const firebaseConfigDev = {
-  apiKey: 'AIzaSyD3eOIBzcsGOfLpHeGYnVy03oKTqzDIj-s',
-  authDomain: 'dj7-debug.firebaseapp.com',
-  databaseURL: 'https://dj7-debug.firebaseio.com',
-  projectId: 'dj7-debug',
-  storageBucket: 'dj7-debug.appspot.com',
-  messagingSenderId: '455043296430',
-  appId: '1:455043296430:web:d0051e97cd1bf8730e113f',
-  measurementId: 'G-QGQNJCWVCP',
-};
-
-const firebaseConfig = process.env.NODE_ENV === 'production' ? firebaseConfigProd : firebaseConfigDev;
 
 export const app = firebase.initializeApp(firebaseConfig);
 const anal = firebase.analytics();
