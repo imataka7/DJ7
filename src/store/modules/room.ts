@@ -17,7 +17,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
   name: 'room', namespaced: true, store, dynamic: true,
 })
 class RoomManager extends VuexModule {
-  public roomId: string = '';
+  public roomId = '';
 
   public status: Room | null = null;
 
@@ -130,7 +130,7 @@ class RoomManager extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async changeState(payload: { status: PlayerStatus, playedTime: number }) {
+  public async changeState(payload: { status: PlayerStatus; playedTime: number }) {
     const { status, playedTime } = payload;
 
     if (!this.status) {
@@ -226,7 +226,7 @@ class RoomManager extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async interrupt(payload: { music: Musicx, playedTime: number }) {
+  public async interrupt(payload: { music: Musicx; playedTime: number }) {
     const { music, playedTime } = payload;
     if (!this.status) {
       return;
