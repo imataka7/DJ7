@@ -40,9 +40,9 @@ export default class About extends Vue {
     return adate.diff;
   }
 
-  public firestoreTime: number = 0;
+  public firestoreTime = 0;
 
-  public currentTime: number = 0;
+  public currentTime = 0;
 
   public adjustedTime = 0;
 

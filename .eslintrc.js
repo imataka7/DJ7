@@ -1,15 +1,22 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
+    node: true
   },
-  extends: ['plugin:vue/essential', '@vue/airbnb', '@vue/typescript'],
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    complexity: ['error', 20],
-  },
+  'extends': [
+    'plugin:vue/essential',
+    'eslint:recommended',
+    '@vue/typescript/recommended'
+  ],
   parserOptions: {
-    parser: '@typescript-eslint/parser',
+    ecmaVersion: 2020
   },
-};
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-async-promise-executor': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    "@typescript-eslint/ban-ts-ignore": process.env.NODE_ENV === 'production' ? 'warn' : 'off', 
+    "@typescript-eslint/no-var-requires" : process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/camelcase': 'off'
+  }
+}
