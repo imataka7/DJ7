@@ -42,6 +42,39 @@ const {arrayUnion, arrayRemove} = firebase.firestore.FieldValue;
   }
 })
 export default class Hub extends Vue {
+  isMonarchism = false
+
+  get dbg() {
+    return process.env.NODE_ENV === "development"
+  }
+
+  get isDraggable() {
+    return this.isDj && !this.isQueueUpdating;
+  }
+
+  get isDj() {
+    if (this.government === "monarchism") {
+      const uid = this.currentUser?.uid || "";
+      const myRole = this.adminUsers
+        .filter((adminUser) => adminUser.uid === uid).shift();
+      return !!(myRole?.roleTags.includes("managePlay"))
+    } else {
+      return true
+    }
+  }
+
+  get government() {
+    if (room.government === "monarchism") {
+      return "monarchism"
+    } else {
+      return "anarchism"
+    }
+  }
+
+  get adminUsers() {
+    return room.adminUsers
+  }
+
   get version() {
     return `v${process.env.VUE_APP_VERSION.replace("+", " on ")}`;
   }
@@ -315,7 +348,11 @@ export default class Hub extends Vue {
     });
 
     const {origin} = window.location;
-    window.location.href = `${origin}/${this.jumpTo.trim()}`;
+    if (this.isMonarchism && this.currentUser?.uid) {
+      window.location.href = `${origin}/${this.jumpTo.trim()}?pilgrimId=${this.currentUser.uid}`;
+    } else {
+      window.location.href = `${origin}/${this.jumpTo.trim()}`;
+    }
   }
 
   public async interrupt(music: Musicx) {

@@ -9,9 +9,9 @@
       <div class="player-buttons is-flex">
         <!-- <button class="has-bounce" :disabled="isControllerDisable">
           <fa-icon icon="forward" rotation="180" size="lg"></fa-icon>
-        </button> -->
+        </button>-->
 
-        <transition name="bounce" mode="out-in">
+        <transition name="bounce" mode="out-in" v-if="isDj">
           <button
             @click="updateStatus(2)"
             v-if="currentStatus === 1"
@@ -38,6 +38,7 @@
           @click="moveMusic('forward')"
           :disabled="currentStatus === 8"
           aria-label="Forward"
+          v-if="isDj"
         >
           <fa-icon icon="forward" size="lg"></fa-icon>
         </button>
@@ -57,10 +58,7 @@
           <fa-icon :icon="speakerIcon" size="lg"></fa-icon>
         </button>
         <transition name="fade">
-          <volume-picker
-            v-model="currentVolume"
-            v-if="isVolumePickerActive"
-          ></volume-picker>
+          <volume-picker v-model="currentVolume" v-if="isVolumePickerActive"></volume-picker>
         </transition>
       </div>
 
@@ -68,15 +66,9 @@
 
       <div class="seek-bar-container">
         <p class="progress-container">
-          <span class="progress-start">
-            {{ formatDuration(((range * musicDuration) | 0) / 100) }}
-          </span>
-          <span class="progress-slash">
-            /
-          </span>
-          <span class="progress-end">
-            {{ formatDuration(musicDuration) }}
-          </span>
+          <span class="progress-start">{{ formatDuration(((range * musicDuration) | 0) / 100) }}</span>
+          <span class="progress-slash">/</span>
+          <span class="progress-end">{{ formatDuration(musicDuration) }}</span>
         </p>
         <seek-bar
           v-model="range"
@@ -103,35 +95,29 @@
               isTheaterMode
           "
         ></div>
-      </transition> -->
-      <youtube-player
-        ref="youtube"
-        class="youtube-player"
-        @end="onMusicEnd"
-        @error="onError"
-      ></youtube-player>
+      </transition>-->
+      <youtube-player ref="youtube" class="youtube-player" @end="onMusicEnd" @error="onError"></youtube-player>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
-import {
-  Component, Vue, Prop, Watch,
-} from 'vue-property-decorator';
-import isMobile from 'ismobilejs';
-import dayjs from 'dayjs';
-import dayjsDuration from 'dayjs/plugin/duration';
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import isMobile from "ismobilejs";
+import dayjs from "dayjs";
+import dayjsDuration from "dayjs/plugin/duration";
 
-import YouTubePlayer from './YoutubePlayer.vue';
+import YouTubePlayer from "./YoutubePlayer.vue";
+import { MusicPlayer, Music, Musicx, Player, PlayerStatus } from "@/models";
 import {
-  MusicPlayer, Music, Musicx, Player, PlayerStatus,
-} from '@/models';
-import {
-  VolumePicker, SeekBar, PlayerMusicInfo, PlayerConfig,
-} from './molecules';
-import { sleep, setEvent } from '@/utils';
-import { adate } from '../store/modules';
+  VolumePicker,
+  SeekBar,
+  PlayerMusicInfo,
+  PlayerConfig
+} from "./molecules";
+import { sleep, setEvent } from "@/utils";
+import { adate } from "../store/modules";
 
 dayjs.extend(dayjsDuration);
 
@@ -144,13 +130,16 @@ interface SupportedPlatform {
     VolumePicker,
     SeekBar,
     PlayerMusicInfo,
-    'youtube-player': YouTubePlayer,
-    PlayerConfig,
-  },
+    "youtube-player": YouTubePlayer,
+    PlayerConfig
+  }
 })
 export default class PlayerController extends Vue {
   @Prop({ default: false })
   public mute!: boolean;
+
+  @Prop({ default: true })
+  public isDj!: boolean;
 
   public log(action: string, content: any) {
     this.$ga.logEvent(action);
@@ -175,28 +164,33 @@ export default class PlayerController extends Vue {
     await Promise.all(this.allPlayers.map(p => p!.init()));
 
     this.timer = setInterval(() => {
-      if (!this.currentPlayerInfo
-      || this.isControllerDisable
-      || this.currentPlayerInfo.status === PlayerStatus.PAUSE
-      || !this.musicDuration
-      || this.isRangeDragging) {
+      if (
+        !this.currentPlayerInfo ||
+        this.isControllerDisable ||
+        this.currentPlayerInfo.status === PlayerStatus.PAUSE ||
+        !this.musicDuration ||
+        this.isRangeDragging
+      ) {
         return;
       }
 
       this.updateSeekBarRange();
     }, 100);
 
-    const v = localStorage.getItem('popup');
+    const v = localStorage.getItem("popup");
     if (v) {
       this.isPopupShowing = false;
     }
     await this.initVolume();
 
-    this.listeners.push(setEvent(window, 'keydown', (e) => {
-      if ((e as KeyboardEvent).keyCode === 27) { // Esc
-        this.isTheaterMode = false;
-      }
-    }));
+    this.listeners.push(
+      setEvent(window, "keydown", e => {
+        if ((e as KeyboardEvent).keyCode === 27) {
+          // Esc
+          this.isTheaterMode = false;
+        }
+      })
+    );
   }
 
   public listeners: any[] = [];
@@ -210,13 +204,16 @@ export default class PlayerController extends Vue {
   }
 
   public async updateStatus(s: PlayerStatus) {
-    this.log('update_player_status', { status: s });
+    this.log("update_player_status", { status: s });
 
-    if (!this.currentPlayer || this.currentPlayer!.state === PlayerStatus.BUFFERING) {
+    if (
+      !this.currentPlayer ||
+      this.currentPlayer!.state === PlayerStatus.BUFFERING
+    ) {
       return;
     }
 
-    this.$emit('update', s, await this.currentPlayer.getCurrentPlayedTime());
+    this.$emit("update", s, await this.currentPlayer.getCurrentPlayedTime());
   }
 
   public clearMusicInfo() {
@@ -226,7 +223,7 @@ export default class PlayerController extends Vue {
 
   public async onMusicEnd(music: Musicx) {
     this.clearMusicInfo();
-    this.$emit('end', music);
+    this.$emit("end", music);
   }
 
   public async onError(music: Musicx, code: number) {
@@ -235,10 +232,10 @@ export default class PlayerController extends Vue {
     }
 
     this.clearMusicInfo();
-    this.$emit('error', music, code);
+    this.$emit("error", music, code);
   }
 
-  public moveMusic(direction: 'forward' | 'backward') {
+  public moveMusic(direction: "forward" | "backward") {
     this.log(direction, { music: this.currentMusic });
 
     this.clearMusicInfo();
@@ -251,7 +248,9 @@ export default class PlayerController extends Vue {
     }
 
     const { BUFFERING, NO_MUSIC } = PlayerStatus;
-    const isPlayerDisable = [BUFFERING, NO_MUSIC].some(s => s === this.currentPlayer?.state);
+    const isPlayerDisable = [BUFFERING, NO_MUSIC].some(
+      s => s === this.currentPlayer?.state
+    );
     const isNoMusic = this.currentStatus === PlayerStatus.NO_MUSIC;
     return isPlayerDisable || isNoMusic;
   }
@@ -271,14 +270,19 @@ export default class PlayerController extends Vue {
   public musicDuration = 0;
 
   public async loadMusic(music: Musicx) {
-    if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
-      this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
+    if (
+      !this.currentPlayer ||
+      this.currentPlayer?.platform !== music.platform
+    ) {
+      this.currentPlayer = this.allPlayers.find(
+        p => p!.platform === music.platform
+      )!;
     }
 
-    this.$logger.info('load music', {
+    this.$logger.info("load music", {
       content: {
-        music,
-      },
+        music
+      }
     });
 
     await this.currentPlayer.loadMusic(music);
@@ -289,9 +293,11 @@ export default class PlayerController extends Vue {
   }
 
   private async initVolume() {
-    const vol = localStorage.getItem('volume') || '0';
+    const vol = localStorage.getItem("volume") || "0";
     this.currentVolume = parseInt(vol, 10);
-    await Promise.all(this.allPlayers.map(p => p!.setVolume(this.currentVolume)));
+    await Promise.all(
+      this.allPlayers.map(p => p!.setVolume(this.currentVolume))
+    );
   }
 
   public async play() {
@@ -320,36 +326,36 @@ export default class PlayerController extends Vue {
   public isMute = false;
 
   public toggleMute() {
-    this.$ga.logEvent('toggle_mute');
+    this.$ga.logEvent("toggle_mute");
 
     if (this.currentVolume === 0) {
-      const vol = localStorage.getItem('volume') || '30';
+      const vol = localStorage.getItem("volume") || "30";
       this.currentVolume = parseInt(vol, 10);
     } else {
       const prevVolume = this.currentVolume;
       this.currentVolume = 0;
       // Make sure to work `setItem` after `onVolumeChanged`
       Promise.resolve().then(() => {
-        localStorage.setItem('volume', prevVolume.toString(10));
+        localStorage.setItem("volume", prevVolume.toString(10));
       });
     }
   }
 
   get speakerIcon() {
     if (this.currentVolume === 0) {
-      return 'volume-mute';
+      return "volume-mute";
     }
 
     if (this.currentVolume > 0 && this.currentVolume < 60) {
-      return 'volume-down';
+      return "volume-down";
     }
 
-    return 'volume-up';
+    return "volume-up";
   }
 
-  @Watch('currentVolume')
+  @Watch("currentVolume")
   public onVolumeChanged(vol: number) {
-    localStorage.setItem('volume', vol.toString(10));
+    localStorage.setItem("volume", vol.toString(10));
     this.currentPlayer?.setVolume(vol);
   }
 
@@ -361,9 +367,10 @@ export default class PlayerController extends Vue {
 
   public updateSeekBarRange() {
     const { updatedAt, playedTime } = this.currentPlayerInfo!;
-    const diff = this.currentPlayerInfo?.status === PlayerStatus.PLAY
-      ? (adate.now() - updatedAt)
-      : 0;
+    const diff =
+      this.currentPlayerInfo?.status === PlayerStatus.PLAY
+        ? adate.now() - updatedAt
+        : 0;
     const per = (playedTime + diff / 1000) / this.musicDuration;
 
     if (per >= 1) {
@@ -375,42 +382,42 @@ export default class PlayerController extends Vue {
   }
 
   public onSeeked(r: number) {
-    const to = r * this.musicDuration / 100;
+    const to = (r * this.musicDuration) / 100;
 
-    this.$ga.logEvent('seek');
-    this.$logger.info('seek', {
+    this.$ga.logEvent("seek");
+    this.$logger.info("seek", {
       content: {
         to,
         music: this.currentMusic,
-        duration: this.musicDuration,
-      },
+        duration: this.musicDuration
+      }
     });
 
     this.isRangeDragging = false;
-    this.$emit('seeked', to);
+    this.$emit("seeked", to);
   }
 
   public formatDuration(duration: number) {
     let d = dayjs.duration(duration * 1000);
 
     const h = Math.floor(d.asHours());
-    d = d.subtract(h, 'hour');
+    d = d.subtract(h, "hour");
 
     const m = Math.floor(d.asMinutes());
-    d = d.subtract(m, 'minutes');
+    d = d.subtract(m, "minutes");
 
     const s = Math.floor(d.asSeconds());
 
     return h
-      ? `${h}:${`${m}`.padStart(2, '0')}:${`${s}`.padStart(2, '0')}`
-      : `${m}:${`${s}`.padStart(2, '0')}`;
+      ? `${h}:${`${m}`.padStart(2, "0")}:${`${s}`.padStart(2, "0")}`
+      : `${m}:${`${s}`.padStart(2, "0")}`;
   }
 
   public isPopupShowing = true;
 
-  @Watch('isTheaterMode')
+  @Watch("isTheaterMode")
   public onTheaterMode() {
-    localStorage.setItem('popup', JSON.stringify({ isShowing: true }));
+    localStorage.setItem("popup", JSON.stringify({ isShowing: true }));
   }
 
   get isPhone() {
@@ -423,7 +430,7 @@ export default class PlayerController extends Vue {
 
   public togglePlayerActive() {
     if (this.isTheaterMode) {
-      this.$ga.logEvent('enter_theater_mode');
+      this.$ga.logEvent("enter_theater_mode");
     }
 
     this.isPopupShowing = false;
@@ -439,16 +446,15 @@ export default class PlayerController extends Vue {
       return;
     }
 
-
     this.spinElement(e.currentTarget as HTMLElement);
 
     const { updatedAt, playedTime } = this.currentPlayerInfo;
     const to = (adate.now() - updatedAt) / 1000 + playedTime;
 
-    this.log('sync', {
+    this.log("sync", {
       music: this.currentMusic,
       to,
-      diff: to - this.range * this.musicDuration / 100,
+      diff: to - (this.range * this.musicDuration) / 100
     });
 
     this.seekTo(to);
@@ -459,16 +465,10 @@ export default class PlayerController extends Vue {
       return;
     }
 
-    e.animate(
-      [
-        { transform: 'rotate(0)' },
-        { transform: 'rotate(360deg)' },
-      ],
-      {
-        duration: 300,
-        easing: 'ease-in-out',
-      },
-    );
+    e.animate([{ transform: "rotate(0)" }, { transform: "rotate(360deg)" }], {
+      duration: 300,
+      easing: "ease-in-out"
+    });
   }
 
   public sumMovementY = 0;
@@ -484,7 +484,7 @@ export default class PlayerController extends Vue {
 
     if (this.isTheaterMode) {
       const el = this.$el as HTMLElement;
-      el.style.removeProperty('transition');
+      el.style.removeProperty("transition");
       this.sumMovementY = 0;
       this.pointerEventStartAt = adate.now();
       this.initialPageY = 0;
@@ -517,14 +517,17 @@ export default class PlayerController extends Vue {
     }
 
     const el = this.$el as HTMLElement;
-    el.style.removeProperty('height');
-    el.style.setProperty('transition', 'height .3s ease, transform .3s ease-in-out');
+    el.style.removeProperty("height");
+    el.style.setProperty(
+      "transition",
+      "height .3s ease, transform .3s ease-in-out"
+    );
 
     const dy = this.sumMovementY / (adate.now() - this.pointerEventStartAt);
     if (dy > 1 || this.sumMovementY > 200) {
       this.isTheaterMode = false;
     }
-    el.style.removeProperty('transform');
+    el.style.removeProperty("transform");
   }
 
   get playingSpeed() {
@@ -532,10 +535,10 @@ export default class PlayerController extends Vue {
   }
 
   set playingSpeed(s: number) {
-    this.$emit('speed', s);
+    this.$emit("speed", s);
   }
 
-  @Watch('playingSpeed')
+  @Watch("playingSpeed")
   public onSpeedChanged(s: number) {
     this.currentPlayer?.setSpeed(s);
   }
