@@ -29,7 +29,7 @@ const configureUi = (to?: string) => ({
 @Component
 export default class Signin extends Vue {
   get version() {
-    return process.env.VUE_APP_VERSION;
+    return `v${process.env.VUE_APP_VERSION.replace('+', ' on ')}`;
   }
 
   private get ui() {
