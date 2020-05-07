@@ -16,7 +16,7 @@
                 :now-playing="playingMusic && playingMusic.title"
               ></share-button>
             </p>
-            <span class="version">{{ version }}</span>
+            <span class="version">{{ `v${version.replace("+", " on ")}` }}</span>
           </div>
 
           <div class="room-users">
