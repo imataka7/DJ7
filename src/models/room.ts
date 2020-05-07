@@ -13,6 +13,7 @@ interface Player {
   status: PlayerStatus;
   updatedAt: number;
   playedTime: number;
+  playingSpeed: number;
 }
 
 interface RoomUser {

@@ -99,6 +99,7 @@
       @error="onError"
       @forward="forwardMusic"
       @seeked="onSeeked"
+      @speed="onSpeedChanged"
     ></player-controller>
   </div>
 </template>
@@ -433,6 +434,10 @@ export default class Hub extends Vue {
 
   public async deleteMusicFromHistory(music: Music) {
     await user.deleteHistoryItem(music);
+  }
+
+  public async onSpeedChanged(s: number) {
+    await room.updatePlayingSpeed(s);
   }
 }
 </script>

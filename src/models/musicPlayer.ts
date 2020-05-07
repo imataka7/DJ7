@@ -11,6 +11,7 @@ interface MusicPlayer {
   stop(): Promise<void>;
   seekTo(to: number): Promise<void>;
   setVolume(vol: number): Promise<void>;
+  setSpeed(speed: number): Promise<void>;
   // getCurrenPlayedTime: () => Promise<number>;
   getCurrentPlayedTime(): Promise<number>;
   getDuration(): Promise<number>;

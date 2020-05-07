@@ -148,6 +148,10 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
   async getDuration() {
     return this.player.getDuration();
   }
+
+  async setSpeed(s: number) {
+    return this.player.setPlaybackRate(s);
+  }
 }
 </script>
 

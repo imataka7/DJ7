@@ -158,6 +158,13 @@ class RoomManager extends VuexModule {
   }
 
   @Action({ rawError: true })
+  public updatePlayingSpeed(s: number) {
+    return this.roomRef!.update({
+      'player.playingSpeed': s,
+    });
+  }
+
+  @Action({ rawError: true })
   public async queueMusic(items: Musicx[]) {
     if (!this.status) {
       return;

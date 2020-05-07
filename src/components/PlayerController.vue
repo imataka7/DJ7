@@ -47,6 +47,25 @@
         </button>
       </div>
 
+      <div
+        class="volume-container"
+        @mouseenter="isVolumePickerActive = true"
+        @mouseleave="isVolumePickerActive = false"
+        v-if="!isPhone && !isTablet"
+      >
+        <button @click="toggleMute" aria-label="Volume">
+          <fa-icon :icon="speakerIcon" size="lg"></fa-icon>
+        </button>
+        <transition name="fade">
+          <volume-picker
+            v-model="currentVolume"
+            v-if="isVolumePickerActive"
+          ></volume-picker>
+        </transition>
+      </div>
+
+      <!-- <player-config v-model="playingSpeed"></player-config> -->
+
       <div class="seek-bar-container">
         <p class="progress-container">
           <span class="progress-start">
@@ -67,22 +86,6 @@
         ></seek-bar>
       </div>
 
-      <div
-        class="volume-container"
-        @mouseenter="isVolumePickerActive = true"
-        @mouseleave="isVolumePickerActive = false"
-        v-if="!isPhone && !isTablet"
-      >
-        <button @click="toggleMute" aria-label="Volume">
-          <fa-icon :icon="speakerIcon" size="lg"></fa-icon>
-        </button>
-        <transition name="fade">
-          <volume-picker
-            v-model="currentVolume"
-            v-if="isVolumePickerActive"
-          ></volume-picker>
-        </transition>
-      </div>
       <div @click="togglePlayerActive" class="music-info-container">
         <div v-if="!isPhone && isPopupShowing" class="click-me">
           <p>Click Me!</p>
@@ -125,7 +128,7 @@ import {
   MusicPlayer, Music, Musicx, Player, PlayerStatus,
 } from '@/models';
 import {
-  VolumePicker, SeekBar, PlayerMusicInfo,
+  VolumePicker, SeekBar, PlayerMusicInfo, PlayerConfig,
 } from './molecules';
 import { sleep, setEvent } from '@/utils';
 import { adate } from '../store/modules';
@@ -142,6 +145,7 @@ interface SupportedPlatform {
     SeekBar,
     PlayerMusicInfo,
     'youtube-player': YouTubePlayer,
+    PlayerConfig,
   },
 })
 export default class PlayerController extends Vue {
@@ -521,6 +525,19 @@ export default class PlayerController extends Vue {
       this.isTheaterMode = false;
     }
     el.style.removeProperty('transform');
+  }
+
+  get playingSpeed() {
+    return this.currentPlayerInfo?.playingSpeed || 1;
+  }
+
+  set playingSpeed(s: number) {
+    this.$emit('speed', s);
+  }
+
+  @Watch('playingSpeed')
+  public onSpeedChanged(s: number) {
+    this.currentPlayer?.setSpeed(s);
   }
 }
 </script>
