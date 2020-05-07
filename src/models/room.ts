@@ -16,9 +16,14 @@ interface Player {
   playingSpeed: number;
 }
 
+
 interface RoomUser {
   uid: string;
   photo: string | null;
+}
+
+interface AdminUser {
+  uid: string;
 }
 
 interface Room {
@@ -26,6 +31,7 @@ interface Room {
   queues: Musicx[];
   player: Player;
   users: RoomUser[];
+  adminUsers: AdminUser[];
 }
 
 export {
