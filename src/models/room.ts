@@ -5,7 +5,7 @@ interface Musicx extends Music {
   id: string;
   extraStatus?: {
     playedTime: number;
-  }
+  };
 }
 
 interface Player {

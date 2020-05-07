@@ -102,7 +102,7 @@ function getPlaylistId(idOrUrl: string) {
 }
 
 async function getPlaylistInfo(playlistId: string) {
-  const playlist = await getPlaylistVideos(playlistId) as { videoId: string, title: string }[];
+  const playlist = await getPlaylistVideos(playlistId) as { videoId: string; title: string }[];
 
   if (playlist) {
     return Promise.all(playlist.map(p => createYTInfo(p.videoId, p.title)));
