@@ -71,6 +71,9 @@ class RoomManager extends VuexModule {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
     const pilgrimId: string | null = params.get("pilgrimId");
+    const adminUsers = pilgrimId ? [{
+      uid: pilgrimId, roleTags: ["managePlay", "manageUser"],
+    }] : [];
     const government: Government = pilgrimId ? "monarchism" : null;
 
     const initial = {
@@ -83,8 +86,8 @@ class RoomManager extends VuexModule {
       queues: [],
       roomId: this.roomId,
       users: [],
-      adminUsers: [{uid: pilgrimId, roleTags: ["managePlay", "manageUser"]}],
-      government: government,
+      adminUsers,
+      government,
     };
     await this.roomRef!.set(initial);
     return initial;

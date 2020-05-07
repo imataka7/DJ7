@@ -42,21 +42,33 @@ const {arrayUnion, arrayRemove} = firebase.firestore.FieldValue;
   }
 })
 export default class Hub extends Vue {
-  isAdminMode = false
+  isMonarchism = false
+
+  get dbg() {
+    return process.env.NODE_ENV === "development"
+  }
 
   get isDraggable() {
     return this.isDj && !(this.isQueueUpdating);
   }
 
   get isDj() {
-    const uid = this.currentUser?.uid || "";
-    const myRole = room.adminUsers
-      .filter((adminUser) => adminUser.uid === uid)[0]
-    return !!(myRole?.roleTags.includes("managePlay"))
+    if (this.government === "monarchism") {
+      const uid = this.currentUser?.uid || "";
+      const myRole = this.adminUsers
+        .filter((adminUser) => adminUser.uid === uid).shift();
+      return !!(myRole?.roleTags.includes("managePlay"))
+    } else {
+      return true
+    }
   }
 
   get government() {
-    return room.government
+    if (room.government === "monarchism") {
+      return "monarchism"
+    } else {
+      return "anarchism"
+    }
   }
 
   get adminUsers() {
@@ -336,7 +348,26 @@ export default class Hub extends Vue {
     });
 
     const {origin} = window.location;
-    window.location.href = `${origin}/${this.jumpTo.trim()}`;
+    if (this.isMonarchism && this.currentUser?.uid) {
+      window.location.href = `${origin}/${this.jumpTo.trim()}?pilgrimId=${this.currentUser.uid}`;
+    } else {
+      window.location.href = `${origin}/${this.jumpTo.trim()}`;
+    }
+    // const query = this.isMonarchism ? {
+    //   pilgrimId: this.currentUser?.uid
+    // } : null;
+    // if (query) {
+    //   this.$router.push({
+    //     name: "hub",
+    //     params: {roomId: this.jumpTo.trim()},
+    //     query,
+    //   });
+    // } else {
+    //   this.$router.push({
+    //     name: "hub",
+    //     params: {roomId: this.jumpTo.trim()},
+    //   });
+    // }
   }
 
   public async interrupt(music: Musicx) {

@@ -6,10 +6,12 @@
           <div class="room-desc">
             <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
 
-            <section>government: {{ government }}</section>
-            <section>user: {{ this.currentUser.uid }}</section>
-            <section>adminUsers: {{ adminUsers }}</section>
-            <section>isDj: {{ isDj }}</section>
+            <div v-if="dbg" style="{border-style: solid; border-color: #ff0000;}">
+              <section>government: {{ government }}</section>
+              <section>user: {{ this.currentUser.uid }}</section>
+              <section>adminUsers: {{ adminUsers }}</section>
+              <section>isDj: {{ isDj }}</section>
+            </div>
 
             <p>
               RoomId: {{ roomId }}
@@ -48,8 +50,8 @@
             </section>
             <section>
               <label class="checkbox">
-                <input type="checkbox" v-model="isAdminMode" />
-                admin mode
+                <input type="checkbox" v-model="isMonarchism" />
+                monarchism
               </label>
             </section>
           </div>
