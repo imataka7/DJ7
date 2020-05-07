@@ -64,7 +64,7 @@
           <music-queue
             v-model="queues"
             @interrupt="interrupt"
-            :is-draggable="false"
+            :is-draggable="isDraggable"
             :is-dj="isDj"
             class="music-list"
             v-else

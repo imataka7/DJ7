@@ -49,7 +49,7 @@ export default class Hub extends Vue {
   }
 
   get isDraggable() {
-    return this.isDj && !(this.isQueueUpdating);
+    return this.isDj && !this.isQueueUpdating;
   }
 
   get isDj() {
@@ -353,21 +353,6 @@ export default class Hub extends Vue {
     } else {
       window.location.href = `${origin}/${this.jumpTo.trim()}`;
     }
-    // const query = this.isMonarchism ? {
-    //   pilgrimId: this.currentUser?.uid
-    // } : null;
-    // if (query) {
-    //   this.$router.push({
-    //     name: "hub",
-    //     params: {roomId: this.jumpTo.trim()},
-    //     query,
-    //   });
-    // } else {
-    //   this.$router.push({
-    //     name: "hub",
-    //     params: {roomId: this.jumpTo.trim()},
-    //   });
-    // }
   }
 
   public async interrupt(music: Musicx) {
