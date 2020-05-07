@@ -24,7 +24,10 @@ interface RoomUser {
 
 interface AdminUser {
   uid: string;
+  roleTags: string[];
 }
+
+type Government = "monarchism" | null;
 
 interface Room {
   roomId: string;
@@ -32,6 +35,7 @@ interface Room {
   player: Player;
   users: RoomUser[];
   adminUsers: AdminUser[];
+  government: Government;
 }
 
 export {

@@ -50,10 +50,13 @@ export default class Hub extends Vue {
 
   get isDj() {
     const uid = this.currentUser?.uid || "";
-    return room.adminUsers
-      .map((adminUser) => adminUser.uid).includes(
-        uid
-      )
+    const myRole = room.adminUsers
+      .filter((adminUser) => adminUser.uid === uid)[0]
+    return !!(myRole?.roleTags.includes("managePlay"))
+  }
+
+  get government() {
+    return room.government
   }
 
   get adminUsers() {

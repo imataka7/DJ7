@@ -5,7 +5,10 @@
         <div class="column swiper-slide input-container">
           <div class="room-desc">
             <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
+
+            <section>government: {{ government }}</section>
             <section>user: {{ this.currentUser.uid }}</section>
+            <section>adminUsers: {{ adminUsers }}</section>
             <section>isDj: {{ isDj }}</section>
 
             <p>

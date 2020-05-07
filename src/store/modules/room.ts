@@ -39,6 +39,10 @@ class RoomManager extends VuexModule {
     return this.status?.adminUsers || [];
   }
 
+  get government() {
+    return this.status?.government;
+  }
+
   get roomRef() {
     if (!this.roomId) {
       return null;
