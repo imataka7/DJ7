@@ -42,6 +42,24 @@ const {arrayUnion, arrayRemove} = firebase.firestore.FieldValue;
   }
 })
 export default class Hub extends Vue {
+  isAdminMode = false
+
+  get isDraggable() {
+    return this.isDj && !(this.isQueueUpdating);
+  }
+
+  get isDj() {
+    const uid = this.currentUser?.uid || "";
+    return room.adminUsers
+      .map((adminUser) => adminUser.uid).includes(
+        uid
+      )
+  }
+
+  get adminUsers() {
+    return room.adminUsers
+  }
+
   get version() {
     return `v${process.env.VUE_APP_VERSION.replace("+", " on ")}`;
   }

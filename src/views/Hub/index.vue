@@ -5,6 +5,9 @@
         <div class="column swiper-slide input-container">
           <div class="room-desc">
             <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
+            <section>user: {{ this.currentUser.uid }}</section>
+            <section>isDj: {{ isDj }}</section>
+
             <p>
               RoomId: {{ roomId }}
               <share-button :room-id="roomId" :now-playing="playingMusic && playingMusic.title"></share-button>
@@ -24,18 +27,28 @@
             />
           </div>
 
-          <input-area @parsed="addQueue"></input-area>
+          <template v-if="isDj">
+            <input-area @parsed="addQueue" />
+          </template>
 
           <div class="ad-container">
             <ad-square></ad-square>
           </div>
 
           <div class="jumper">
-            <label>
-              <p class="label-desc">Do you want to change the room?</p>
-              <input type="text" v-model="jumpTo" :disabled="!currentUser" placeholder="Room id" />
-              <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
-            </label>
+            <section>
+              <label>
+                <p class="label-desc">Do you want to change the room?</p>
+                <input type="text" v-model="jumpTo" :disabled="!currentUser" placeholder="Room id" />
+                <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
+              </label>
+            </section>
+            <section>
+              <label class="checkbox">
+                <input type="checkbox" v-model="isAdminMode" />
+                admin mode
+              </label>
+            </section>
           </div>
           <abutton @click="signOut" :disabled="!currentUser">Sign out</abutton>
         </div>
@@ -46,7 +59,8 @@
           <music-queue
             v-model="queues"
             @interrupt="interrupt"
-            :is-draggable="!isQueueUpdating"
+            :is-draggable="false"
+            :is-dj="isDj"
             class="music-list"
             v-else
           ></music-queue>
@@ -74,6 +88,7 @@
 
     <player-controller
       ref="controller"
+      :is-dj="isDj"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"
