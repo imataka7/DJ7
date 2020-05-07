@@ -18,7 +18,7 @@ jobs:
     - name: Apply linter
       run: npm run lint --fix
     - name: Build the project
-      run: npm run build
+      run: npm run build:prod
     - name: Deploy to firebase
       run: npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
     # TODO: custom message
