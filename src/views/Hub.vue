@@ -4,17 +4,12 @@
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <div class="room-desc">
-            <img
-              class="dj7-logo"
-              :src="require('@/assets/logo.png')"
-              alt="DJ7"
-            />
+            <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
             <p>
               RoomId: {{ roomId }}
               <share-button
                 :room-id="roomId"
-                :now-playing="playingMusic && playingMusic.title"
-              ></share-button>
+                :now-playing="playingMusic && playingMusic.title"></share-button>
             </p>
             <span class="version">{{ version }}</span>
           </div>
@@ -40,12 +35,7 @@
           <div class="jumper">
             <label>
               <p class="label-desc">Do you want to change the room?</p>
-              <input
-                type="text"
-                v-model="jumpTo"
-                :disabled="!currentUser"
-                placeholder="Room id"
-              />
+              <input type="text" v-model="jumpTo" :disabled="!currentUser" placeholder="Room id" />
               <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
             </label>
           </div>
@@ -54,9 +44,7 @@
 
         <div class="column swiper-slide">
           <p class="header">Queue</p>
-          <div class="no-music" v-if="queues.length === 0">
-            No music in queue
-          </div>
+          <div class="no-music" v-if="queues.length === 0">No music in queue</div>
           <music-queue
             v-model="queues"
             @interrupt="interrupt"
@@ -69,18 +57,12 @@
         <div class="column swiper-slide">
           <p class="header">History</p>
           <template v-if="!currentUser">
-            <div class="no-music">
-              Only available for signed in users
-            </div>
+            <div class="no-music">Only available for signed in users</div>
             <div class="button-container">
-              <abutton class="is-large" @click="$router.push('/signin')">
-                Sign in
-              </abutton>
+              <abutton class="is-large" @click="$router.push('/signin')">Sign in</abutton>
             </div>
           </template>
-          <div class="no-music" v-else-if="history.length === 0">
-            No music in history
-          </div>
+          <div class="no-music" v-else-if="history.length === 0">No music in history</div>
           <history-list
             :list="history"
             @add="addQueue"
@@ -116,13 +98,24 @@ import isMobile from 'ismobilejs';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import {
-  YoutubePlayer, InputArea, MusicQueue, HistoryList, PlayerController, ShareButton, AdSquare,
+  YoutubePlayer,
+  InputArea,
+  MusicQueue,
+  HistoryList,
+  PlayerController,
+  ShareButton,
+  AdSquare,
 } from '@/components';
 import {
   Room, RoomUser, Musicx, Music, User, PlayerStatus,
 } from '@/models';
 import {
-  sleep, setEvent, getEmbedUrl, getMusicInfo, getClone, showToast,
+  sleep,
+  setEvent,
+  getEmbedUrl,
+  getMusicInfo,
+  getClone,
+  showToast,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '../components/molecules';
@@ -144,7 +137,7 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 })
 export default class Hub extends Vue {
   get version() {
-    return process.env.VUE_APP_VERSION;
+    return `v${process.env.VUE_APP_VERSION.replace('+', ' on ')}`;
   }
 
   get currentUser() {
@@ -194,7 +187,7 @@ export default class Hub extends Vue {
   }
 
   get users() {
-    const users = (room?.users) || [];
+    const users = room?.users || [];
     return getClone(users).reverse();
   }
 
@@ -249,13 +242,15 @@ export default class Hub extends Vue {
       await this.controller.loadMusic(music);
     }
 
-    if (oldStatus?.player.playedTime === playedTime
-    && status === oldStatus?.player.status) {
+    if (
+      oldStatus?.player.playedTime === playedTime
+      && status === oldStatus?.player.status
+    ) {
       return;
     }
 
     const seekTo = status === PlayerStatus.PLAY
-      ? ((adate.now() - updatedAt) / 1000) + playedTime
+      ? (adate.now() - updatedAt) / 1000 + playedTime
       : playedTime;
 
     await this.setStatus(status, seekTo);
@@ -319,9 +314,7 @@ export default class Hub extends Vue {
 
     setEvent(window, 'resize', this.updateSwiper);
 
-    await Promise.all([
-      this.init(),
-    ]);
+    await Promise.all([this.init()]);
   }
 
   public beforeDestroy() {
