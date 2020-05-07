@@ -16,7 +16,6 @@ interface Player {
   playingSpeed: number;
 }
 
-
 interface RoomUser {
   uid: string;
   photo: string | null;
@@ -42,6 +41,7 @@ export {
   Player,
   RoomUser,
   Musicx,
+  Government,
 };
 
 export default Room;
