@@ -55,12 +55,30 @@ export default class Hub extends Vue {
 
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
+  get role() {
+    return {
+      isDj: this.isDj,
+      isAdmin: this.isAdmin,
+    }
+  }
+
   get isDj() {
     if (this.government === 'monarchism') {
       const uid = this.currentUser?.uid || '';
       const myRole = this.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
       return !!(myRole?.roleTags.includes('managePlay'))
+    } else {
+      return true
+    }
+  }
+
+  get isAdmin() {
+    if (this.government === 'monarchism') {
+      const uid = this.currentUser?.uid || '';
+      const myRole = this.adminUsers
+        .filter((adminUser) => adminUser.uid === uid).shift();
+      return !!(myRole?.roleTags.includes('manageUser'))
     } else {
       return true
     }

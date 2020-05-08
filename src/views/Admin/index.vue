@@ -7,13 +7,15 @@
             <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
 
             <div v-if="dbg" style="{border-style: solid; border-color: #ff0000;}">
-              <section>government: {{ government }}</section>
-              <section>user: {{ this.currentUser.uid }}</section>
-              <section>adminUsers: {{ adminUsers }}</section>
-              <section>isDj: {{ isDj }}</section>
+              <div>government: {{ government }}</div>
+              <div>adminUsers: {{ adminUsers }}</div>
+              <div>role: {{ role }}</div>
+              <div v-if="currentUser">
+                <div>uid: {{ currentUser.uid }}</div>
+              </div>
               <div>
                 <button
-                  @click="$router.push({ name: 'hub', params: { roomId  }})"
+                  @click="$router.push({ name: 'hub', params: { roomId }})"
                 >RoomId: {{ roomId }}</button>
               </div>
             </div>
