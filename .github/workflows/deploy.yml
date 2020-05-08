@@ -21,6 +21,6 @@ jobs:
     - name: Build the project
       run: npm run build:prod
     - name: Select the project
-      run: npx firebase use sairilab-musichub
+      run: npx firebase use sairilab-musichub --token "${{ secrets.FIREBASE_TOKEN }}"
     - name: Deploy to firebase
       run: npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
