@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { Hub } from '@/views';
-import General from '../views/General.vue';
 import { app as firebase } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -9,27 +8,12 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'general',
-    component: General,
-    meta: {
-      requireAuth: true,
-    },
+    redirect: 'general'
   },
   {
     path: '/signin',
     name: 'signin',
     component: () => import(/* webpackChunkName: "signin" */ '../views/Signin.vue'),
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    meta: {
-      authRequired: true,
-    },
   },
   {
     path: '/terms-of-service',
@@ -42,10 +26,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "pp" */ '../views/Privacy.vue'),
   },
   {
+    path: '/general',
+    name: 'hub-general',
+    component: Hub,
+  },
+  {
     path: '/:roomId',
     name: 'hub',
     component: Hub,
-    alias: '/:roomId/req',
     meta: {
       authRequired: true,
     },
