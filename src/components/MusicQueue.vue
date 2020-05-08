@@ -14,7 +14,7 @@
         v-for="q in queues"
         :key="q.id"
         :music="q"
-        :handling="isDj"
+        :sortable="isDj"
       >
         <template v-slot:buttons v-if="isDj">
           <abutton class="button" title="Delete" @click="del(q)">
@@ -166,12 +166,6 @@ export default class MusicQueue extends Vue {
   &.is-flash {
     animation: flash 1.5s ease;
   }
-}
-
-.handle {
-  float: left;
-  padding-top: 8px;
-  padding-bottom: 8px;
 }
 
 // .flip-list-move {

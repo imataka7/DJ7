@@ -1,6 +1,6 @@
 <template>
   <div class="music-list-item">
-    <div v-if="handling" class="handle">
+    <div v-if="sortable" class="handle">
       <fa-icon icon="equals"></fa-icon>
     </div>
     <a
@@ -43,7 +43,7 @@ export default class MusicListItem extends Vue {
   public music!: Musicx;
 
   @Prop()
-  public handling!: boolean;
+  public sortable!: boolean;
 
   public getUrl(url: string) {
     const videoId = url.replace('https://www.youtube.com/embed/', '');
