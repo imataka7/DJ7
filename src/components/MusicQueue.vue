@@ -14,7 +14,7 @@
         v-for="q in queues"
         :key="q.id"
         :music="q"
-        :handling="isDj"
+        :sortable="isDj"
       >
         <template v-slot:buttons v-if="isDj">
           <abutton class="button" title="Delete" @click="del(q)">
