@@ -7,8 +7,8 @@
             <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
 
             <div v-if="dbg" style="{border-style: solid; border-color: #ff0000;}">
-              <div>government: {{ government }}</div>
-              <div>adminUsers: {{ adminUsers }}</div>
+              <div>government: {{ room.government }}</div>
+              <div>adminUsers: {{ room.adminUsers }}</div>
               <div>role: {{ role }}</div>
               <div v-if="currentUser">
                 <div>uid: {{ currentUser.uid }}</div>

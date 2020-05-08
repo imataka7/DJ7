@@ -40,7 +40,11 @@ class RoomManager extends VuexModule {
   }
 
   get government() {
-    return this.status?.government;
+    return this.status?.government || 'anarchism';
+  }
+
+  get isMonarchism() {
+    return this.government === 'monarchism';
   }
 
   get roomRef() {

@@ -53,9 +53,9 @@ export default class Hub extends Vue {
   }
 
   get isDj() {
-    if (this.government === 'monarchism') {
+    if (room.isMonarchism) {
       const uid = this.currentUser?.uid || '';
-      const myRole = this.adminUsers
+      const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
       return !!(myRole?.roleTags.includes('managePlay'))
     } else {
@@ -64,9 +64,9 @@ export default class Hub extends Vue {
   }
 
   get isAdmin() {
-    if (this.government === 'monarchism') {
+    if (room.isMonarchism) {
       const uid = this.currentUser?.uid || '';
-      const myRole = this.adminUsers
+      const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
       return !!(myRole?.roleTags.includes('manageUser'))
     } else {
@@ -74,16 +74,8 @@ export default class Hub extends Vue {
     }
   }
 
-  get government() {
-    if (room.government === 'monarchism') {
-      return 'monarchism'
-    } else {
-      return 'anarchism'
-    }
-  }
-
-  get adminUsers() {
-    return room.adminUsers
+  get room() {
+    return room;
   }
 
   get version() {
