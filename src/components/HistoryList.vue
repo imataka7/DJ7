@@ -20,15 +20,19 @@
 import {
   Component, Vue, Prop,
 } from 'vue-property-decorator';
+// import VirtualList from 'vue-virtual-scroll-list';
 import { Music } from '@/models';
 import { generateRandomId, getClone } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
+const VirtualList = require('vue-virtual-scroll-list');
+
 @Component({
   components: {
     MusicListItem,
     abutton: ActionButton,
+    VirtualList,
   },
 })
 export default class HistoryList extends Vue {
