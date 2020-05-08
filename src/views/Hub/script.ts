@@ -52,6 +52,8 @@ export default class Hub extends Vue {
     return this.isDj && !this.isQueueUpdating;
   }
 
+  // RoleTagから論理話をとってDJ操作の可不可を算出
+  // (Government, Array<RoleTag>) -> Boolean
   get isDj() {
     if (this.government === "monarchism") {
       const uid = this.currentUser?.uid || "";

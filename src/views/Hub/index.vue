@@ -11,6 +11,16 @@
               <section>user: {{ this.currentUser.uid }}</section>
               <section>adminUsers: {{ adminUsers }}</section>
               <section>isDj: {{ isDj }}</section>
+              <div>
+                <button
+                  @click="$router.push({ name: 'hub', params: { roomId }})"
+                >RoomId: {{ roomId }}</button>
+              </div>
+              <div>
+                <button
+                  @click="$router.push({ name: 'admin', params: { roomId }})"
+                >{{ `${roomId}/admin` }}</button>
+              </div>
             </div>
 
             <p>
