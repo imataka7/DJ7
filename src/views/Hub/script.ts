@@ -45,8 +45,30 @@ export default class Hub extends Vue {
 
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
-  get role() {
-    return this.currentUser?.role;
+  get role(): Role {
+    if (this.currentUser) {
+      const uid = this.currentUser .uid;
+      const myRole = room.adminUsers
+        .filter((adminUser) => adminUser.uid === uid).shift();
+      const role: Role = room.isMonarchism ?
+      // monarchism
+        {
+          isDj: !!(myRole?.roleTags.includes('managePlay')),
+          isAdmin: !!(myRole?.roleTags.includes('manageUser')),
+        } :
+      // anarchimsRoom
+        ({
+          isDj: true,
+          isAdmin: false
+        });
+      return role
+    } else {
+      // currentUser is null
+      return {
+        isDj: false,
+        isAdmin: false
+      };
+    }
   }
 
   get room() {
@@ -58,30 +80,7 @@ export default class Hub extends Vue {
   }
 
   get currentUser() {
-    if (!user.user) {
-      return null
-    }
-
-    // RoleTagから論理話をとってDJ操作の可不可を算出
-    // (Government, Array<RoleTag>) -> Boolean
-    const uid = user.user.uid;
-    const myRole = room.adminUsers
-      .filter((adminUser) => adminUser.uid === uid).shift();
-    const role: Role = room.isMonarchism ?
-      // monarchism
-      {
-        isDj: !!(myRole?.roleTags.includes('managePlay')),
-        isAdmin: !!(myRole?.roleTags.includes('manageUser')),
-      } :
-      // anarchimsRoom
-      ({
-        isDj: true,
-        isAdmin: false
-      });
-    return {
-      ...user.user,
-      role
-    }
+    return user.user;
   }
 
   get me() {
