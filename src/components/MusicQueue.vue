@@ -168,12 +168,6 @@ export default class MusicQueue extends Vue {
   }
 }
 
-.handle {
-  float: left;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
 // .flip-list-move {
 //   transition: transform 0.2s;
 // }
