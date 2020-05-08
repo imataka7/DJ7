@@ -59,7 +59,7 @@ class RoomManager extends VuexModule {
   }
 
   @Action({ commit: 'setStatus', rawError: true })
-  public async addRoom(roomId: string) {
+  public async addRoom() {
     const initial = {
       player: {
         music: null,
@@ -113,7 +113,7 @@ class RoomManager extends VuexModule {
     const snapshot = await this.roomRef!.get();
 
     if (!snapshot.exists) {
-      await this.addRoom(roomId);
+      await this.addRoom();
     } else {
       this.setStatus(snapshot.data() as Room);
     }

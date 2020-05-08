@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable class-methods-use-this */
+/* eslint-disable */
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';

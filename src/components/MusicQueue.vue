@@ -70,7 +70,7 @@ export default class MusicQueue extends Vue {
   public isFlash = false;
 
   @Watch('isDraggable')
-  public onChanged(val: boolean) {
+  public onChanged() {
     this.reloadKey = Math.random();
   }
 
@@ -79,7 +79,7 @@ export default class MusicQueue extends Vue {
   public queueTemp: Musicx[] = [] ;
 
   @Watch('queueTemp')
-  public onQueueChanged(newval: any[], oldval: any[]) {
+  public onQueueChanged(newval: Musicx[], oldval: Musicx[]) {
     if (newval.length > oldval.length) {
       this.isFlash = true;
       setTimeout(() => { this.isFlash = false; }, 1000);
@@ -138,12 +138,12 @@ export default class MusicQueue extends Vue {
     return mobiles.test(window.navigator.userAgent);
   }
 
- public dragOptions = {
-   //  animation: 100,
-   group: 'queue',
-   disabled: this.isDraggable,
-   ghostClass: 'ghost',
- }
+  public dragOptions = {
+    //  animation: 100,
+    group: 'queue',
+    disabled: this.isDraggable,
+    ghostClass: 'ghost',
+  }
 }
 </script>
 

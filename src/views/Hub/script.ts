@@ -1,9 +1,6 @@
-import {Component, Vue, Prop, Watch} from "vue-property-decorator";
-import firebase from "firebase/app";
-import "firebase/firestore";
-import Swiper from "swiper";
-import isMobile from "ismobilejs";
-import PlayerStates from "youtube-player/dist/constants/PlayerStates";
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import 'firebase/firestore';
+import Swiper from 'swiper';
 
 import {
   YoutubePlayer,
@@ -13,21 +10,15 @@ import {
   PlayerController,
   ShareButton,
   AdSquare
-} from "@/components";
-import {Room, RoomUser, Musicx, Music, User, PlayerStatus} from "@/models";
+} from '@/components';
+import { Room, Musicx, Music, PlayerStatus } from '@/models';
 import {
-  sleep,
   setEvent,
-  getEmbedUrl,
-  getMusicInfo,
   getClone,
   showToast
-} from "@/utils";
-import {user, room, adate} from "@/store/modules";
-import {ActionButton} from "@/components/molecules";
-import {logger} from "@/plugins/logger";
-
-const {arrayUnion, arrayRemove} = firebase.firestore.FieldValue;
+} from '@/utils';
+import { user, room, adate } from '@/store/modules';
+import { ActionButton } from '@/components/molecules';
 
 @Component({
   components: {
@@ -43,7 +34,7 @@ const {arrayUnion, arrayRemove} = firebase.firestore.FieldValue;
 })
 export default class Hub extends Vue {
   get version() {
-    return `v${process.env.VUE_APP_VERSION.replace("+", " on ")}`;
+    return `v${process.env.VUE_APP_VERSION.replace('+', ' on ')}`;
   }
 
   get currentUser() {
@@ -54,7 +45,7 @@ export default class Hub extends Vue {
     return user.me;
   }
 
-  @Watch("currentUser", {immediate: true})
+  @Watch('currentUser', { immediate: true })
   public onAuthStateChanged() {
     if (this.me) {
       room.addUser(this.me);
@@ -63,9 +54,9 @@ export default class Hub extends Vue {
   }
 
   public async signOut() {
-    this.$ga.logEvent("sign_out");
+    this.$ga.logEvent('sign_out');
 
-    this.$router.push("/signin");
+    await this.$router.push('/signin');
     await room.leaveRoom(this.me!);
     await user.signOut();
   }
@@ -97,10 +88,10 @@ export default class Hub extends Vue {
     return getClone(users).reverse();
   }
 
-  private controller!: PlayerController;
+  private controller!: any;
 
   get roomId() {
-    return this.$route.params.roomId || "general";
+    return this.$route.params.roomId || 'general';
   }
 
   public async init() {
@@ -118,7 +109,7 @@ export default class Hub extends Vue {
     return room.status;
   }
 
-  @Watch("roomStatus", {deep: true})
+  @Watch('roomStatus', { deep: true })
   public async onRoomStatusChanged(newStatus: Room, oldStatus: Room) {
     this.isQueueUpdating = true;
 
@@ -129,14 +120,14 @@ export default class Hub extends Vue {
       this.isQueueUpdating = false;
     }, 100);
 
-    const {music, updatedAt, playedTime, status} = newStatus.player;
+    const { music, updatedAt, playedTime, status } = newStatus.player;
 
     if (!music || status === PlayerStatus.NO_MUSIC) {
       await this.setStatus(status, 0);
       return;
     }
 
-    const {source, platform, id, thumbnail, title} = music;
+    const { id } = music;
 
     if (id && id !== previousId) {
       user.updateHistory(music);
@@ -162,7 +153,7 @@ export default class Hub extends Vue {
   private async setStatus(status: PlayerStatus, to: number) {
     await this.controller.seekTo(to);
 
-    const {PLAY, PAUSE, NO_MUSIC} = PlayerStatus;
+    const { PLAY, PAUSE, NO_MUSIC } = PlayerStatus;
     switch (status) {
       case PLAY:
         await this.controller.play();
@@ -188,8 +179,8 @@ export default class Hub extends Vue {
   public swiper?: Swiper;
 
   public initSwiper() {
-    this.swiper = new Swiper(".swiper-container", {
-      direction: "horizontal",
+    this.swiper = new Swiper('.swiper-container', {
+      direction: 'horizontal',
       loop: false,
       slidesPerView: 1,
       breakpoints: {
@@ -215,7 +206,7 @@ export default class Hub extends Vue {
       this.initSwiper();
     }
 
-    setEvent(window, "resize", this.updateSwiper);
+    setEvent(window, 'resize', this.updateSwiper);
 
     await Promise.all([this.init()]);
   }
@@ -233,7 +224,7 @@ export default class Hub extends Vue {
   }
 
   private onStatusChanged(status: PlayerStatus, playedTime: number) {
-    room.changeState({status, playedTime});
+    room.changeState({ status, playedTime });
   }
 
   private async onMusicEnded(playedMusic: Musicx) {
@@ -243,8 +234,8 @@ export default class Hub extends Vue {
 
     const status = await room.fetchCurrentStatus();
 
-    const {player, queues} = status;
-    const {music, playedTime, updatedAt} = player;
+    const { player, queues } = status;
+    const { music, playedTime, updatedAt } = player;
 
     // チャタリング対策
     // 更新時間が近いとき
@@ -259,7 +250,7 @@ export default class Hub extends Vue {
       return;
     }
 
-    this.$logger.info("music end", {
+    this.$logger.info('music end', {
       content: {
         playedMusic,
         timeElapsedFromUpdated,
@@ -275,15 +266,15 @@ export default class Hub extends Vue {
   public async onError(playedMusic: Musicx, code: number) {
     const status = await room.fetchCurrentStatus();
 
-    const {player, queues} = status;
-    const {music, playedTime, updatedAt} = player;
+    const { player, queues } = status;
+    const { music } = player;
 
     // console.log(music, errorMusic);
 
     if (music.id === playedMusic?.id) {
       room.setMusicFromQueue(queues);
 
-      this.$logger.error("player error", {
+      this.$logger.error('player error', {
         content: {
           music: playedMusic,
           code
@@ -291,30 +282,30 @@ export default class Hub extends Vue {
       });
     }
 
-    showToast("error", `An error occurs in the player. code: ${code}`);
+    showToast('error', `An error occurs in the player. code: ${code}`);
   }
 
   private async forwardMusic() {
     room.forwardMusic();
   }
 
-  public jumpTo = "";
+  public jumpTo = '';
 
   public jump() {
     if (!this.jumpTo) {
       return;
     }
 
-    this.$ga.logEvent("jump", {
+    this.$ga.logEvent('jump', {
       roomId: this.jumpTo
     });
-    this.$logger.info("jump", {
+    this.$logger.info('jump', {
       content: {
         roomId: this.jumpTo
       }
     });
 
-    const {origin} = window.location;
+    const { origin } = window.location;
     window.location.href = `${origin}/${this.jumpTo.trim()}`;
   }
 
@@ -325,7 +316,7 @@ export default class Hub extends Vue {
     //   return;
     // }
 
-    await room.interrupt({music, playedTime: playedTime || 0});
+    await room.interrupt({ music, playedTime: playedTime || 0 });
   }
 
   public async deleteMusicFromHistory(music: Music) {

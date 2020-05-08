@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Vue, { VueConstructor, PluginObject } from 'vue';
 import * as Sentry from '@sentry/browser';
 import { Vue as IntegrationsVue } from '@sentry/integrations';

@@ -9,16 +9,12 @@
 /* eslint-disable no-await-in-loop */
 
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue, Watch,
 } from 'vue-property-decorator';
 import YouTube from 'youtube-player';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
-import PlayerStatus from '@/models/playerStatus';
-import MusicPlayer from '@/models/musicPlayer';
-import sleep from '../utils/sleep';
-import Music from '../models/music';
-import { Musicx } from '../models/room';
+import { Musicx, MusicPlayer, PlayerStatus } from '@/models';
 
 @Component
 export default class PlayerYoutube extends Vue implements MusicPlayer {

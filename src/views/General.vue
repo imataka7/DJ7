@@ -41,9 +41,9 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue,
 } from 'vue-property-decorator';
-import Hub from './Hub.vue';
+import { Hub } from '.';
 import ActionButton from '@/components/molecules/ActionButton.vue';
 import { PlayerController } from '@/components';
 import { user } from '@/store/modules';

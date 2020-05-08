@@ -32,10 +32,10 @@ const firebaseConfig = {
 };
 
 export const app = firebase.initializeApp(firebaseConfig);
-const anal = firebase.analytics();
+firebase.analytics();
 
 export default {
-  install(vue: VueConstructor, options: any) {
+  install(vue: VueConstructor) {
     vue.prototype.$firestore = app.firestore();
     vue.prototype.$auth = app.auth();
     vue.prototype.$ga = app.analytics();
