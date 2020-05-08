@@ -1,6 +1,5 @@
 <template>
   <div class="history-list">
-    <!-- <p>{{ size }}</p> -->
     <virtual-list :size="size" :remain="10" :key="size">
       <music-list-item v-for="m in reversedList" :key="m.source" :music="m">
         <template v-slot:buttons>
@@ -22,7 +21,7 @@ import {
   Component, Vue, Prop,
 } from 'vue-property-decorator';
 import { Music } from '@/models';
-import { generateRandomId, getClone, sleep } from '@/utils';
+import { generateRandomId, getClone } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -64,9 +63,7 @@ export default class HistoryList extends Vue {
   public size = 100;
 
   public mounted() {
-    console.log(this.$el.clientHeight);
     this.size = this.$el.clientHeight / 10;
-    sleep(10000).then(() => console.log(this.$el.clientHeight));
   }
 }
 </script>

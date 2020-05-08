@@ -75,7 +75,7 @@ class RoomManager extends VuexModule {
       uid: pilgrimId, roleTags: ['managePlay', 'manageUser'],
     }] : [];
     const government: Government = pilgrimId ? 'monarchism' : null;
-
+    
     const initial = {
       player: {
         music: null,
