@@ -11,7 +11,7 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue, Prop,
 } from 'vue-property-decorator';
 import isMobile from 'ismobilejs';
 

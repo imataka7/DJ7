@@ -38,11 +38,11 @@
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import Draggable from "vuedraggable";
-import { Musicx } from "@/models/room";
-import MusicListItem from "./molecules/MusicListItem.vue";
-import ActionButton from "./molecules/ActionButton.vue";
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import Draggable from 'vuedraggable';
+import { Musicx } from '@/models/room';
+import MusicListItem from './molecules/MusicListItem.vue';
+import ActionButton from './molecules/ActionButton.vue';
 
 @Component({
   components: {
@@ -59,7 +59,7 @@ export default class MusicQueue extends Vue {
   @Prop({ default: true })
   isDj!: boolean;
 
-  @Watch("value")
+  @Watch('value')
   public onValueChanged(newVal: Musicx[]) {
     this.queueTemp = newVal;
   }
@@ -71,8 +71,8 @@ export default class MusicQueue extends Vue {
 
   public isFlash = false;
 
-  @Watch("isDraggable")
-  public onChanged(val: boolean) {
+  @Watch('isDraggable')
+  public onChanged() {
     this.reloadKey = Math.random();
   }
 
@@ -80,8 +80,8 @@ export default class MusicQueue extends Vue {
 
   public queueTemp: Musicx[] = [];
 
-  @Watch("queueTemp")
-  public onQueueChanged(newval: any[], oldval: any[]) {
+  @Watch('queueTemp')
+  public onQueueChanged(newval: Musicx[], oldval: Musicx[]) {
     if (newval.length > oldval.length) {
       this.isFlash = true;
       setTimeout(() => {
@@ -95,10 +95,10 @@ export default class MusicQueue extends Vue {
   }
 
   set queues(newVal) {
-    this.$ga.logEvent("drag");
+    this.$ga.logEvent('drag');
 
     this.queueTemp = newVal;
-    this.$emit("input", newVal);
+    this.$emit('input', newVal);
   }
 
   public mounted() {
@@ -115,20 +115,20 @@ export default class MusicQueue extends Vue {
   }
 
   public del(music: Musicx) {
-    this.log("delete_queue", music);
+    this.log('delete_queue', music);
 
     const newQueue = this.queues.filter(q => q.id !== music.id);
-    this.$emit("input", newQueue);
+    this.$emit('input', newQueue);
   }
 
   public interrupt(music: Musicx) {
-    this.log("interrupt", music);
+    this.log('interrupt', music);
 
-    this.$emit("interrupt", music);
+    this.$emit('interrupt', music);
   }
 
   public moveToTop(music: Musicx) {
-    this.log("move_to_top", music);
+    this.log('move_to_top', music);
 
     const newQueue = this.queues.filter(q => q.id !== music.id);
 
@@ -144,10 +144,10 @@ export default class MusicQueue extends Vue {
 
   public dragOptions = {
     //  animation: 100,
-    group: "queue",
+    group: 'queue',
     disabled: this.isDraggable,
-    ghostClass: "ghost"
-  };
+    ghostClass: 'ghost',
+  }
 }
 </script>
 

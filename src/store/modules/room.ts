@@ -4,14 +4,14 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-import {app as firebaseApp} from '@/plugins/firebase';
+import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
 import {
   Room, RoomUser, Musicx, PlayerStatus, Government,
 } from '@/models';
 
 const firestore = firebaseApp.firestore();
-const {arrayUnion, arrayRemove} = firebase.firestore.FieldValue;
+const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Module({
   name: 'room', namespaced: true, store, dynamic: true,
@@ -66,15 +66,15 @@ class RoomManager extends VuexModule {
     this.listener = listener;
   }
 
-  @Action({commit: 'setStatus', rawError: true})
-  public async addRoom(roomId: string) {
+  @Action({ commit: 'setStatus', rawError: true })
+  public async addRoom() {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
-    const pilgrimId: string | null = params.get("pilgrimId");
+    const pilgrimId: string | null = params.get('pilgrimId');
     const adminUsers = pilgrimId ? [{
-      uid: pilgrimId, roleTags: ["managePlay", "manageUser"],
+      uid: pilgrimId, roleTags: ['managePlay', 'manageUser'],
     }] : [];
-    const government: Government = pilgrimId ? "monarchism" : null;
+    const government: Government = pilgrimId ? 'monarchism' : null;
 
     const initial = {
       player: {
@@ -93,7 +93,7 @@ class RoomManager extends VuexModule {
     return initial;
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async addUser(user: RoomUser) {
     if (!this.roomRef) {
       return;
@@ -114,14 +114,14 @@ class RoomManager extends VuexModule {
     await batch.commit();
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async removeUser(user: RoomUser) {
     await this.roomRef!.update({
       users: arrayRemove(user),
     });
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async init(roomId: string) {
     this.listener?.();
 
@@ -130,7 +130,7 @@ class RoomManager extends VuexModule {
     const snapshot = await this.roomRef!.get();
 
     if (!snapshot.exists) {
-      await this.addRoom(roomId);
+      await this.addRoom();
     } else {
       this.setStatus(snapshot.data() as Room);
     }
@@ -139,16 +139,16 @@ class RoomManager extends VuexModule {
     this.setListener(listener);
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async updateQueue(queues: Musicx[]) {
     this.roomRef!.update({
       queues,
     });
   }
 
-  @Action({rawError: true})
-  public async changeState(payload: {status: PlayerStatus; playedTime: number}) {
-    const {status, playedTime} = payload;
+  @Action({ rawError: true })
+  public async changeState(payload: { status: PlayerStatus; playedTime: number }) {
+    const { status, playedTime } = payload;
 
     if (!this.status) {
       return;
@@ -166,7 +166,7 @@ class RoomManager extends VuexModule {
     });
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async seek(to: number) {
     this.roomRef!.update({
       'player.playedTime': to,
@@ -174,14 +174,14 @@ class RoomManager extends VuexModule {
     });
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public updatePlayingSpeed(s: number) {
     return this.roomRef!.update({
       'player.playingSpeed': s,
     });
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async queueMusic(items: Musicx[]) {
     if (!this.status) {
       return;
@@ -213,7 +213,7 @@ class RoomManager extends VuexModule {
     await batch.commit();
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async setMusicFromQueue(queues: Musicx[]) {
     if (queues.length === 0) {
       await this.roomRef!.update({
@@ -242,9 +242,9 @@ class RoomManager extends VuexModule {
     });
   }
 
-  @Action({rawError: true})
-  public async interrupt(payload: {music: Musicx; playedTime: number}) {
-    const {music, playedTime} = payload;
+  @Action({ rawError: true })
+  public async interrupt(payload: { music: Musicx; playedTime: number }) {
+    const { music, playedTime } = payload;
     if (!this.status) {
       return;
     }
@@ -270,17 +270,17 @@ class RoomManager extends VuexModule {
     });
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async forwardMusic() {
     if (!this.status) {
       return;
     }
 
-    const {queues} = this.status;
+    const { queues } = this.status;
     await this.setMusicFromQueue(queues);
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async fetchCurrentStatus() {
     const snapshot = await this.roomRef!.get();
     const status = snapshot.data() as Room;
@@ -288,7 +288,7 @@ class RoomManager extends VuexModule {
     return status;
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async leaveRoom(me: RoomUser) {
     this.listener?.();
     await this.removeUser(me);

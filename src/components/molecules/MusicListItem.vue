@@ -36,17 +36,11 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue, Prop,
 } from 'vue-property-decorator';
-// @ts-ignore
-import VirtualList from 'vue-virtual-scroll-list';
 import { Musicx } from '../../models/room';
 
-@Component({
-  components: {
-    VirtualList,
-  },
-})
+@Component
 export default class MusicListItem extends Vue {
   @Prop()
   public music!: Musicx;

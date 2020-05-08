@@ -25,7 +25,7 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue,
 } from 'vue-property-decorator';
 import {
   getMusicInfo, getPlaylistInfo, getPlaylistId, showToast,

@@ -74,11 +74,11 @@ Vue.config.productionTip = false;
 initUserInfo();
 // Object.defineProperty(window, 'logger', { value: logger, enumerable: true });
 
-Vue.config.errorHandler = (err, vm, info) => {
+Vue.config.errorHandler = (err) => {
   captureException(err);
 };
 
-Vue.config.warnHandler = (message, vm, trace) => {
+Vue.config.warnHandler = (message) => {
   captureException(new Error(message));
 };
 

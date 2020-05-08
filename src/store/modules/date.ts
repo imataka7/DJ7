@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 
 import {
-  VuexModule, Mutation, Action, Module, getModule, MutationAction,
+  VuexModule, Module, getModule, MutationAction,
 } from 'vuex-module-decorators';
 import { logger } from '@/plugins/logger';
 

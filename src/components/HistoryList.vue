@@ -19,10 +19,10 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue, Prop,
 } from 'vue-property-decorator';
 import { Music } from '@/models';
-import { generateRandomId, getClone } from '@/utils';
+import { generateRandomId, getClone, sleep } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -64,7 +64,9 @@ export default class HistoryList extends Vue {
   public size = 100;
 
   public mounted() {
+    console.log(this.$el.clientHeight);
     this.size = this.$el.clientHeight / 10;
+    sleep(10000).then(() => console.log(this.$el.clientHeight));
   }
 }
 </script>

@@ -6,9 +6,7 @@
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
-import {
-  Component, Vue, Prop, Watch,
-} from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import isMobile from 'ismobilejs';
 import setEvent from '@/utils/eventUtil';
 import { adate, user } from '@/store/modules';
@@ -58,6 +56,7 @@ export default class MusicHub extends Vue {
 @import "~normalize.css";
 @import "~@sweetalert2/theme-dark/dark.scss";
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
+@import "./styles/sairi-components.scss";
 
 $black: #000;
 $gray-1: #111;

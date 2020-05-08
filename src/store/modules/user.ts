@@ -1,12 +1,12 @@
 import {
-  VuexModule, Mutation, Action, Module, getModule, MutationAction,
+  VuexModule, Mutation, Action, Module, getModule,
 } from 'vuex-module-decorators';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
-import { getClone, setEvent, convertProviderIdToName } from '@/utils';
+import { getClone, convertProviderIdToName } from '@/utils';
 import {
   RoomUser, Music, User, Musicx,
 } from '@/models';
@@ -120,8 +120,11 @@ class FirebaseUser extends VuexModule {
       // item.count += 1;
       history.push(item);
     } else {
-      const { id, extraStatus, ...item } = music;
-      history.push(item);
+      // const { id, extraStatus, ...item } = music;
+      // history.push(item);
+      delete music.id;
+      delete music.extraStatus;
+      history.push(music);
     }
 
     if (history.length > 2000) {

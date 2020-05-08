@@ -8,13 +8,3 @@
     data-ad-slot="3820047437"
   ></ins>
 </template>
-
-<script lang="ts">
-/* eslint-disable class-methods-use-this */
-import {
-  Component, Vue, Prop, Watch,
-} from 'vue-property-decorator';
-
-@Component
-export default class AdHorizontal extends Vue {}
-</script>

@@ -20,7 +20,7 @@
 import {
   Component, Vue, Prop, Watch,
 } from 'vue-property-decorator';
-import Music from '../../models/music';
+import Music from '@/models/music';
 
 @Component
 export default class PlayerMusicInfo extends Vue {
