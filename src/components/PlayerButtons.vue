@@ -1,6 +1,6 @@
 <template>
   <div class="player-buttons is-flex">
-    <transition name="bounce" mode="out-in">
+    <transition name="bounce" mode="out-in" v-if="role.playerPause">
       <button
         @click="pause"
         v-if="currentStatus === 1"
@@ -24,6 +24,7 @@
     </transition>
 
     <button
+      v-if="role.playerSkip"
       class="sairi-player-button has-bounce"
       @click="forward"
       :disabled="currentStatus === 8"
@@ -32,12 +33,7 @@
       <fa-icon icon="forward" size="lg"></fa-icon>
     </button>
 
-    <button
-      :disabled="disabled"
-      aria-label="Sync"
-      @click="sync"
-      class="sairi-player-button"
-    >
+    <button :disabled="disabled" aria-label="Sync" @click="sync" class="sairi-player-button">
       <fa-icon icon="sync-alt" size="lg"></fa-icon>
     </button>
   </div>
@@ -45,10 +41,8 @@
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
-import {
-  Component, Vue, Prop,
-} from 'vue-property-decorator';
-import { PlayerStatus } from '@/models';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { PlayerStatus, Role } from '@/models';
 
 @Component
 export default class PlayerButtons extends Vue {
@@ -57,6 +51,9 @@ export default class PlayerButtons extends Vue {
 
   @Prop({ default: true })
   public disabled!: boolean;
+
+  @Prop({ default: {} })
+  role!: Role;
 
   public pause() {
     this.$emit('pause');
@@ -84,16 +81,10 @@ export default class PlayerButtons extends Vue {
       return;
     }
 
-    e.animate(
-      [
-        { transform: 'rotate(0)' },
-        { transform: 'rotate(360deg)' },
-      ],
-      {
-        duration: 300,
-        easing: 'ease-in-out',
-      },
-    );
+    e.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], {
+      duration: 300,
+      easing: 'ease-in-out'
+    });
   }
 }
 </script>
