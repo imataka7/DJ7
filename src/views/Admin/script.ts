@@ -11,7 +11,7 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus , Role } from '@/models';
+import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
   setEvent,
   getClone,
@@ -19,6 +19,7 @@ import {
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
+import roleBook from '@/roleBook';
 
 @Component({
   components: {
@@ -42,51 +43,16 @@ export default class Hub extends Vue {
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role(): Role {
-    // const roleAdmin: Role = {
-    //   playerPause: false,
-    //   playerSkip: false,
-    //   playerSeek: false,
-    //   addViaSearch: false,
-    //   queueShift: false,
-    //   queueSort: false,
-    //   queueDelete: false,
-    //   queueInterrupt: false,
-    //   queueMoveToTop: false,
-    //   addFromHistory: false,
-    //   manageUser: true,
-    // };
-    // const roleDj: Role = {
-    //   playerPause: true,
-    //   playerSkip: true,
-    //   playerSeek: true,
-    //   addViaSearch: true,
-    //   queueShift: true,
-    //   queueSort: true,
-    //   queueDelete: true,
-    //   queueInterrupt: true,
-    //   queueMoveToTop: true,
-    //   addFromHistory: true,
-    //   manageUser: false,
-    // };
-    const roleDog: Role = {
-      playerPause: false,
-      playerSkip: false,
-      playerSeek: false,
-      addViaSearch: false,
-      queueShift: false,
-      queueSort: false,
-      queueDelete: false,
-      queueInterrupt: false,
-      queueMoveToTop: false,
-      addFromHistory: false,
-      manageUser: false,
-    };
-    if (this.currentUser) {
+    if (!this.currentUser) {
+      // currentUser is null
+      return roleBook['dog']
+    } else {
       const uid = this.currentUser.uid;
       const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
       const role: Role = room.isMonarchism ?
         // monarchism
+        // roleBook["managePlay"] + roleBook["manageUser"]
         {
           playerPause: !!(myRole?.roleTags.includes('managePlay')),
           playerSkip: !!(myRole?.roleTags.includes('managePlay')),
@@ -102,23 +68,9 @@ export default class Hub extends Vue {
         }
         :
         // anarchimsRoom
-        ({
-          playerPause: true,
-          playerSkip: true,
-          playerSeek: true,
-          addViaSearch: true,
-          queueShift: true,
-          queueSort: true,
-          queueDelete: true,
-          queueInterrupt: true,
-          queueMoveToTop: true,
-          addFromHistory: true,
-          manageUser: false,
-        });
+        roleBook['managePlay']
+      ;
       return role
-    } else {
-      // currentUser is null
-      return roleDog
     }
   }
 
