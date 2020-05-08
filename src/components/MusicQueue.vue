@@ -7,7 +7,6 @@
       tag="div"
       class="draggable-list"
       v-model="queues"
-      :draggable="isDj"
     >
       <music-list-item
         :class="`draggable-item ${!dragging ? '' : ''}`"
