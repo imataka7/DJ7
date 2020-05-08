@@ -1,9 +1,6 @@
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import firebase from 'firebase/app';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import 'firebase/firestore';
 import Swiper from 'swiper';
-import isMobile from 'ismobilejs';
-import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import {
   YoutubePlayer,
@@ -14,20 +11,14 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, RoomUser, Musicx, Music, User, PlayerStatus } from '@/models';
+import { Room, Musicx, Music, PlayerStatus , Role } from '@/models';
 import {
-  sleep,
   setEvent,
-  getEmbedUrl,
-  getMusicInfo,
   getClone,
   showToast
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
-import { logger } from '@/plugins/logger';
-
-const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Component({
   components: {
@@ -42,51 +33,42 @@ const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
   }
 })
 export default class Hub extends Vue {
+  sw = false;
+  
   get dbg() {
     return process.env.NODE_ENV === 'development'
   }
 
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
-  get role() {
-    return {
-      isDj: this.isDj,
-      isAdmin: this.isAdmin,
-    }
-  }
-
-  get isDj() {
-    if (this.government === 'monarchism') {
-      const uid = this.currentUser?.uid || '';
-      const myRole = this.adminUsers
+  get role(): Role {
+    if (this.currentUser) {
+      const uid = this.currentUser .uid;
+      const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
-      return !!(myRole?.roleTags.includes('managePlay'))
+      const role: Role = room.isMonarchism ?
+      // monarchism
+        {
+          isDj: !!(myRole?.roleTags.includes('managePlay')),
+          isAdmin: !!(myRole?.roleTags.includes('manageUser')),
+        } :
+      // anarchimsRoom
+        ({
+          isDj: true,
+          isAdmin: false
+        });
+      return role
     } else {
-      return true
+      // currentUser is null
+      return {
+        isDj: false,
+        isAdmin: false
+      };
     }
   }
 
-  get isAdmin() {
-    if (this.government === 'monarchism') {
-      const uid = this.currentUser?.uid || '';
-      const myRole = this.adminUsers
-        .filter((adminUser) => adminUser.uid === uid).shift();
-      return !!(myRole?.roleTags.includes('manageUser'))
-    } else {
-      return true
-    }
-  }
-
-  get government() {
-    if (room.government === 'monarchism') {
-      return 'monarchism'
-    } else {
-      return 'anarchism'
-    }
-  }
-
-  get adminUsers() {
-    return room.adminUsers
+  get room() {
+    return room;
   }
 
   get version() {

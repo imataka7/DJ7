@@ -10,6 +10,7 @@
               <div>government: {{ room.government }}</div>
               <div>adminUsers: {{ room.adminUsers }}</div>
               <div>role: {{ role }}</div>
+              <div>users: {{ room && room.users }}</div>
               <div v-if="currentUser">
                 <div>uid: {{ currentUser.uid }}</div>
               </div>

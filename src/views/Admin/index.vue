@@ -7,9 +7,10 @@
             <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="DJ7" />
 
             <div v-if="dbg" style="{border-style: solid; border-color: #ff0000;}">
-              <div>government: {{ government }}</div>
-              <div>adminUsers: {{ adminUsers }}</div>
+              <div>government: {{ room.government }}</div>
+              <div>adminUsers: {{ room.adminUsers }}</div>
               <div>role: {{ role }}</div>
+              <div>users: {{ room && room.users }}</div>
               <div v-if="currentUser">
                 <div>uid: {{ currentUser.uid }}</div>
               </div>
@@ -41,8 +42,8 @@
         </div>
 
         <div class="column swiper-slide">
-          <section>government: {{ government }}</section>
-          <template v-if="government==='monarchism'">
+          <section>government: {{ room.government }}</section>
+          <template v-if="room.isMonarchism">
             <div v-for="user in users" :key="user.id">
               <img :src="user.photo" alt="icon" width="50" height="50" />
               <div>userId: {{ user.uid }}</div>

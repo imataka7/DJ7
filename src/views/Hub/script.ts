@@ -253,13 +253,15 @@ export default class Hub extends Vue {
     await Promise.all([this.init()]);
   }
 
-  public beforeDestroy() {
-    if (this.me) {
-      room.removeUser(this.me);
-    }
-    room.listener?.();
-    room.setListener(() => undefined);
-  }
+
+  // // ユーザがRoomから退出する処理
+  // public beforeDestroy() {
+  //   if (this.me) {
+  //     room.removeUser(this.me);
+  //   }
+  //   room.listener?.();
+  //   room.setListener(() => undefined);
+  // }
 
   public async addQueue(items: Musicx[]) {
     room.queueMusic(items);
