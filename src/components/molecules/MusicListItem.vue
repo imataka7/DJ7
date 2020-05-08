@@ -1,5 +1,8 @@
 <template>
   <div class="music-list-item">
+    <div v-if="sortable" class="handle">
+      <fa-icon icon="equals"></fa-icon>
+    </div>
     <a
       class="img-link"
       target="_blank"
@@ -13,17 +16,13 @@
     <div class="desc-buttons">
       <div class="desc" :title="music.title">
         <p>
-          <template v-if="music.extraStatus">
-            *
-          </template>
+          <template v-if="music.extraStatus">*</template>
           <a
             class="original-link"
             target="_blank"
             rel="noopener noreferrer"
             :href="getUrl(music.source)"
-          >
-            {{ music.title }}
-          </a>
+          >{{ music.title }}</a>
         </p>
       </div>
       <div class="buttons">
@@ -35,15 +34,16 @@
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
-import {
-  Component, Vue, Prop,
-} from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Musicx } from '../../models/room';
 
 @Component
 export default class MusicListItem extends Vue {
   @Prop()
   public music!: Musicx;
+
+  @Prop()
+  public sortable!: boolean;
 
   public getUrl(url: string) {
     const videoId = url.replace('https://www.youtube.com/embed/', '');
@@ -111,5 +111,9 @@ export default class MusicListItem extends Vue {
   display: flex;
   justify-content: flex-start;
   margin-top: 5px;
+}
+
+.handle {
+  padding: 8px;
 }
 </style>
