@@ -11,7 +11,7 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus } from '@/models';
+import { Room, Musicx, Music, PlayerStatus , Role } from '@/models';
 import {
   setEvent,
   getClone,
@@ -40,38 +40,13 @@ export default class Hub extends Vue {
   }
 
   get isDraggable() {
-    return this.isDj && !this.isQueueUpdating;
+    return !this.isQueueUpdating;
   }
 
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role() {
-    return {
-      isDj: this.isDj,
-      isAdmin: this.isAdmin,
-    }
-  }
-
-  get isDj() {
-    if (room.isMonarchism) {
-      const uid = this.currentUser?.uid || '';
-      const myRole = room.adminUsers
-        .filter((adminUser) => adminUser.uid === uid).shift();
-      return !!(myRole?.roleTags.includes('managePlay'))
-    } else {
-      return true
-    }
-  }
-
-  get isAdmin() {
-    if (room.isMonarchism) {
-      const uid = this.currentUser?.uid || '';
-      const myRole = room.adminUsers
-        .filter((adminUser) => adminUser.uid === uid).shift();
-      return !!(myRole?.roleTags.includes('manageUser'))
-    } else {
-      return true
-    }
+    return this.currentUser?.role;
   }
 
   get room() {
@@ -83,7 +58,30 @@ export default class Hub extends Vue {
   }
 
   get currentUser() {
-    return user.user;
+    if (!user.user) {
+      return null
+    }
+
+    // RoleTagから論理話をとってDJ操作の可不可を算出
+    // (Government, Array<RoleTag>) -> Boolean
+    const uid = user.user.uid;
+    const myRole = room.adminUsers
+      .filter((adminUser) => adminUser.uid === uid).shift();
+    const role: Role = room.isMonarchism ?
+      // monarchism
+      {
+        isDj: !!(myRole?.roleTags.includes('managePlay')),
+        isAdmin: !!(myRole?.roleTags.includes('manageUser')),
+      } :
+      // anarchimsRoom
+      ({
+        isDj: true,
+        isAdmin: false
+      });
+    return {
+      ...user.user,
+      role
+    }
   }
 
   get me() {
