@@ -1,6 +1,6 @@
 <template>
   <div class="music-list-item">
-    <div v-if="sortable" class="handle">
+    <div v-if="role.queueSort" class="handle">
       <fa-icon icon="equals"></fa-icon>
     </div>
     <a
@@ -35,15 +35,15 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Musicx } from '../../models/room';
+import { Musicx, Role } from '@/models';
 
 @Component
 export default class MusicListItem extends Vue {
   @Prop()
   public music!: Musicx;
 
-  @Prop()
-  public sortable!: boolean;
+  @Prop({ default: {} })
+  role!: Role;
 
   public getUrl(url: string) {
     const videoId = url.replace('https://www.youtube.com/embed/', '');

@@ -106,7 +106,7 @@
 
     <player-controller
       ref="controller"
-      :is-dj="role.playerPause"
+      :role="role"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"

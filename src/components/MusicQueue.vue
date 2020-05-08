@@ -14,7 +14,7 @@
         v-for="q in queues"
         :key="q.id"
         :music="q"
-        :sortable="role.queueSort"
+        :role="role"
       >
         <template v-slot:buttons>
           <abutton v-if="role.queueDelete" class="button" title="Delete" @click="del(q)">
@@ -63,7 +63,7 @@ export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
   value!: Musicx[];
 
-  @Prop()
+  @Prop({ default: {} })
   role!: Role;
 
   @Watch('value')

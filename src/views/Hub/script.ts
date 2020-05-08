@@ -72,6 +72,19 @@ export default class Hub extends Vue {
     //   addFromHistory: true,
     //   manageUser: false,
     // };
+    // const roleKing: Role = {
+    //   playerPause: true,
+    //   playerSkip: true,
+    //   playerSeek: true,
+    //   addViaSearch: true,
+    //   queueShift: true,
+    //   queueSort: true,
+    //   queueDelete: true,
+    //   queueInterrupt: true,
+    //   queueMoveToTop: true,
+    //   addFromHistory: true,
+    //   manageUser: true,
+    // };
     const roleDog: Role = {
       playerPause: false,
       playerSkip: false,
