@@ -7,6 +7,7 @@
       tag="div"
       class="draggable-list"
       v-model="queues"
+      :draggable="isDj"
     >
       <music-list-item
         :class="`draggable-item ${!dragging ? '' : ''}`"
@@ -14,7 +15,7 @@
         :key="q.id"
         :music="q"
       >
-        <template v-slot:buttons>
+        <template v-slot:buttons v-if="isDj">
           <abutton class="button" title="Delete" @click="del(q)">
             <fa-icon icon="times"></fa-icon>
           </abutton>
@@ -37,9 +38,7 @@
 
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
-import {
-  Component, Vue, Prop, Watch,
-} from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
 import { Musicx } from '@/models/room';
 import MusicListItem from './molecules/MusicListItem.vue';
@@ -49,13 +48,16 @@ import ActionButton from './molecules/ActionButton.vue';
   components: {
     Draggable,
     MusicListItem,
-    abutton: ActionButton,
-  },
+    abutton: ActionButton
+  }
 })
 // TODO: Refactor
 export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
   value!: Musicx[];
+
+  @Prop({ default: true })
+  isDj!: boolean;
 
   @Watch('value')
   public onValueChanged(newVal: Musicx[]) {
@@ -76,13 +78,15 @@ export default class MusicQueue extends Vue {
 
   public dragging = false;
 
-  public queueTemp: Musicx[] = [] ;
+  public queueTemp: Musicx[] = [];
 
   @Watch('queueTemp')
   public onQueueChanged(newval: Musicx[], oldval: Musicx[]) {
     if (newval.length > oldval.length) {
       this.isFlash = true;
-      setTimeout(() => { this.isFlash = false; }, 1000);
+      setTimeout(() => {
+        this.isFlash = false;
+      }, 1000);
     }
   }
 
@@ -105,8 +109,8 @@ export default class MusicQueue extends Vue {
     this.$ga.logEvent(action);
     this.$logger.info(action, {
       content: {
-        music,
-      },
+        music
+      }
     });
   }
 

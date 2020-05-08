@@ -1,7 +1,9 @@
 import Music from './music';
 import MusicPlayer from './musicPlayer';
 import PlayerStatus from './playerStatus';
-import Room, { RoomUser, Musicx, Player } from './room';
+import Room, {
+  RoomUser, Musicx, Player, Government
+} from './room';
 import User from './user';
 
 export {
@@ -11,6 +13,7 @@ export {
   RoomUser,
   Musicx,
   Player,
+  Government,
   Room,
   User,
 };

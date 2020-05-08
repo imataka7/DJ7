@@ -1,12 +1,12 @@
 <template>
   <div class="general">
     <div class="desc-container">
-      <img class="dj7-logo" :src="require('@/assets/logo.png')" alt="" />
+      <img class="dj7-logo" :src="require('@/assets/logo.png')" alt />
       <template v-if="!currentUser">
         <h2>Share your moments with everyone!</h2>
-        <abutton class="is-large" @click="$router.push('/signin')">
-          Join now
-        </abutton>
+        <abutton class="is-large" @click="$router.push('/signin')"
+          >Join now</abutton
+        >
       </template>
       <template v-else>
         <h2>Welcome back {{ currentUser.displayName }}!</h2>
@@ -15,9 +15,9 @@
           <template v-if="visitedRooms.length">
             <p>
               You've visited
-              <a :href="`/${id}`" v-for="id in visitedRooms" :key="id">
-                {{ id }}
-              </a>
+              <a :href="`/${id}`" v-for="id in visitedRooms" :key="id">{{
+                id
+              }}</a>
             </p>
           </template>
           <label>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="hub-container">
-      <hub></hub>
+      <hub />
     </div>
   </div>
 </template>
@@ -52,8 +52,8 @@ import { user } from '@/store/modules';
   components: {
     Hub,
     abutton: ActionButton,
-    PlayerController,
-  },
+    PlayerController
+  }
 })
 export default class General extends Vue {
   get currentUser() {
@@ -67,7 +67,7 @@ export default class General extends Vue {
       return;
     }
 
-    this.$router.push(`/${this.jumpTo.trim()}`);
+    this.$router.push({ name: 'hub', params: { roomId: this.jumpTo.trim() } });
   }
 
   get visitedRooms() {
