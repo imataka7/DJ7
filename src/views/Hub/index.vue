@@ -78,7 +78,7 @@
             v-model="queues"
             @interrupt="interrupt"
             :is-draggable="isDraggable"
-            :is-dj="role.queueDelete"
+            :role="role"
             class="music-list"
             v-else
           ></music-queue>

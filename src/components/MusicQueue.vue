@@ -7,23 +7,29 @@
       tag="div"
       class="draggable-list"
       v-model="queues"
-      :disabled="!isDj"
+      :disabled="!role.queueSort"
     >
       <music-list-item
         :class="`draggable-item ${!dragging ? '' : ''}`"
         v-for="q in queues"
         :key="q.id"
         :music="q"
-        :sortable="isDj"
+        :sortable="role.queueSort"
       >
-        <template v-slot:buttons v-if="isDj">
-          <abutton class="button" title="Delete" @click="del(q)">
+        <template v-slot:buttons>
+          <abutton v-if="role.queueDelete" class="button" title="Delete" @click="del(q)">
             <fa-icon icon="times"></fa-icon>
           </abutton>
-          <abutton class="button" title="Interrupt" @click="interrupt(q)">
+          <abutton
+            v-if="role.queueInterrupt"
+            class="button"
+            title="Interrupt"
+            @click="interrupt(q)"
+          >
             <fa-icon icon="hand-paper"></fa-icon>
           </abutton>
           <abutton
+            v-if="role.queueMoveToTop"
             class="button"
             title="Move to top"
             @click="moveToTop(q)"
@@ -41,7 +47,7 @@
 /* eslint-disable class-methods-use-this */
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
-import { Musicx } from '@/models/room';
+import { Musicx, Role } from '@/models';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -57,8 +63,8 @@ export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
   value!: Musicx[];
 
-  @Prop({ default: true })
-  isDj!: boolean;
+  @Prop()
+  role!: Role;
 
   @Watch('value')
   public onValueChanged(newVal: Musicx[]) {

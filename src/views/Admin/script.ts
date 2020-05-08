@@ -34,7 +34,7 @@ import { ActionButton } from '@/components/molecules';
 })
 export default class Hub extends Vue {
   sw = false;
-  
+
   get dbg() {
     return process.env.NODE_ENV === 'development'
   }
@@ -46,9 +46,9 @@ export default class Hub extends Vue {
     //   playerPause: false,
     //   playerSkip: false,
     //   playerSeek: false,
-    //   outroSkip: false,
     //   addViaSearch: false,
     //   queueShift: false,
+    //   queueSort: false,
     //   queueDelete: false,
     //   queueInterrupt: false,
     //   queueMoveToTop: false,
@@ -59,9 +59,9 @@ export default class Hub extends Vue {
     //   playerPause: true,
     //   playerSkip: true,
     //   playerSeek: true,
-    //   outroSkip: true,
     //   addViaSearch: true,
     //   queueShift: true,
+    //   queueSort: true,
     //   queueDelete: true,
     //   queueInterrupt: true,
     //   queueMoveToTop: true,
@@ -72,9 +72,9 @@ export default class Hub extends Vue {
       playerPause: false,
       playerSkip: false,
       playerSeek: false,
-      outroSkip: false,
       addViaSearch: false,
       queueShift: false,
+      queueSort: false,
       queueDelete: false,
       queueInterrupt: false,
       queueMoveToTop: false,
@@ -91,25 +91,24 @@ export default class Hub extends Vue {
           playerPause: !!(myRole?.roleTags.includes('managePlay')),
           playerSkip: !!(myRole?.roleTags.includes('managePlay')),
           playerSeek: !!(myRole?.roleTags.includes('managePlay')),
-          outroSkip: !!(myRole?.roleTags.includes('managePlay')),
           addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
           queueShift: !!(myRole?.roleTags.includes('managePlay')),
+          queueSort: !!(myRole?.roleTags.includes('managePlay')),
           queueDelete: !!(myRole?.roleTags.includes('managePlay')),
           queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
           queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
           addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
           manageUser: !!(myRole?.roleTags.includes('manageUser')),
         }
-        
         :
         // anarchimsRoom
         ({
           playerPause: true,
           playerSkip: true,
           playerSeek: true,
-          outroSkip: true,
           addViaSearch: true,
           queueShift: true,
+          queueSort: true,
           queueDelete: true,
           queueInterrupt: true,
           queueMoveToTop: true,
