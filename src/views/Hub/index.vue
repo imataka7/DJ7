@@ -15,7 +15,7 @@
               style="{border-style: solid; border-color: #ff0000;}"
             >
               <section>government: {{ government }}</section>
-              <section>user: {{ currentUser && currentUser.uid }}</section>
+              <section>user: {{ currentUser }}</section>
               <section>adminUsers: {{ adminUsers }}</section>
               <section>isDj: {{ isDj }}</section>
             </div>
