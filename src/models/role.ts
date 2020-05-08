@@ -1,7 +1,7 @@
 
 interface Role {
-  managePlay: boolean;
-  manageAccount: boolean;
+  isDj: boolean;
+  isAdmin: boolean;
 }
 
 export default Role;

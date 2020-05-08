@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { Hub } from '@/views';
+import { Hub, Admin } from '@/views';
 import { app as firebase } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -34,6 +34,14 @@ const routes = [
     path: '/:roomId',
     name: 'hub',
     component: Hub,
+    meta: {
+      authRequired: true,
+    },
+  },
+  {
+    path: '/:roomId/admin',
+    name: 'admin',
+    component: Admin,
     meta: {
       authRequired: true,
     },

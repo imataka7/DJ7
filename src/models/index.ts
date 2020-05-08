@@ -5,6 +5,7 @@ import Room, {
   RoomUser, Musicx, Player, Government
 } from './room';
 import User from './user';
+import Role from './role';
 
 export {
   Music,
@@ -16,4 +17,5 @@ export {
   Government,
   Room,
   User,
+  Role,
 };
