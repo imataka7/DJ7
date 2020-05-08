@@ -11,7 +11,7 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus } from '@/models';
+import { Room, Musicx, Music, PlayerStatus , Role } from '@/models';
 import {
   setEvent,
   getClone,
@@ -40,30 +40,39 @@ export default class Hub extends Vue {
   }
 
   get isDraggable() {
-    return this.isDj && !this.isQueueUpdating;
+    return !this.isQueueUpdating;
   }
 
-  get isDj() {
-    if (this.government === 'monarchism') {
-      const uid = this.currentUser?.uid || '';
-      const myRole = this.adminUsers
+  // RoleTagから論理話をとってDJ操作の可不可を算出
+  // (Government, Array<RoleTag>) -> Boolean
+  get role(): Role {
+    if (this.currentUser) {
+      const uid = this.currentUser .uid;
+      const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
-      return !!(myRole?.roleTags.includes('managePlay'))
+      const role: Role = room.isMonarchism ?
+      // monarchism
+        {
+          isDj: !!(myRole?.roleTags.includes('managePlay')),
+          isAdmin: !!(myRole?.roleTags.includes('manageUser')),
+        } :
+      // anarchimsRoom
+        ({
+          isDj: true,
+          isAdmin: false
+        });
+      return role
     } else {
-      return true
+      // currentUser is null
+      return {
+        isDj: false,
+        isAdmin: false
+      };
     }
   }
 
-  get government() {
-    if (room.government === 'monarchism') {
-      return 'monarchism'
-    } else {
-      return 'anarchism'
-    }
-  }
-
-  get adminUsers() {
-    return room.adminUsers
+  get room() {
+    return room;
   }
 
   get version() {
@@ -244,13 +253,15 @@ export default class Hub extends Vue {
     await Promise.all([this.init()]);
   }
 
-  public beforeDestroy() {
-    if (this.me) {
-      room.removeUser(this.me);
-    }
-    room.listener?.();
-    room.setListener(() => undefined);
-  }
+
+  // // ユーザがRoomから退出する処理
+  // public beforeDestroy() {
+  //   if (this.me) {
+  //     room.removeUser(this.me);
+  //   }
+  //   room.listener?.();
+  //   room.setListener(() => undefined);
+  // }
 
   public async addQueue(items: Musicx[]) {
     room.queueMusic(items);

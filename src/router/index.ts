@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { Hub } from '@/views';
+import { Hub, Admin } from '@/views';
 import General from '../views/General.vue';
 import { app as firebase } from '@/plugins/firebase';
 
@@ -46,6 +46,14 @@ const routes = [
     name: 'hub',
     component: Hub,
     alias: '/:roomId/req',
+    meta: {
+      authRequired: true,
+    },
+  },
+  {
+    path: '/:roomId/admin',
+    name: 'admin',
+    component: Admin,
     meta: {
       authRequired: true,
     },
