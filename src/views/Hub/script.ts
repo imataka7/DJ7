@@ -11,7 +11,7 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus , Role } from '@/models';
+import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
   setEvent,
   getClone,
@@ -46,28 +46,84 @@ export default class Hub extends Vue {
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role(): Role {
+    // const roleAdmin: Role = {
+    //   playerPause: false,
+    //   playerSkip: false,
+    //   playerSeek: false,
+    //   outroSkip: false,
+    //   addViaSearch: false,
+    //   queueShift: false,
+    //   queueDelete: false,
+    //   queueInterrupt: false,
+    //   queueMoveToTop: false,
+    //   addFromHistory: false,
+    //   manageUser: true,
+    // };
+    // const roleDj: Role = {
+    //   playerPause: true,
+    //   playerSkip: true,
+    //   playerSeek: true,
+    //   outroSkip: true,
+    //   addViaSearch: true,
+    //   queueShift: true,
+    //   queueDelete: true,
+    //   queueInterrupt: true,
+    //   queueMoveToTop: true,
+    //   addFromHistory: true,
+    //   manageUser: false,
+    // };
+    const roleDog: Role = {
+      playerPause: false,
+      playerSkip: false,
+      playerSeek: false,
+      outroSkip: false,
+      addViaSearch: false,
+      queueShift: false,
+      queueDelete: false,
+      queueInterrupt: false,
+      queueMoveToTop: false,
+      addFromHistory: false,
+      manageUser: false,
+    };
     if (this.currentUser) {
-      const uid = this.currentUser .uid;
+      const uid = this.currentUser.uid;
       const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
       const role: Role = room.isMonarchism ?
-      // monarchism
+        // monarchism
         {
-          isDj: !!(myRole?.roleTags.includes('managePlay')),
-          isAdmin: !!(myRole?.roleTags.includes('manageUser')),
-        } :
-      // anarchimsRoom
+          playerPause: !!(myRole?.roleTags.includes('managePlay')),
+          playerSkip: !!(myRole?.roleTags.includes('managePlay')),
+          playerSeek: !!(myRole?.roleTags.includes('managePlay')),
+          outroSkip: !!(myRole?.roleTags.includes('managePlay')),
+          addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
+          queueShift: !!(myRole?.roleTags.includes('managePlay')),
+          queueDelete: !!(myRole?.roleTags.includes('managePlay')),
+          queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
+          queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
+          addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
+          manageUser: !!(myRole?.roleTags.includes('manageUser')),
+        }
+        
+        :
+        // anarchimsRoom
         ({
-          isDj: true,
-          isAdmin: false
+          playerPause: true,
+          playerSkip: true,
+          playerSeek: true,
+          outroSkip: true,
+          addViaSearch: true,
+          queueShift: true,
+          queueDelete: true,
+          queueInterrupt: true,
+          queueMoveToTop: true,
+          addFromHistory: true,
+          manageUser: false,
         });
       return role
     } else {
       // currentUser is null
-      return {
-        isDj: false,
-        isAdmin: false
-      };
+      return roleDog
     }
   }
 

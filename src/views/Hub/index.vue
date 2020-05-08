@@ -19,7 +19,7 @@
                   @click="$router.push({ name: 'hub', params: { roomId }})"
                 >RoomId: {{ roomId }}</button>
               </div>
-              <div v-if="role.isAdmin">
+              <div v-if="role.manageUser">
                 <button
                   @click="$router.push({ name: 'admin', params: { roomId }})"
                 >{{ `${roomId}/admin` }}</button>
@@ -45,7 +45,7 @@
             />
           </div>
 
-          <template v-if="role.isDj">
+          <template v-if="role.addViaSearch">
             <input-area @parsed="addQueue" />
           </template>
 
@@ -78,7 +78,7 @@
             v-model="queues"
             @interrupt="interrupt"
             :is-draggable="isDraggable"
-            :is-dj="role.isDj"
+            :is-dj="role.queueDelete"
             class="music-list"
             v-else
           ></music-queue>
@@ -106,7 +106,7 @@
 
     <player-controller
       ref="controller"
-      :is-dj="role.isDj"
+      :is-dj="role.playerPause"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"
