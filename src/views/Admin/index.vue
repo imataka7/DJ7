@@ -38,31 +38,6 @@
               height="50"
             />
           </div>
-
-          <template v-if="isDj">
-            <input-area @parsed="addQueue" />
-          </template>
-
-          <div class="ad-container">
-            <ad-square></ad-square>
-          </div>
-
-          <div class="jumper">
-            <section>
-              <label>
-                <p class="label-desc">Do you want to change the room?</p>
-                <input type="text" v-model="jumpTo" :disabled="!currentUser" placeholder="Room id" />
-                <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
-              </label>
-            </section>
-            <section>
-              <label class="checkbox">
-                <input type="checkbox" v-model="isMonarchism" />
-                monarchism
-              </label>
-            </section>
-          </div>
-          <abutton @click="signOut" :disabled="!currentUser">Sign out</abutton>
         </div>
 
         <div class="column swiper-slide">
@@ -84,17 +59,6 @@
         </div>
       </div>
     </div>
-
-    <player-controller
-      ref="controller"
-      :is-dj="isDj"
-      @update="onStatusChanged"
-      @end="onMusicEnded"
-      @error="onError"
-      @forward="forwardMusic"
-      @seeked="onSeeked"
-      @speed="onSpeedChanged"
-    ></player-controller>
   </div>
 </template>
 
