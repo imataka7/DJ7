@@ -1,12 +1,13 @@
-# on:
-#   push:
-#     paths:
-#       - "README.md"
+name: Deploy to firebase
 
 on:
   push:
     branches:
       - master
+    paths:
+      - "src/**"
+      - "public/**"
+      - "vue.config.js"
 
 jobs:
   deploy:
@@ -21,8 +22,3 @@ jobs:
       run: npm run build:prod
     - name: Deploy to firebase
       run: npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
-    # TODO: custom message
-    # - name: Send a notification to discord
-    #   uses: rtCamp/action-slack-notify@master
-    #   env:
-    #     SLACK_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
