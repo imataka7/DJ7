@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import {Hub, Admin} from '@/views';
+import { Hub, Admin } from '@/views';
 import General from '../views/General.vue';
-import {app as firebase} from '@/plugins/firebase';
+import { app as firebase } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
 

@@ -14,9 +14,13 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'quotes': ['error', 'single'],
+    'object-curly-spacing': ['error', 'always'],
     'no-async-promise-executor': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    "@typescript-eslint/ban-ts-ignore": process.env.NODE_ENV === 'production' ? 'warn' : 'off', 
-    "@typescript-eslint/no-var-requires" : process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/ban-ts-ignore': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/no-var-requires': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/camelcase': 'off'
   }
 }

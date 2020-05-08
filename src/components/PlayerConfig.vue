@@ -23,9 +23,9 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue, Prop,
 } from 'vue-property-decorator';
-import { sleep } from '../../utils';
+import { sleep } from '@/utils';
 
 @Component
 export default class PlayerConfig extends Vue {

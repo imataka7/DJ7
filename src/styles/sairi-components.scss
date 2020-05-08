@@ -1,0 +1,26 @@
+.sairi-player-button {
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: color 0.2s;
+  color: var(--controller-button-fc);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    color: var(--controller-button-disabled);
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled) {
+    &.has-bounce:active {
+      animation: bounce-in 0.1s;
+    }
+
+    &:hover {
+      color: var(--controller-button-hover);
+    }
+  }
+}

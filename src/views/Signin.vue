@@ -9,7 +9,7 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue,
 } from 'vue-property-decorator';
 import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';

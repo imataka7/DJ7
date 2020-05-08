@@ -26,7 +26,7 @@ interface AdminUser {
   roleTags: string[];
 }
 
-type Government = "monarchism" | null;
+type Government = 'monarchism' | null;
 
 interface Room {
   roomId: string;

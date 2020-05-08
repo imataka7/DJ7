@@ -1,6 +1,5 @@
 <template>
   <div class="history-list">
-    <!-- <p>{{ size }}</p> -->
     <virtual-list :size="size" :remain="10" :key="size">
       <music-list-item v-for="m in reversedList" :key="m.source" :music="m">
         <template v-slot:buttons>
@@ -19,17 +18,21 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import {
-  Component, Vue, Prop, Watch,
+  Component, Vue, Prop,
 } from 'vue-property-decorator';
+// import VirtualList from 'vue-virtual-scroll-list';
 import { Music } from '@/models';
 import { generateRandomId, getClone } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
+const VirtualList = require('vue-virtual-scroll-list');
+
 @Component({
   components: {
     MusicListItem,
     abutton: ActionButton,
+    VirtualList,
   },
 })
 export default class HistoryList extends Vue {
