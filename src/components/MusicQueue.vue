@@ -7,12 +7,14 @@
       tag="div"
       class="draggable-list"
       v-model="queues"
+      :disabled="!isDj"
     >
       <music-list-item
         :class="`draggable-item ${!dragging ? '' : ''}`"
         v-for="q in queues"
         :key="q.id"
         :music="q"
+        :handling="isDj"
       >
         <template v-slot:buttons v-if="isDj">
           <abutton class="button" title="Delete" @click="del(q)">
@@ -145,8 +147,8 @@ export default class MusicQueue extends Vue {
     //  animation: 100,
     group: 'queue',
     disabled: this.isDraggable,
-    ghostClass: 'ghost',
-  }
+    ghostClass: 'ghost'
+  };
 }
 </script>
 
@@ -164,6 +166,12 @@ export default class MusicQueue extends Vue {
   &.is-flash {
     animation: flash 1.5s ease;
   }
+}
+
+.handle {
+  float: left;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 // .flip-list-move {
