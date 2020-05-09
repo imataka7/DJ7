@@ -8,7 +8,12 @@ import dayjsDuration from 'dayjs/plugin/duration';
 
 import VolumeController from '../VolumeController.vue';
 import PlayerMusicInfo from '../PlayerMusicInfo.vue';
-import PlayerButtons from '../PlayerButtons.vue';
+import {
+  PlayPauseButton,
+  SyncButton,
+  ForwardButton,
+  PlayerButtons,
+} from '@/components/PlayerButtons';
 import YouTubePlayer from '../YoutubePlayer.vue';
 import PlayerConfig from '../PlayerConfig.vue';
 import SeekBar from '../SeekBar.vue';
@@ -31,9 +36,12 @@ interface SupportedPlatform {
     'youtube-player': YouTubePlayer,
     VolumeController,
     PlayerMusicInfo,
-    PlayerButtons,
     PlayerConfig,
     SeekBar,
+    PlayPauseButton,
+    SyncButton,
+    ForwardButton,
+    PlayerButtons,
   },
 })
 export default class PlayerController extends Vue {
