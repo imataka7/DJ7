@@ -50,7 +50,7 @@ export default class Hub extends Vue {
 
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
-  get role(): Role {
+  get currentRole(): Role {
     if (!this.currentUser) {
       // currentUser is null
       return roleBook['dog']
