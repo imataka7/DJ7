@@ -33,6 +33,7 @@ interface Room {
   queues: Musicx[];
   player: Player;
   users: RoomUser[];
+  pilgrimId: string;
   adminUsers: AdminUser[];
   government: Government;
 }
@@ -41,6 +42,7 @@ export {
   Player,
   RoomUser,
   Musicx,
+  AdminUser,
   Government,
 };
 
