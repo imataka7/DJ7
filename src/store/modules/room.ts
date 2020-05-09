@@ -90,6 +90,7 @@ class RoomManager extends VuexModule {
       queues: [],
       roomId: this.roomId,
       users: [],
+      pilgrimId,
       adminUsers,
       government,
     };
