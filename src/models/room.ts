@@ -41,6 +41,7 @@ export {
   Player,
   RoomUser,
   Musicx,
+  AdminUser,
   Government,
 };
 

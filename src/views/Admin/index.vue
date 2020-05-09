@@ -44,16 +44,19 @@
         <div class="column swiper-slide">
           <section>government: {{ room.government }}</section>
           <template v-if="room.isMonarchism">
+            <button @click="saveSettings">save settings</button>
             <div v-for="user in users" :key="user.id">
               <img :src="user.photo" alt="icon" width="50" height="50" />
               <div>userId: {{ user.uid }}</div>
               <div>
-                managePlay
-                <button @click="sw=!sw">{{ sw }}</button>
-              </div>
-              <div>
-                manageUser
-                <button @click="sw=!sw">{{ sw }}</button>
+                <label>
+                  <input type="checkbox" value="managePlay" v-model="user.roleTags" />
+                  managePlay
+                </label>
+                <label>
+                  <input type="checkbox" value="manageUser" v-model="user.roleTags" />
+                  manageUser
+                </label>
               </div>
             </div>
           </template>

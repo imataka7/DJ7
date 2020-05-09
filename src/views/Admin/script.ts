@@ -11,7 +11,8 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
+import { Room, Musicx, Music, PlayerStatus, Role, AdminUser
+} from '@/models';
 import {
   setEvent,
   getClone,
@@ -34,7 +35,15 @@ import roleBook from '@/roleBook';
   }
 })
 export default class Hub extends Vue {
-  sw = false;
+  users: Array<{
+    uid: string;
+    photo: string;
+    roleTags: string[];
+  }> = [];
+
+  saveSettings() {
+    room.updateAdminUsers(this.users)
+  }
 
   get dbg() {
     return process.env.NODE_ENV === 'development'
@@ -86,11 +95,6 @@ export default class Hub extends Vue {
     return user.user;
   }
 
-  get users() {
-    const users = room?.users || [];
-    return getClone(users).reverse();
-  }
-
   get roomId() {
     return this.$route.params.roomId || 'general';
   }
@@ -136,5 +140,15 @@ export default class Hub extends Vue {
     setEvent(window, 'resize', this.updateSwiper);
 
     await Promise.all([this.init()]);
+
+    // initialize this.users
+    const userList = room?.users || [];
+    const users =  getClone(userList).reverse();
+    const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u, })));
+    const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u, })));
+    const roleTagedUsers = Object.keys(userDict).map(uid =>
+      Object.assign({}, userDict[uid], adminuserDict[uid])
+    );
+    this.users = roleTagedUsers;
   }
 }
