@@ -9,36 +9,28 @@
       <player-buttons
         :currentStatus="currentStatus"
         :disabled="isControllerDisable"
+        :role="role"
         @play="updateStatus(1)"
         @pause="updateStatus(2)"
         @forward="moveMusic('forward')"
         @sync="sync"
       ></player-buttons>
 
-      <volume-controller
-        v-model="currentVolume"
-        v-if="!isPhone && !isTablet"
-      ></volume-controller>
+      <volume-controller v-model="currentVolume" v-if="!isPhone && !isTablet"></volume-controller>
 
       <!-- <player-config v-model="playingSpeed"></player-config> -->
 
       <div class="seek-bar-container">
         <p class="progress-container">
-          <span class="progress-start">
-            {{ formatDuration(((range * musicDuration) | 0) / 100) }}
-          </span>
-          <span class="progress-slash">
-            /
-          </span>
-          <span class="progress-end">
-            {{ formatDuration(musicDuration) }}
-          </span>
+          <span class="progress-start">{{ formatDuration(((range * musicDuration) | 0) / 100) }}</span>
+          <span class="progress-slash">/</span>
+          <span class="progress-end">{{ formatDuration(musicDuration) }}</span>
         </p>
         <seek-bar
           v-model="range"
           @input="isRangeDragging = true"
           @seeked="onSeeked"
-          :disabled="isControllerDisable"
+          :disabled="!role.playerSeek || isControllerDisable"
         ></seek-bar>
       </div>
 
@@ -59,13 +51,8 @@
               isTheaterMode
           "
         ></div>
-      </transition> -->
-      <youtube-player
-        ref="youtube"
-        class="youtube-player"
-        @end="onMusicEnd"
-        @error="onError"
-      ></youtube-player>
+      </transition>-->
+      <youtube-player ref="youtube" class="youtube-player" @end="onMusicEnd" @error="onError"></youtube-player>
     </div>
   </div>
 </template>

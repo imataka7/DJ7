@@ -11,7 +11,7 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus , Role } from '@/models';
+import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
   setEvent,
   getClone,
@@ -19,6 +19,7 @@ import {
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
+import roleBook from '@/roleBook';
 
 @Component({
   components: {
@@ -46,28 +47,34 @@ export default class Hub extends Vue {
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role(): Role {
-    if (this.currentUser) {
-      const uid = this.currentUser .uid;
+    if (!this.currentUser) {
+      // currentUser is null
+      return roleBook['dog']
+    } else {
+      const uid = this.currentUser.uid;
       const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
       const role: Role = room.isMonarchism ?
-      // monarchism
+        // monarchism
+        // roleBook["managePlay"] + roleBook["manageUser"]
         {
-          isDj: !!(myRole?.roleTags.includes('managePlay')),
-          isAdmin: !!(myRole?.roleTags.includes('manageUser')),
-        } :
-      // anarchimsRoom
-        ({
-          isDj: true,
-          isAdmin: false
-        });
+          playerPause: !!(myRole?.roleTags.includes('managePlay')),
+          playerSkip: !!(myRole?.roleTags.includes('managePlay')),
+          playerSeek: !!(myRole?.roleTags.includes('managePlay')),
+          addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
+          queueShift: !!(myRole?.roleTags.includes('managePlay')),
+          queueSort: !!(myRole?.roleTags.includes('managePlay')),
+          queueDelete: !!(myRole?.roleTags.includes('managePlay')),
+          queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
+          queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
+          addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
+          manageUser: !!(myRole?.roleTags.includes('manageUser')),
+        }
+        :
+        // anarchimsRoom
+        roleBook['managePlay']
+      ;
       return role
-    } else {
-      // currentUser is null
-      return {
-        isDj: false,
-        isAdmin: false
-      };
     }
   }
 
