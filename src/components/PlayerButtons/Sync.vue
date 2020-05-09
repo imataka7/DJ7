@@ -19,18 +19,6 @@ export default class Sync extends Vue {
   @Prop({ default: true })
   public disabled!: boolean;
 
-  public pause() {
-    this.$emit('pause');
-  }
-
-  public play() {
-    this.$emit('play');
-  }
-
-  public forward() {
-    this.$emit('forward');
-  }
-
   public sync(e: Event) {
     if (this.currentStatus !== PlayerStatus.PLAY) {
       return;

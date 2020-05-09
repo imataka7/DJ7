@@ -12,20 +12,11 @@
         :disabled="isControllerDisable"
         @play="updateStatus(1)"
         @pause="updateStatus(2)"
-        @forward="moveMusic('forward')"
-        @sync="sync"
       />
 
       <volume-controller v-model="currentVolume" v-if="!isPhone && !isTablet"></volume-controller>
 
-      <SyncButton
-        :currentStatus="currentStatus"
-        :disabled="isControllerDisable"
-        @play="updateStatus(1)"
-        @pause="updateStatus(2)"
-        @forward="moveMusic('forward')"
-        @sync="sync"
-      />
+      <SyncButton :currentStatus="currentStatus" :disabled="isControllerDisable" @sync="sync" />
 
       <!-- <player-config v-model="playingSpeed"></player-config> -->
 
@@ -47,10 +38,7 @@
         v-if="role.playerSkip"
         :currentStatus="currentStatus"
         :disabled="isControllerDisable"
-        @play="updateStatus(1)"
-        @pause="updateStatus(2)"
         @forward="moveMusic('forward')"
-        @sync="sync"
       />
 
       <div @click="togglePlayerActive" class="music-info-container">

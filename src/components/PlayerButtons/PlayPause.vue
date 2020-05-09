@@ -45,30 +45,6 @@ export default class PlayPause extends Vue {
   public play() {
     this.$emit('play');
   }
-
-  public forward() {
-    this.$emit('forward');
-  }
-
-  public sync(e: Event) {
-    if (this.currentStatus !== PlayerStatus.PLAY) {
-      return;
-    }
-
-    this.spinElement(e.currentTarget as HTMLElement);
-    this.$emit('sync');
-  }
-
-  public spinElement(e: HTMLElement) {
-    if (!e.animate) {
-      return;
-    }
-
-    e.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], {
-      duration: 300,
-      easing: 'ease-in-out'
-    });
-  }
 }
 </script>
 
