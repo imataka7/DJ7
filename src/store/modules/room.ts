@@ -7,7 +7,7 @@ import 'firebase/firestore';
 import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
 import {
-  Room, RoomUser, Musicx, PlayerStatus, Government,
+  Room, RoomUser, Musicx, PlayerStatus, AdminUser, Government,
 } from '@/models';
 
 const firestore = firebaseApp.firestore();
@@ -79,7 +79,7 @@ class RoomManager extends VuexModule {
       uid: pilgrimId, roleTags: ['managePlay', 'manageUser'],
     }] : [];
     const government: Government = pilgrimId ? 'monarchism' : null;
-    
+
     const initial = {
       player: {
         music: null,
@@ -147,6 +147,13 @@ class RoomManager extends VuexModule {
   public async updateQueue(queues: Musicx[]) {
     this.roomRef!.update({
       queues,
+    });
+  }
+
+  @Action({ rawError: true })
+  public async updateAdminUsers(adminUsers: AdminUser[]) {
+    this.roomRef!.update({
+      adminUsers,
     });
   }
 

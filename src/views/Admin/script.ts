@@ -1,7 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import 'firebase/firestore';
 import Swiper from 'swiper';
-
 import {
   YoutubePlayer,
   InputArea,
@@ -11,7 +10,8 @@ import {
   ShareButton,
   AdSquare
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
+import { Room, Musicx, Music, PlayerStatus, Role, AdminUser
+} from '@/models';
 import {
   setEvent,
   getClone,
@@ -34,7 +34,15 @@ import roleBook from '@/roleBook';
   }
 })
 export default class Hub extends Vue {
-  sw = false;
+  users: Array<{
+    uid: string;
+    photo: string;
+    roleTags: string[];
+  }> = [];
+
+  saveSettings() {
+    room.updateAdminUsers(this.users)
+  }
 
   get dbg() {
     return process.env.NODE_ENV === 'development'
@@ -42,7 +50,7 @@ export default class Hub extends Vue {
 
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
-  get role(): Role {
+  get currentRole(): Role {
     if (!this.currentUser) {
       // currentUser is null
       return roleBook['dog']
@@ -84,11 +92,6 @@ export default class Hub extends Vue {
 
   get currentUser() {
     return user.user;
-  }
-
-  get users() {
-    const users = room?.users || [];
-    return getClone(users).reverse();
   }
 
   get roomId() {
@@ -136,5 +139,19 @@ export default class Hub extends Vue {
     setEvent(window, 'resize', this.updateSwiper);
 
     await Promise.all([this.init()]);
+
+    // initialize this.users
+    const userList = room?.users || [];
+    const users =  getClone(userList).reverse();
+    const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u, })));
+    const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u, })));
+    const roleTagedUsers: Array<{
+      uid: string;
+      photo: string;
+      roleTags: string[];
+    }> = Object.keys(userDict).map(uid =>
+      Object.assign({ roleTags: [] }, userDict[uid], adminuserDict[uid])
+    );
+    this.users = roleTagedUsers;
   }
 }
