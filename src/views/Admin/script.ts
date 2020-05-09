@@ -1,7 +1,6 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import 'firebase/firestore';
 import Swiper from 'swiper';
-
 import {
   YoutubePlayer,
   InputArea,
@@ -146,8 +145,12 @@ export default class Hub extends Vue {
     const users =  getClone(userList).reverse();
     const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u, })));
     const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u, })));
-    const roleTagedUsers = Object.keys(userDict).map(uid =>
-      Object.assign({}, userDict[uid], adminuserDict[uid])
+    const roleTagedUsers: Array<{
+      uid: string;
+      photo: string;
+      roleTags: string[];
+    }> = Object.keys(userDict).map(uid =>
+      Object.assign({ roleTags: [] }, userDict[uid], adminuserDict[uid])
     );
     this.users = roleTagedUsers;
   }
