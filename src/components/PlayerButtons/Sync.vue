@@ -9,7 +9,7 @@
 <script lang="ts">
 /* eslint-disable class-methods-use-this */
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PlayerStatus, Role } from '@/models';
+import { PlayerStatus } from '@/models';
 
 @Component
 export default class Sync extends Vue {
@@ -18,9 +18,6 @@ export default class Sync extends Vue {
 
   @Prop({ default: true })
   public disabled!: boolean;
-
-  @Prop({ default: {} })
-  role!: Role;
 
   public pause() {
     this.$emit('pause');

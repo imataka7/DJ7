@@ -6,20 +6,10 @@
     @pointerup="onPointerEnd"
   >
     <div class="controller-container is-flex">
-      <!-- <PlayerButtons -->
-      <!--   :currentStatus="currentStatus" -->
-      <!--   :disabled="isControllerDisable" -->
-      <!--   :role="role" -->
-      <!--   @play="updateStatus(1)" -->
-      <!--   @pause="updateStatus(2)" -->
-      <!--   @forward="moveMusic('forward')" -->
-      <!--   @sync="sync" -->
-      <!-- /> -->
-
       <PlayPauseButton
+        v-if="role.playerPause"
         :currentStatus="currentStatus"
         :disabled="isControllerDisable"
-        :role="role"
         @play="updateStatus(1)"
         @pause="updateStatus(2)"
         @forward="moveMusic('forward')"
@@ -31,7 +21,6 @@
       <SyncButton
         :currentStatus="currentStatus"
         :disabled="isControllerDisable"
-        :role="role"
         @play="updateStatus(1)"
         @pause="updateStatus(2)"
         @forward="moveMusic('forward')"
@@ -55,9 +44,9 @@
       </div>
 
       <ForwardButton
+        v-if="role.playerSkip"
         :currentStatus="currentStatus"
         :disabled="isControllerDisable"
-        :role="role"
         @play="updateStatus(1)"
         @pause="updateStatus(2)"
         @forward="moveMusic('forward')"
