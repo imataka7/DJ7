@@ -33,6 +33,7 @@ interface Room {
   queues: Musicx[];
   player: Player;
   users: RoomUser[];
+  pilgrimId: string;
   adminUsers: AdminUser[];
   government: Government;
 }
