@@ -6,17 +6,17 @@
     @pointerup="onPointerEnd"
   >
     <div class="controller-container is-flex">
-      <player-buttons
+      <PlayPauseButton
+        v-if="role.playerPause"
         :currentStatus="currentStatus"
         :disabled="isControllerDisable"
-        :role="role"
         @play="updateStatus(1)"
         @pause="updateStatus(2)"
-        @forward="moveMusic('forward')"
-        @sync="sync"
-      ></player-buttons>
+      />
 
       <volume-controller v-model="currentVolume" v-if="!isPhone && !isTablet"></volume-controller>
+
+      <SyncButton :currentStatus="currentStatus" :disabled="isControllerDisable" @sync="sync" />
 
       <!-- <player-config v-model="playingSpeed"></player-config> -->
 
@@ -33,6 +33,13 @@
           :disabled="!role.playerSeek || isControllerDisable"
         ></seek-bar>
       </div>
+
+      <ForwardButton
+        v-if="role.playerSkip"
+        :currentStatus="currentStatus"
+        :disabled="isControllerDisable"
+        @forward="moveMusic('forward')"
+      />
 
       <div @click="togglePlayerActive" class="music-info-container">
         <div v-if="!isPhone && isPopupShowing" class="click-me">
