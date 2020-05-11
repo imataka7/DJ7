@@ -8,14 +8,14 @@ import {
   HistoryList,
   PlayerController,
   ShareButton,
-  AdSquare
+  AdSquare,
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus, Role, AdminUser
+import { Room, Musicx, Music, PlayerStatus, Role, AdminUser,
 } from '@/models';
 import {
   setEvent,
   getClone,
-  showToast
+  showToast,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
@@ -30,8 +30,8 @@ import roleBook from '@/roleBook';
     PlayerController,
     ShareButton,
     abutton: ActionButton,
-    AdSquare
-  }
+    AdSquare,
+  },
 })
 export default class Hub extends Vue {
   users: Array<{
@@ -116,9 +116,9 @@ export default class Hub extends Vue {
       breakpoints: {
         1240: {
           slidesPerView: 3,
-          allowTouchMove: false
-        }
-      }
+          allowTouchMove: false,
+        },
+      },
     });
   }
 
@@ -143,14 +143,14 @@ export default class Hub extends Vue {
     // initialize this.users
     const userList = room?.users || [];
     const users =  getClone(userList).reverse();
-    const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u, })));
-    const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u, })));
+    const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u })));
+    const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u })));
     const roleTagedUsers: Array<{
       uid: string;
       photo: string;
       roleTags: string[];
     }> = Object.keys(userDict).map(uid =>
-      Object.assign({ roleTags: [] }, userDict[uid], adminuserDict[uid])
+      Object.assign({ roleTags: [] }, userDict[uid], adminuserDict[uid]),
     );
     this.users = roleTagedUsers;
   }

@@ -9,13 +9,13 @@ import {
   HistoryList,
   PlayerController,
   ShareButton,
-  AdSquare
+  AdSquare,
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
   setEvent,
   getClone,
-  showToast
+  showToast,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
@@ -30,8 +30,8 @@ import roleBook from '@/roleBook';
     PlayerController,
     ShareButton,
     abutton: ActionButton,
-    AdSquare
-  }
+    AdSquare,
+  },
 })
 export default class Hub extends Vue {
   isMonarchism = false
@@ -47,33 +47,32 @@ export default class Hub extends Vue {
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role(): Role {
-    if (!this.currentUser) {
-      // currentUser is null
+    // anarchism
+    if (!room.isMonarchism) {
+      return roleBook['managePlay']
+    } else if (!this.currentUser) {
+      // monarchism & currentUser is null
       return roleBook['dog']
+      // monarchism & currentUser
     } else {
       const uid = this.currentUser.uid;
       const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
-      const role: Role = room.isMonarchism ?
-        // monarchism
-        // roleBook["managePlay"] + roleBook["manageUser"]
-        {
-          playerPause: !!(myRole?.roleTags.includes('managePlay')),
-          playerSkip: !!(myRole?.roleTags.includes('managePlay')),
-          playerSeek: !!(myRole?.roleTags.includes('managePlay')),
-          addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
-          queueShift: !!(myRole?.roleTags.includes('managePlay')),
-          queueSort: !!(myRole?.roleTags.includes('managePlay')),
-          queueDelete: !!(myRole?.roleTags.includes('managePlay')),
-          queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
-          queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
-          addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
-          manageUser: !!(myRole?.roleTags.includes('manageUser')),
-        }
-        :
-        // anarchimsRoom
-        roleBook['managePlay']
-      ;
+      const role: Role =
+      // roleBook["managePlay"] + roleBook["manageUser"]
+      {
+        playerPause: !!(myRole?.roleTags.includes('managePlay')),
+        playerSkip: !!(myRole?.roleTags.includes('managePlay')),
+        playerSeek: !!(myRole?.roleTags.includes('managePlay')),
+        addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
+        queueShift: !!(myRole?.roleTags.includes('managePlay')),
+        queueSort: !!(myRole?.roleTags.includes('managePlay')),
+        queueDelete: !!(myRole?.roleTags.includes('managePlay')),
+        queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
+        queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
+        addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
+        manageUser: !!(myRole?.roleTags.includes('manageUser')),
+      }
       return role
     }
   }
@@ -235,9 +234,9 @@ export default class Hub extends Vue {
       breakpoints: {
         1240: {
           slidesPerView: 3,
-          allowTouchMove: false
-        }
-      }
+          allowTouchMove: false,
+        },
+      },
     });
   }
 
@@ -307,8 +306,8 @@ export default class Hub extends Vue {
         timeElapsedFromUpdated,
         currentTime,
         nextMusic: queues[0],
-        remoteMusic: player.music
-      }
+        remoteMusic: player.music,
+      },
     });
 
     room.setMusicFromQueue(queues);
@@ -328,8 +327,8 @@ export default class Hub extends Vue {
       this.$logger.error('player error', {
         content: {
           music: playedMusic,
-          code
-        }
+          code,
+        },
       });
     }
 
@@ -348,12 +347,12 @@ export default class Hub extends Vue {
     }
 
     this.$ga.logEvent('jump', {
-      roomId: this.jumpTo
+      roomId: this.jumpTo,
     });
     this.$logger.info('jump', {
       content: {
-        roomId: this.jumpTo
-      }
+        roomId: this.jumpTo,
+      },
     });
 
     const { origin } = window.location;

@@ -25,7 +25,7 @@ import { sleep } from '@/utils';
 @Component({
   components: {
     VolumePicker,
-  }
+  },
 })
 export default class VolumeController extends Vue {
   @Prop({ default: 0 })

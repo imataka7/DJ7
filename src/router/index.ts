@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    redirect: 'general'
+    redirect: 'general',
   },
   {
     path: '/signin',
