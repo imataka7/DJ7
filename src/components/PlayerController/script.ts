@@ -122,6 +122,10 @@ export default class PlayerController extends Vue {
   }
 
   public async onMusicEnd(music: Musicx) {
+    if (!this.role.queueShift) {
+      return;
+    }
+
     this.clearMusicInfo();
     this.$emit('end', music);
   }
