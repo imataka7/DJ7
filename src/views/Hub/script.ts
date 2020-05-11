@@ -47,33 +47,32 @@ export default class Hub extends Vue {
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role(): Role {
-    if (!this.currentUser) {
-      // currentUser is null
+    // anarchims
+    if (!room.isMonarchism) {
+      return roleBook['managePlay']
+    } else if (!this.currentUser) {
+      // monarchism & currentUser is null
       return roleBook['dog']
+      // monarchism & currentUser
     } else {
       const uid = this.currentUser.uid;
       const myRole = room.adminUsers
         .filter((adminUser) => adminUser.uid === uid).shift();
-      const role: Role = room.isMonarchism ?
-        // monarchism
-        // roleBook["managePlay"] + roleBook["manageUser"]
-        {
-          playerPause: !!(myRole?.roleTags.includes('managePlay')),
-          playerSkip: !!(myRole?.roleTags.includes('managePlay')),
-          playerSeek: !!(myRole?.roleTags.includes('managePlay')),
-          addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
-          queueShift: !!(myRole?.roleTags.includes('managePlay')),
-          queueSort: !!(myRole?.roleTags.includes('managePlay')),
-          queueDelete: !!(myRole?.roleTags.includes('managePlay')),
-          queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
-          queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
-          addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
-          manageUser: !!(myRole?.roleTags.includes('manageUser')),
-        }
-        :
-        // anarchimsRoom
-        roleBook['managePlay']
-      ;
+      const role: Role =
+      // roleBook["managePlay"] + roleBook["manageUser"]
+      {
+        playerPause: !!(myRole?.roleTags.includes('managePlay')),
+        playerSkip: !!(myRole?.roleTags.includes('managePlay')),
+        playerSeek: !!(myRole?.roleTags.includes('managePlay')),
+        addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
+        queueShift: !!(myRole?.roleTags.includes('managePlay')),
+        queueSort: !!(myRole?.roleTags.includes('managePlay')),
+        queueDelete: !!(myRole?.roleTags.includes('managePlay')),
+        queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
+        queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
+        addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
+        manageUser: !!(myRole?.roleTags.includes('manageUser')),
+      }
       return role
     }
   }
