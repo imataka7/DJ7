@@ -35,7 +35,7 @@ export default class Sync extends Vue {
 
     e.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], {
       duration: 300,
-      easing: 'ease-in-out'
+      easing: 'ease-in-out',
     });
   }
 }

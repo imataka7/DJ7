@@ -9,13 +9,13 @@ import {
   HistoryList,
   PlayerController,
   ShareButton,
-  AdSquare
+  AdSquare,
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
   setEvent,
   getClone,
-  showToast
+  showToast,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
@@ -30,8 +30,8 @@ import roleBook from '@/roleBook';
     PlayerController,
     ShareButton,
     abutton: ActionButton,
-    AdSquare
-  }
+    AdSquare,
+  },
 })
 export default class Hub extends Vue {
   isMonarchism = false
@@ -235,9 +235,9 @@ export default class Hub extends Vue {
       breakpoints: {
         1240: {
           slidesPerView: 3,
-          allowTouchMove: false
-        }
-      }
+          allowTouchMove: false,
+        },
+      },
     });
   }
 
@@ -307,8 +307,8 @@ export default class Hub extends Vue {
         timeElapsedFromUpdated,
         currentTime,
         nextMusic: queues[0],
-        remoteMusic: player.music
-      }
+        remoteMusic: player.music,
+      },
     });
 
     room.setMusicFromQueue(queues);
@@ -328,8 +328,8 @@ export default class Hub extends Vue {
       this.$logger.error('player error', {
         content: {
           music: playedMusic,
-          code
-        }
+          code,
+        },
       });
     }
 
@@ -348,12 +348,12 @@ export default class Hub extends Vue {
     }
 
     this.$ga.logEvent('jump', {
-      roomId: this.jumpTo
+      roomId: this.jumpTo,
     });
     this.$logger.info('jump', {
       content: {
-        roomId: this.jumpTo
-      }
+        roomId: this.jumpTo,
+      },
     });
 
     const { origin } = window.location;

@@ -55,8 +55,8 @@ import ActionButton from './molecules/ActionButton.vue';
   components: {
     Draggable,
     MusicListItem,
-    abutton: ActionButton
-  }
+    abutton: ActionButton,
+  },
 })
 // TODO: Refactor
 export default class MusicQueue extends Vue {
@@ -116,8 +116,8 @@ export default class MusicQueue extends Vue {
     this.$ga.logEvent(action);
     this.$logger.info(action, {
       content: {
-        music
-      }
+        music,
+      },
     });
   }
 
@@ -153,7 +153,7 @@ export default class MusicQueue extends Vue {
     //  animation: 100,
     group: 'queue',
     disabled: this.isDraggable,
-    ghostClass: 'ghost'
+    ghostClass: 'ghost',
   };
 }
 </script>
