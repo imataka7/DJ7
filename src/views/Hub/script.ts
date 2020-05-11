@@ -47,7 +47,7 @@ export default class Hub extends Vue {
   // RoleTagから論理話をとってDJ操作の可不可を算出
   // (Government, Array<RoleTag>) -> Boolean
   get role(): Role {
-    // anarchims
+    // anarchism
     if (!room.isMonarchism) {
       return roleBook['managePlay']
     } else if (!this.currentUser) {
