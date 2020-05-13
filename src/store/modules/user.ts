@@ -75,34 +75,44 @@ class FirebaseUser extends VuexModule {
 
     const userSnapshot = await this.userRef!.get();
 
+    const { uid, displayName, photoURL, providerData } = user;
+    const provider = convertProviderIdToName(providerData[0]!.providerId);
+    const userData = {
+      provider,
+      photo: photoURL || '',
+      userName: displayName || '',
+    }
+
     if (!userSnapshot.exists) {
-      const initial = {
-        uid: user.uid,
+      const initial: User = {
+        uid,
         history: [],
+        visitedRooms: [],
+        ...userData,
       };
       await this.userRef!.set(initial);
       this.setStatus(initial);
     } else {
-      this.setStatus(userSnapshot.data() as User);
+      await this.userRef!.update({
+        ...userData,
+      });
+      const d = userSnapshot.data() as User;
+      this.setStatus({
+        ...d,
+        ...userData,
+      });
     }
 
     const listener = this.userRef!.onSnapshot(async (doc) => {
       this.setStatus(doc.data() as User);
     });
-
     this.setListener(listener);
 
-    const {
-      uid, displayName, providerData,
-    } = this.user!;
-
-    const userInfo = {
-      provider: convertProviderIdToName(providerData[0]!.providerId),
+    setUserInfo({
       uid,
-      username: displayName || '',
-    };
-
-    setUserInfo(userInfo);
+      provider,
+      username: userData.userName,
+    });
   }
 
   @Action({ rawError: true })
