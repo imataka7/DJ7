@@ -106,9 +106,10 @@ class RoomManager extends VuexModule {
 
     const batch = firestore.batch();
 
-    if (this.users?.find(u => u.uid === user.uid)) {
+    const registered = this.users?.find(u => u.uid === user.uid);
+    if (registered) {
       batch.update(this.roomRef, {
-        users: arrayRemove(user),
+        users: arrayRemove(registered),
       });
     }
 
