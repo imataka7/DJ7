@@ -19,6 +19,8 @@ interface Player {
 interface RoomUser {
   uid: string;
   photo: string | null;
+  provider: string;
+  userName: string;
 }
 
 interface AdminUser {
