@@ -35,15 +35,18 @@ class FirebaseUser extends VuexModule {
     return this.status?.visitedRooms;
   }
 
-  get me() {
+  get me(): RoomUser | null {
     if (!this.status) {
       return null;
     }
 
+    const { uid, userName, provider, photo } = this.status;
     return {
-      uid: this.status.uid,
-      photo: this.status.photo,
-    } as RoomUser;
+      uid,
+      photo,
+      userName,
+      provider,
+    };
   }
 
   get userRef() {
