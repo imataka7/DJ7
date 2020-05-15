@@ -14,7 +14,7 @@
               ></fa-icon>
             </div>
 
-            <div v-if="false" style="border: solid 1px red;">
+            <div v-if="dbg" style="border: solid 1px red;">
               <div>government: {{ room.government }}</div>
               <div>adminUsers: {{ room.adminUsers }}</div>
               <div>role: {{ currentRole }}</div>

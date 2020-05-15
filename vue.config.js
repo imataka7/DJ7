@@ -1,4 +1,4 @@
-process.env.VUE_APP_VERSION = '0.30.42+20200514';
+process.env.VUE_APP_VERSION = '0.30.43+20200515';
 
 const manifestJSON = require('./public/manifest.json');
 
