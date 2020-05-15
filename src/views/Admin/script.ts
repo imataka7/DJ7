@@ -10,14 +10,9 @@ import {
   ShareButton,
   AdSquare,
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus, Role, AdminUser,
-} from '@/models';
-import {
-  setEvent,
-  getClone,
-  showToast,
-} from '@/utils';
-import { user, room, adate } from '@/store/modules';
+import { Role } from '@/models';
+import { setEvent } from '@/utils';
+import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
 
@@ -77,7 +72,7 @@ export default class Hub extends Vue {
         :
         // anarchimsRoom
         roleBook['managePlay']
-      ;
+        ;
       return role
     }
   }
@@ -142,7 +137,7 @@ export default class Hub extends Vue {
 
     // initialize this.users
     const userList = room?.users || [];
-    const users =  getClone(userList).reverse();
+    const users = [...userList].reverse();
     const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u })));
     const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u })));
     const roleTagedUsers: Array<{

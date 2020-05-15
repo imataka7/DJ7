@@ -14,7 +14,7 @@
 .columns {
   display: flex;
   justify-content: center;
-  height: calc(100% - 50px);
+  height: 100%;
 }
 
 .column {
@@ -50,6 +50,10 @@
   min-width: 50px;
   min-height: 50px;
   margin: 10px auto;
+}
+
+.share-button-container {
+  margin-bottom: 10px;
 }
 
 .label-desc {
@@ -99,7 +103,52 @@
 }
 
 .dj7-logo {
-  height: 50px;
+  img {
+    height: 50px;
+  }
+
+  .crown {
+    position: relative;
+    left: 5px;
+    bottom: 7px;
+  }
+}
+
+.save-button-container {
+  padding-left: 10px;
+  margin: 10px 0;
+}
+
+.user-settings {
+  display: grid;
+  height: 70px;
+  grid-template-areas:
+    "icon name"
+    "icon boxes";
+
+  div:nth-child(1) {
+    padding: 10px;
+    grid-area: icon;
+
+    img {
+      height: 50px;
+    }
+  }
+
+  div:nth-child(2) {
+    grid-area: name;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  div:nth-child(3) {
+    grid-area: boxes;
+  }
 }
 
 @media screen and (max-width: 1200px) {

@@ -4,13 +4,17 @@
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <div class="room-desc">
-            <img
-              class="dj7-logo"
-              :src="require('@/assets/logo.png')"
-              alt="DJ7"
-            />
+            <div class="dj7-logo">
+              <img :src="require('@/assets/logo.png')" alt="DJ7" />
+              <fa-icon
+                class="crown"
+                icon="crown"
+                size="lg"
+                v-if="room.isMonarchism"
+              ></fa-icon>
+            </div>
 
-            <div v-if="dbg" style="border: solid 1px red;">
+            <div v-if="false" style="border: solid 1px red;">
               <div>government: {{ room.government }}</div>
               <div>adminUsers: {{ room.adminUsers }}</div>
               <div>role: {{ currentRole }}</div>
@@ -26,24 +30,32 @@
                 </button>
               </div>
             </div>
-
             <p>
               RoomId: {{ roomId }}
-              <share-button
-                :room-id="roomId"
-                :now-playing="playingMusic && playingMusic.title"
-              ></share-button>
+              <abutton
+                @click="$router.push({ name: 'hub', params: { roomId } })"
+              >
+                Back to room
+              </abutton>
             </p>
             <span class="version">{{ version }}</span>
           </div>
 
+          <div class="share-button-container">
+            <share-button
+              :room-id="roomId"
+              :now-playing="playingMusic && playingMusic.title"
+            ></share-button>
+          </div>
+
           <div class="room-users">
-            <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
+            <a v-for="u in users" :key="u.id" :href="`#${u.uid}`">
+              <img :src="u.photo" alt="icon" />
+            </a>
           </div>
         </div>
 
         <div class="column swiper-slide">
-          <section>government: {{ room.government }}</section>
           <template v-if="!room.isMonarchism">
             <div>この部屋に管理者はいません</div>
             <button @click="$router.push({ name: 'hub', params: { roomId } })">
@@ -57,10 +69,21 @@
             </button>
           </template>
           <template v-else>
-            <button @click="saveSettings">save settings</button>
-            <div v-for="user in users" :key="user.id">
-              <img :src="user.photo" alt="icon" width="50" height="50" />
-              <div>userId: {{ user.uid }}</div>
+            <div class="save-button-container">
+              <abutton @click="saveSettings">Save</abutton>
+            </div>
+            <div
+              v-for="user in users"
+              :key="user.id"
+              :id="uid"
+              class="user-settings"
+            >
+              <div>
+                <img :src="user.photo" alt="icon" width="50" height="50" />
+              </div>
+              <div>
+                <p>{{ user.userName || user.uid }}</p>
+              </div>
               <div>
                 <label>
                   <input
