@@ -11,7 +11,7 @@ import {
   AdSquare,
 } from '@/components';
 import { Role } from '@/models';
-import { setEvent } from '@/utils';
+import { setEvent, showToast } from '@/utils';
 import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
@@ -35,8 +35,13 @@ export default class Hub extends Vue {
     roleTags: string[];
   }> = [];
 
-  saveSettings() {
-    room.updateAdminUsers(this.users)
+  public async saveSettings() {
+    try {
+      await room.updateAdminUsers(this.users);
+      showToast('success', 'Your settings have been saved');
+    } catch {
+      showToast('error', 'Failed to save your settings');
+    }
   }
 
   get dbg() {
