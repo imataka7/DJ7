@@ -4,11 +4,15 @@
       <div class="columns swiper-wrapper">
         <div class="column swiper-slide input-container">
           <div class="room-desc">
-            <img
-              class="dj7-logo"
-              :src="require('@/assets/logo.png')"
-              alt="DJ7"
-            />
+            <div class="dj7-logo">
+              <img :src="require('@/assets/logo.png')" alt="DJ7" />
+              <fa-icon
+                class="crown"
+                icon="crown"
+                size="lg"
+                v-if="room.isMonarchism"
+              ></fa-icon>
+            </div>
 
             <div v-if="dbg" style="border: solid 1px red;">
               <div>government: {{ room.government }}</div>
@@ -36,12 +40,22 @@
 
             <p>
               RoomId: {{ roomId }}
-              <share-button
-                :room-id="roomId"
-                :now-playing="playingMusic && playingMusic.title"
-              ></share-button>
+              <abutton
+                @click="$router.push({ name: 'admin', params: { roomId } })"
+                v-if="role.manageUser"
+              >
+                Settings
+                <fa-icon icon="cog"></fa-icon>
+              </abutton>
             </p>
             <span class="version">{{ version }}</span>
+          </div>
+
+          <div class="share-button-container">
+            <share-button
+              :room-id="roomId"
+              :now-playing="playingMusic && playingMusic.title"
+            ></share-button>
           </div>
 
           <div class="room-users">
