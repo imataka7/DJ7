@@ -38,9 +38,9 @@ export default class Hub extends Vue {
   public async saveSettings() {
     try {
       await room.updateAdminUsers(this.users);
-      showToast('success', 'Your settings have been saved');
+      showToast('success', '設定の保存に成功しました。');
     } catch {
-      showToast('error', 'Failed to save your settings');
+      showToast('error', '設定の保存に失敗しました。');
     }
   }
 

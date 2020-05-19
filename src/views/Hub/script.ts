@@ -332,7 +332,7 @@ export default class Hub extends Vue {
       });
     }
 
-    showToast('error', `An error occurs in the player. code: ${code}`);
+    showToast('error', `エラーが発生しました。 code: ${code}`);
   }
 
   private async forwardMusic() {

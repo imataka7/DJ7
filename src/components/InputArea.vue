@@ -79,7 +79,7 @@ export default class InputArea extends Vue {
       if (searchResult) {
         musicList.push(searchResult);
       } else {
-        showToast('error', `Not found: ${queries[i]}`);
+        showToast('error', `見つかりませんでした: ${queries[i]}`);
       }
     }
 
@@ -96,7 +96,7 @@ export default class InputArea extends Vue {
     const musicList = (res.filter(m => m !== null) as Musicx[][]).flat();
 
     if (musicList.length === 0) {
-      showToast('error', 'No playlists found');
+      showToast('error', 'プレイリストが見つかりません');
     }
 
     return musicList;
