@@ -1,6 +1,6 @@
 <template>
   <abutton class="share-button" @click="showPopup">
-    Share on <fa-icon :icon="['fab', 'twitter']"></fa-icon>
+    シェア <fa-icon :icon="['fab', 'twitter']"></fa-icon>
   </abutton>
 </template>
 

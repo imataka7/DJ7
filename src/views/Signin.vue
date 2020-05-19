@@ -1,6 +1,6 @@
 <template>
   <div class="signin">
-    <h1>Welcome to DJ7!</h1>
+    <h1>DJ7へようこそ！</h1>
     <h2>{{ version }}</h2>
     <div class="firebaseui-auth-container"></div>
   </div>
