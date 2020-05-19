@@ -1,4 +1,4 @@
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import 'firebase/firestore';
 import Swiper from 'swiper';
 import {
@@ -10,14 +10,9 @@ import {
   ShareButton,
   AdSquare,
 } from '@/components';
-import { Room, Musicx, Music, PlayerStatus, Role, AdminUser,
-} from '@/models';
-import {
-  setEvent,
-  getClone,
-  showToast,
-} from '@/utils';
-import { user, room, adate } from '@/store/modules';
+import { Role } from '@/models';
+import { setEvent, showToast } from '@/utils';
+import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
 
@@ -40,8 +35,13 @@ export default class Hub extends Vue {
     roleTags: string[];
   }> = [];
 
-  saveSettings() {
-    room.updateAdminUsers(this.users)
+  public async saveSettings() {
+    try {
+      await room.updateAdminUsers(this.users);
+      showToast('success', '設定の保存に成功しました。');
+    } catch {
+      showToast('error', '設定の保存に失敗しました。');
+    }
   }
 
   get dbg() {
@@ -77,7 +77,7 @@ export default class Hub extends Vue {
         :
         // anarchimsRoom
         roleBook['managePlay']
-      ;
+        ;
       return role
     }
   }
@@ -142,7 +142,7 @@ export default class Hub extends Vue {
 
     // initialize this.users
     const userList = room?.users || [];
-    const users =  getClone(userList).reverse();
+    const users = [...userList].reverse();
     const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u })));
     const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u })));
     const roleTagedUsers: Array<{

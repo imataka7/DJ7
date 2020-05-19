@@ -22,7 +22,9 @@
             target="_blank"
             rel="noopener noreferrer"
             :href="getUrl(music.source)"
-          >{{ music.title }}</a>
+          >
+            {{ music.title }}
+          </a>
         </p>
       </div>
       <div class="buttons">
@@ -42,7 +44,7 @@ export default class MusicListItem extends Vue {
   @Prop()
   public music!: Musicx;
 
-  @Prop({ default: {} })
+  @Prop({ default: () => ({}) })
   role!: Role;
 
   public getUrl(url: string) {

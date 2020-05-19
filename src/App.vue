@@ -164,11 +164,8 @@ $sairi-orange: #f50;
   --volume-picker-border: #{$gray-4};
   --volume-picker-shadow: #{$gray-5};
 
-  // img {
-  //   filter: grayscale(30%);
-  // }
-  .dj7-logo {
-    filter: invert(0.85);
+  .dj7-logo > img {
+    filter: invert(1);
   }
 }
 

@@ -31,6 +31,10 @@
   margin-bottom: 15px;
 }
 
+.share-button-container {
+  margin-bottom: 10px;
+}
+
 .room-users {
   display: flex;
   justify-content: flex-start;
@@ -99,7 +103,15 @@
 }
 
 .dj7-logo {
-  height: 50px;
+  img {
+    height: 50px;
+  }
+
+  .crown {
+    position: relative;
+    left: 5px;
+    bottom: 7px;
+  }
 }
 
 @media screen and (max-width: 1200px) {

@@ -17,7 +17,12 @@
         :role="role"
       >
         <template v-slot:buttons>
-          <abutton v-if="role.queueDelete" class="button" title="Delete" @click="del(q)">
+          <abutton
+            v-if="role.queueDelete"
+            class="button"
+            title="Delete"
+            @click="del(q)"
+          >
             <fa-icon icon="times"></fa-icon>
           </abutton>
           <abutton
@@ -63,7 +68,7 @@ export default class MusicQueue extends Vue {
   @Prop({ default: () => [] })
   value!: Musicx[];
 
-  @Prop({ default: {} })
+  @Prop({ default: () => ({}) })
   role!: Role;
 
   @Watch('value')

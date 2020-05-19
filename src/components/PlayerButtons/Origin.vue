@@ -33,7 +33,12 @@
       <fa-icon icon="forward" size="lg"></fa-icon>
     </button>
 
-    <button :disabled="disabled" aria-label="Sync" @click="sync" class="sairi-player-button">
+    <button
+      :disabled="disabled"
+      aria-label="Sync"
+      @click="sync"
+      class="sairi-player-button"
+    >
       <fa-icon icon="sync-alt" size="lg"></fa-icon>
     </button>
   </div>
@@ -52,7 +57,7 @@ export default class PlayerButtons extends Vue {
   @Prop({ default: true })
   public disabled!: boolean;
 
-  @Prop({ default: {} })
+  @Prop({ default: () => ({}) })
   role!: Role;
 
   public pause() {

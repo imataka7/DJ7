@@ -11,7 +11,7 @@
         </div>
       </div>
     </template>
-    <p class="no-music-indicator" v-else>No music playing</p>
+    <p class="no-music-indicator" v-else>動画が再生されていません</p>
   </div>
 </template>
 
