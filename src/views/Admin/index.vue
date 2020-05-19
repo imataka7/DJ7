@@ -31,11 +31,11 @@
               </div>
             </div>
             <p>
-              RoomId: {{ roomId }}
+              部屋ID: {{ roomId }}
               <abutton
                 @click="$router.push({ name: 'hub', params: { roomId } })"
               >
-                Back to room
+                部屋に戻る
               </abutton>
             </p>
             <span class="version">{{ version }}</span>
@@ -70,7 +70,7 @@
           </template>
           <template v-else>
             <div class="save-button-container">
-              <abutton @click="saveSettings">Save</abutton>
+              <abutton @click="saveSettings">保存</abutton>
             </div>
             <div
               v-for="user in users"
@@ -91,7 +91,7 @@
                     value="managePlay"
                     v-model="user.roleTags"
                   />
-                  managePlay
+                  再生権限
                 </label>
                 <label>
                   <input
@@ -99,7 +99,7 @@
                     value="manageUser"
                     v-model="user.roleTags"
                   />
-                  manageUser
+                  管理者権限
                 </label>
               </div>
             </div>

@@ -39,12 +39,12 @@
             </div>
 
             <p>
-              RoomId: {{ roomId }}
+              部屋ID: {{ roomId }}
               <abutton
                 @click="$router.push({ name: 'admin', params: { roomId } })"
                 v-if="role.manageUser"
               >
-                Settings
+                設定
                 <fa-icon icon="cog"></fa-icon>
               </abutton>
             </p>
@@ -73,30 +73,32 @@
           <div class="jumper">
             <section>
               <label>
-                <p class="label-desc">Do you want to change the room?</p>
+                <p class="label-desc">部屋の移動/作成をする</p>
                 <input
                   type="text"
                   v-model="jumpTo"
                   :disabled="!currentUser"
-                  placeholder="Room id"
+                  placeholder="部屋ID"
                 />
-                <abutton @click="jump" :disabled="!currentUser">Jump</abutton>
+                <abutton @click="jump" :disabled="!currentUser">移動</abutton>
               </label>
             </section>
             <section>
               <label class="checkbox">
                 <input type="checkbox" v-model="isMonarchism" />
-                monarchism
+                作成時は権限を設定できるようにする
               </label>
             </section>
           </div>
-          <abutton @click="signOut" :disabled="!currentUser">Sign out</abutton>
+          <abutton @click="signOut" :disabled="!currentUser"
+            >サインアウト</abutton
+          >
         </div>
 
         <div class="column swiper-slide">
-          <p class="header">Queue</p>
+          <p class="header">キュー</p>
           <div class="no-music" v-if="queues.length === 0">
-            No music in queue
+            キューに動画がありません
           </div>
           <music-queue
             v-model="queues"
@@ -109,17 +111,17 @@
         </div>
 
         <div class="column swiper-slide">
-          <p class="header">History</p>
+          <p class="header">履歴</p>
           <template v-if="!currentUser">
             <div class="no-music">Only available for signed in users</div>
             <div class="button-container">
-              <abutton class="is-large" @click="$router.push('/signin')"
-                >Sign in</abutton
-              >
+              <abutton class="is-large" @click="$router.push('/signin')">
+                サインイン
+              </abutton>
             </div>
           </template>
           <div class="no-music" v-else-if="history.length === 0">
-            No music in history
+            履歴に動画がありません
           </div>
           <history-list
             :list="history"

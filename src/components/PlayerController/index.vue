@@ -14,15 +14,24 @@
         @pause="updateStatus(2)"
       />
 
-      <volume-controller v-model="currentVolume" v-if="!isPhone && !isTablet"></volume-controller>
+      <volume-controller
+        v-model="currentVolume"
+        v-if="!isPhone && !isTablet"
+      ></volume-controller>
 
-      <SyncButton :currentStatus="currentStatus" :disabled="isControllerDisable" @sync="sync" />
+      <SyncButton
+        :currentStatus="currentStatus"
+        :disabled="isControllerDisable"
+        @sync="sync"
+      />
 
       <!-- <player-config v-model="playingSpeed"></player-config> -->
 
       <div class="seek-bar-container">
         <p class="progress-container">
-          <span class="progress-start">{{ formatDuration(((range * musicDuration) | 0) / 100) }}</span>
+          <span class="progress-start">{{
+            formatDuration(((range * musicDuration) | 0) / 100)
+          }}</span>
           <span class="progress-slash">/</span>
           <span class="progress-end">{{ formatDuration(musicDuration) }}</span>
         </p>
@@ -43,7 +52,7 @@
 
       <div @click="togglePlayerActive" class="music-info-container">
         <div v-if="!isPhone && isPopupShowing" class="click-me">
-          <p>Click Me!</p>
+          <p>クリック！</p>
         </div>
         <player-music-info :music="currentMusic"></player-music-info>
       </div>
@@ -59,7 +68,12 @@
           "
         ></div>
       </transition>-->
-      <youtube-player ref="youtube" class="youtube-player" @end="onMusicEnd" @error="onError"></youtube-player>
+      <youtube-player
+        ref="youtube"
+        class="youtube-player"
+        @end="onMusicEnd"
+        @error="onError"
+      ></youtube-player>
     </div>
   </div>
 </template>
