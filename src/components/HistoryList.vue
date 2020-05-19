@@ -6,7 +6,12 @@
           <abutton class="button" title="Delete music" @click="del(m)">
             <fa-icon icon="times"></fa-icon>
           </abutton>
-          <abutton class="button" title="Add to queue" @click="add(m)">
+          <abutton
+            class="button"
+            title="Add to queue"
+            @click="add(m)"
+            v-if="role.addFromHistory"
+          >
             <fa-icon icon="plus"></fa-icon>
           </abutton>
         </template>
@@ -21,7 +26,7 @@ import {
   Component, Vue, Prop,
 } from 'vue-property-decorator';
 // import VirtualList from 'vue-virtual-scroll-list';
-import { Music } from '@/models';
+import { Music, Role } from '@/models';
 import { generateRandomId, getClone } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
@@ -38,6 +43,9 @@ const VirtualList = require('vue-virtual-scroll-list');
 export default class HistoryList extends Vue {
   @Prop({ default: () => [] })
   list!: Music[];
+
+  @Prop({ default: () => ({}) })
+  role!: Role;
 
   get reversedList() {
     return getClone(this.list).reverse();
