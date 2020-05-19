@@ -128,6 +128,7 @@
             @add="addQueue"
             @del="deleteMusicFromHistory"
             class="music-list"
+            :role="role"
             v-else
           ></history-list>
         </div>

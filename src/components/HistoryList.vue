@@ -10,7 +10,7 @@
             class="button"
             title="Add to queue"
             @click="add(m)"
-            v-if="!role.addFromHistory"
+            v-if="role.addFromHistory"
           >
             <fa-icon icon="plus"></fa-icon>
           </abutton>
