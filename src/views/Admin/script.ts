@@ -145,8 +145,6 @@ export default class Hub extends Vue {
           recordUserWithRoleTags[uid],
         ),
       );
-    console.log(recordUserWithRoleTags)
-    console.log(userRoleProfiles)
 
     this.users = userRoleProfiles;
   }

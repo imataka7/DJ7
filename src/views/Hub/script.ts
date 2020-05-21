@@ -45,7 +45,16 @@ export default class Hub extends Vue {
     return !this.isQueueUpdating;
   }
 
+  get isGeneral() {
+    return this.$route.name === 'hub-general'
+  }
+
   get role(): Role {
+    if (this.isGeneral){
+      return roleBook['managePlay']
+    }
+
+
     // 更新直後に権限持ってなくても一瞬だけボタンが出てしまうので
     // 最初は何も与えないように変更
     if (!room.status) {
