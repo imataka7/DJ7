@@ -131,21 +131,21 @@ export default class Hub extends Vue {
     const userList = room?.users || [];
     const users = [...userList].reverse();
 
-    const recodeUserWithPhoto: Record<uid, UsersWithPhoto>
+    const recordUserWithPhoto: Record<uid, UsersWithPhoto>
       = Object.assign({}, ...users.map((u) => ({ [u.uid]: u })));
 
-    const recodeUserWithRoleTags: Record<uid, UsersWithRoleTags>
+    const recordUserWithRoleTags: Record<uid, UsersWithRoleTags>
       = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u })));
 
     const userRoleProfiles: Array<UserRoleProfile>
-      = Object.keys(recodeUserWithPhoto).map(uid =>
+      = Object.keys(recordUserWithPhoto).map(uid =>
         Object.assign(
           { roleTags: initUser.roleTags },
-          recodeUserWithPhoto[uid],
-          recodeUserWithRoleTags[uid],
+          recordUserWithPhoto[uid],
+          recordUserWithRoleTags[uid],
         ),
       );
-    console.log(recodeUserWithRoleTags)
+    console.log(recordUserWithRoleTags)
     console.log(userRoleProfiles)
 
     this.users = userRoleProfiles;
