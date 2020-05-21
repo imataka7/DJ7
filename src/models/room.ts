@@ -23,9 +23,13 @@ interface RoomUser {
   userName: string;
 }
 
+type PilgrimId = string | null
+type RoleTag = string
+type RoleTags =  Array<RoleTag>
+
 interface AdminUser {
   uid: string;
-  roleTags: string[];
+  roleTags: RoleTags;
 }
 
 type Government = 'monarchism' | null;
@@ -35,9 +39,13 @@ interface Room {
   queues: Musicx[];
   player: Player;
   users: RoomUser[];
-  pilgrimId: string;
+  pilgrimId: PilgrimId;
   adminUsers: AdminUser[];
   government: Government;
+  // NOTE
+  // 部屋の初期設定をmonacrchismに強制的にする以前の部屋では
+  // initUserをもっていない
+  initUser: { roleTags: RoleTags } | null;
 }
 
 export {
@@ -46,6 +54,7 @@ export {
   Musicx,
   AdminUser,
   Government,
+  RoleTags,
 };
 
 export default Room;
