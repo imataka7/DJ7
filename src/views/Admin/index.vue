@@ -58,7 +58,7 @@
             <div class="user-settings">
               <div>
                 <img
-                  src="https://i.gyazo.com/96a09da620ef379960ee69a4ee193291.gif"
+                src="https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg"
                   alt="icon"
                   width="50"
                   height="50"
