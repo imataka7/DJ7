@@ -57,4 +57,4 @@ const roleBook: { [roleTag: string]: Role } = {
   },
 };
 
-export default roleBook
+export default roleBook;

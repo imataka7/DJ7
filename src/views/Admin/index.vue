@@ -6,11 +6,16 @@
           <div class="room-desc">
             <div class="dj7-logo">
               <img :src="require('@/assets/logo.png')" alt="DJ7" />
-              <fa-icon class="crown" icon="crown" size="lg" v-if="room.isMonarchism"></fa-icon>
+              <fa-icon
+                class="crown"
+                icon="crown"
+                size="lg"
+                v-if="room.isMonarchism"
+              ></fa-icon>
             </div>
 
             <div v-if="dbg" style="border: solid 1px red;">
-              <div>{{ initUserRoleTags}}</div>
+              <div>{{ initUserRoleTags }}</div>
               <div>government: {{ room.government }}</div>
               <div>adminUsers: {{ room.adminUsers }}</div>
               <div>role: {{ currentRole }}</div>
@@ -21,18 +26,26 @@
               <div>
                 <button
                   @click="$router.push({ name: 'hub', params: { roomId } })"
-                >RoomId: {{ roomId }}</button>
+                >
+                  RoomId: {{ roomId }}
+                </button>
               </div>
             </div>
             <p>
               部屋ID: {{ roomId }}
-              <abutton @click="$router.push({ name: 'hub', params: { roomId } })">部屋に戻る</abutton>
+              <abutton
+                @click="$router.push({ name: 'hub', params: { roomId } })"
+                >部屋に戻る</abutton
+              >
             </p>
             <span class="version">{{ version }}</span>
           </div>
 
           <div class="share-button-container">
-            <share-button :room-id="roomId" :now-playing="playingMusic && playingMusic.title"></share-button>
+            <share-button
+              :room-id="roomId"
+              :now-playing="playingMusic && playingMusic.title"
+            ></share-button>
           </div>
 
           <div class="room-users">
@@ -45,11 +58,15 @@
         <div class="column swiper-slide">
           <template v-if="!room.isMonarchism">
             <div>この部屋に管理者はいません</div>
-            <button @click="$router.push({ name: 'hub', params: { roomId } })">部屋に戻る</button>
+            <abutton @click="$router.push({ name: 'hub', params: { roomId } })"
+              >部屋に戻る</abutton
+            >
           </template>
           <template v-else-if="!currentRole.manageUser">
             <div>あなたは管理者ではありません</div>
-            <button @click="$router.push({ name: 'hub', params: { roomId } })">部屋に戻る</button>
+            <abutton @click="$router.push({ name: 'hub', params: { roomId } })"
+              >部屋に戻る</abutton
+            >
           </template>
           <template v-else>
             <div class="save-button-container">
@@ -57,28 +74,36 @@
             </div>
             <div class="user-settings">
               <div>
-                <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg"
-                  alt="icon"
-                  width="50"
-                  height="50"
-                />
+                <fa-icon icon="user" size="3x" fixed-width></fa-icon>
               </div>
               <div>
                 <p>初期ユーザ</p>
               </div>
               <div>
                 <label>
-                  <input type="checkbox" value="managePlay" v-model="initUser.roleTags" />
+                  <input
+                    type="checkbox"
+                    value="managePlay"
+                    v-model="initUser.roleTags"
+                  />
                   再生権限
                 </label>
                 <label>
-                  <input type="checkbox" value="manageUser" v-modle="initUser.roleTags" />
+                  <input
+                    type="checkbox"
+                    value="manageUser"
+                    v-modle="initUser.roleTags"
+                  />
                   管理者権限
                 </label>
               </div>
             </div>
-            <div v-for="user in users" :key="user.id" :id="uid" class="user-settings">
+            <div
+              v-for="user in users"
+              :key="user.id"
+              :id="uid"
+              class="user-settings"
+            >
               <div>
                 <img :src="user.photo" alt="icon" width="50" height="50" />
               </div>
@@ -87,11 +112,19 @@
               </div>
               <div>
                 <label>
-                  <input type="checkbox" value="managePlay" v-model="user.roleTags" />
+                  <input
+                    type="checkbox"
+                    value="managePlay"
+                    v-model="user.roleTags"
+                  />
                   再生権限
                 </label>
                 <label>
-                  <input type="checkbox" value="manageUser" v-model="user.roleTags" />
+                  <input
+                    type="checkbox"
+                    value="manageUser"
+                    v-model="user.roleTags"
+                  />
                   管理者権限
                 </label>
               </div>

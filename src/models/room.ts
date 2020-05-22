@@ -9,7 +9,7 @@ interface Musicx extends Music {
 }
 
 interface Player {
-  music: Musicx;
+  music: Musicx | null;
   status: PlayerStatus;
   updatedAt: number;
   playedTime: number;
@@ -23,9 +23,9 @@ interface RoomUser {
   userName: string;
 }
 
-type PilgrimId = string | null
-type RoleTag = string
-type RoleTags =  Array<RoleTag>
+type PilgrimId = string | null;
+type RoleTag = string;
+type RoleTags = Array<RoleTag>;
 
 interface AdminUser {
   uid: string;

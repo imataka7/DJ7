@@ -84,7 +84,7 @@ class FirebaseUser extends VuexModule {
       provider,
       photo: photoURL || '',
       userName: displayName || '',
-    }
+    };
 
     if (!userSnapshot.exists) {
       const initial: User = {

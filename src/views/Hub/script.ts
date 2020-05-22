@@ -20,7 +20,7 @@ import {
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
-import { makeCurrentRole, initUserPolyfill } from '@/roleManager'
+import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
 
 @Component({
   components: {
@@ -38,7 +38,7 @@ export default class Hub extends Vue {
   isMonarchism = true
 
   get dbg() {
-    return process.env.NODE_ENV === 'development'
+    return process.env.NODE_ENV === 'development';
   }
 
   get isDraggable() {
@@ -46,12 +46,12 @@ export default class Hub extends Vue {
   }
 
   get isGeneral() {
-    return this.$route.name === 'hub-general'
+    return this.$route.name === 'hub-general';
   }
 
   get role(): Role {
-    if (this.isGeneral){
-      return roleBook['managePlay']
+    if (this.isGeneral) {
+      return roleBook['managePlay'];
     }
 
 
@@ -63,10 +63,10 @@ export default class Hub extends Vue {
 
     // currentUser is null
     if (!this.currentUser) {
-      return roleBook['dog']
+      return roleBook['dog'];
     }
 
-    return makeCurrentRole(this.currentUser)
+    return makeCurrentRole(this.currentUser);
   }
 
   get room() {
@@ -287,7 +287,7 @@ export default class Hub extends Vue {
     const timeElapsedFromUpdated = currentTime - updatedAt;
     const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 3000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
-    const isDifferentMusic = playedMusic.id !== music.id;
+    const isDifferentMusic = playedMusic.id !== music?.id;
     if (isUpdateAtTooNear || isDifferentMusic) {
       return;
     }
@@ -313,7 +313,7 @@ export default class Hub extends Vue {
 
     // console.log(music, errorMusic);
 
-    if (music.id === playedMusic?.id) {
+    if (music?.id === playedMusic?.id) {
       room.setMusicFromQueue(queues);
 
       this.$logger.error('player error', {
