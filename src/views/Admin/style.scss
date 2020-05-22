@@ -127,7 +127,12 @@
     "icon boxes";
 
   div:nth-child(1) {
-    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 70px;
+    margin-right: 10px;
     grid-area: icon;
 
     img {
