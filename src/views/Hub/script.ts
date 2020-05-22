@@ -20,6 +20,7 @@ import {
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
+import { makeCurrentRole, initUserPolyfill } from '@/roleManager'
 
 @Component({
   components: {
@@ -34,7 +35,7 @@ import roleBook from '@/roleBook';
   },
 })
 export default class Hub extends Vue {
-  isMonarchism = false
+  isMonarchism = true
 
   get dbg() {
     return process.env.NODE_ENV === 'development'
@@ -44,43 +45,28 @@ export default class Hub extends Vue {
     return !this.isQueueUpdating;
   }
 
-  // RoleTagから論理話をとってDJ操作の可不可を算出
-  // (Government, Array<RoleTag>) -> Boolean
+  get isGeneral() {
+    return this.$route.name === 'hub-general'
+  }
+
   get role(): Role {
+    if (this.isGeneral){
+      return roleBook['managePlay']
+    }
+
+
     // 更新直後に権限持ってなくても一瞬だけボタンが出てしまうので
     // 最初は何も与えないように変更
     if (!room.status) {
       return roleBook['dog'];
     }
 
-    // anarchism
-    if (!room.isMonarchism) {
-      return roleBook['managePlay']
-    } else if (!this.currentUser) {
-      // monarchism & currentUser is null
+    // currentUser is null
+    if (!this.currentUser) {
       return roleBook['dog']
-      // monarchism & currentUser
-    } else {
-      const uid = this.currentUser.uid;
-      const myRole = room.adminUsers
-        .filter((adminUser) => adminUser.uid === uid).shift();
-      const role: Role =
-      // roleBook["managePlay"] + roleBook["manageUser"]
-      {
-        playerPause: !!(myRole?.roleTags.includes('managePlay')),
-        playerSkip: !!(myRole?.roleTags.includes('managePlay')),
-        playerSeek: !!(myRole?.roleTags.includes('managePlay')),
-        addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
-        queueShift: !!(myRole?.roleTags.includes('managePlay')),
-        queueSort: !!(myRole?.roleTags.includes('managePlay')),
-        queueDelete: !!(myRole?.roleTags.includes('managePlay')),
-        queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
-        queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
-        addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
-        manageUser: !!(myRole?.roleTags.includes('manageUser')),
-      }
-      return role
     }
+
+    return makeCurrentRole(this.currentUser)
   }
 
   get room() {

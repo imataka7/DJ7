@@ -10,11 +10,28 @@ import {
   ShareButton,
   AdSquare,
 } from '@/components';
-import { Role } from '@/models';
+import { Role, RoleTags } from '@/models';
 import { setEvent, showToast } from '@/utils';
 import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
+import { makeCurrentRole, initUser } from '@/roleManager'
 import roleBook from '@/roleBook';
+
+
+type uid = string
+interface UsersWithPhoto {
+  uid: string;
+  photo: string;
+}
+interface UsersWithRoleTags {
+  uid: string;
+  roleTags: RoleTags | null;
+}
+interface UserRoleProfile {
+  uid: string;
+  photo: string;
+  roleTags: RoleTags;
+}
 
 @Component({
   components: {
@@ -29,15 +46,14 @@ import roleBook from '@/roleBook';
   },
 })
 export default class Hub extends Vue {
-  users: Array<{
-    uid: string;
-    photo: string;
-    roleTags: string[];
-  }> = [];
+  users: Array<UserRoleProfile> = []
+
+  initUser: { roleTags: RoleTags } = { roleTags: [] }
 
   public async saveSettings() {
     try {
       await room.updateAdminUsers(this.users);
+      await room.updateInitUser(this.initUser);
       showToast('success', '設定の保存に成功しました。');
     } catch {
       showToast('error', '設定の保存に失敗しました。');
@@ -48,38 +64,13 @@ export default class Hub extends Vue {
     return process.env.NODE_ENV === 'development'
   }
 
-  // RoleTagから論理話をとってDJ操作の可不可を算出
-  // (Government, Array<RoleTag>) -> Boolean
   get currentRole(): Role {
+    // currentUser is null
     if (!this.currentUser) {
-      // currentUser is null
       return roleBook['dog']
-    } else {
-      const uid = this.currentUser.uid;
-      const myRole = room.adminUsers
-        .filter((adminUser) => adminUser.uid === uid).shift();
-      const role: Role = room.isMonarchism ?
-        // monarchism
-        // roleBook["managePlay"] + roleBook["manageUser"]
-        {
-          playerPause: !!(myRole?.roleTags.includes('managePlay')),
-          playerSkip: !!(myRole?.roleTags.includes('managePlay')),
-          playerSeek: !!(myRole?.roleTags.includes('managePlay')),
-          addViaSearch: !!(myRole?.roleTags.includes('managePlay')),
-          queueShift: !!(myRole?.roleTags.includes('managePlay')),
-          queueSort: !!(myRole?.roleTags.includes('managePlay')),
-          queueDelete: !!(myRole?.roleTags.includes('managePlay')),
-          queueInterrupt: !!(myRole?.roleTags.includes('managePlay')),
-          queueMoveToTop: !!(myRole?.roleTags.includes('managePlay')),
-          addFromHistory: !!(myRole?.roleTags.includes('managePlay')),
-          manageUser: !!(myRole?.roleTags.includes('manageUser')),
-        }
-        :
-        // anarchimsRoom
-        roleBook['managePlay']
-        ;
-      return role
     }
+
+    return makeCurrentRole(this.currentUser)
   }
 
   get room() {
@@ -131,7 +122,35 @@ export default class Hub extends Vue {
     this.swiper?.update();
   }
 
+  public setInitUser() {
+    this.initUser = initUser
+  }
+
+  public setUserRoleProfiles() {
+    // initialize this.users
+    const userList = room?.users || [];
+    const users = [...userList].reverse();
+
+    const recordUserWithPhoto: Record<uid, UsersWithPhoto>
+      = Object.assign({}, ...users.map((u) => ({ [u.uid]: u })));
+
+    const recordUserWithRoleTags: Record<uid, UsersWithRoleTags>
+      = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u })));
+
+    const userRoleProfiles: Array<UserRoleProfile>
+      = Object.keys(recordUserWithPhoto).map(uid =>
+        Object.assign(
+          { roleTags: initUser.roleTags },
+          recordUserWithPhoto[uid],
+          recordUserWithRoleTags[uid],
+        ),
+      );
+
+    this.users = userRoleProfiles;
+  }
+
   public async mounted() {
+
     if (window.innerWidth < 1240) {
       this.initSwiper();
     }
@@ -140,18 +159,7 @@ export default class Hub extends Vue {
 
     await Promise.all([this.init()]);
 
-    // initialize this.users
-    const userList = room?.users || [];
-    const users = [...userList].reverse();
-    const userDict = Object.assign({}, ...users.map((u) => ({ [u.uid]: u })));
-    const adminuserDict = Object.assign({}, ...this.room.adminUsers.map((u) => ({ [u.uid]: u })));
-    const roleTagedUsers: Array<{
-      uid: string;
-      photo: string;
-      roleTags: string[];
-    }> = Object.keys(userDict).map(uid =>
-      Object.assign({ roleTags: [] }, userDict[uid], adminuserDict[uid]),
-    );
-    this.users = roleTagedUsers;
+    this.setInitUser()
+    this.setUserRoleProfiles()
   }
 }

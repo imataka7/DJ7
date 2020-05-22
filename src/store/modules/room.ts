@@ -8,6 +8,7 @@ import { app as firebaseApp } from '@/plugins/firebase';
 import store from '..';
 import {
   Room, RoomUser, Musicx, PlayerStatus, AdminUser, Government,
+  RoleTags,
 } from '@/models';
 
 const firestore = firebaseApp.firestore();
@@ -55,6 +56,10 @@ class RoomManager extends VuexModule {
     return firestore.collection('rooms').doc(this.roomId);
   }
 
+  get initUser() {
+    return this.status?.initUser
+  }
+
   @Mutation
   public setRoomId(roomId: string) {
     this.roomId = roomId;
@@ -80,6 +85,9 @@ class RoomManager extends VuexModule {
     }] : [];
     const government: Government = pilgrimId ? 'monarchism' : null;
 
+    // TODO
+    // Roomと型付けすると，musicがnullでエラーがでるが，nullで問題ないのか
+    // const initial : Room = {
     const initial = {
       player: {
         music: null,
@@ -93,6 +101,9 @@ class RoomManager extends VuexModule {
       pilgrimId,
       adminUsers,
       government,
+      initUser: {
+        roleTags: ['managePlay'],
+      },
     };
     await this.roomRef!.set(initial);
     return initial;
@@ -156,6 +167,13 @@ class RoomManager extends VuexModule {
   public async updateAdminUsers(adminUsers: AdminUser[]) {
     this.roomRef!.update({
       adminUsers,
+    });
+  }
+
+  @Action({ rawError: true })
+  public async updateInitUser(initUser: { roleTags: RoleTags}  ) {
+    this.roomRef!.update({
+      initUser,
     });
   }
 
