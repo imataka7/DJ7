@@ -50,7 +50,7 @@ export default class Hub extends Vue {
   }
 
   get role(): Role {
-    if (this.isGeneral){
+    if (this.isGeneral) {
       return roleBook['managePlay'];
     }
 
@@ -287,7 +287,7 @@ export default class Hub extends Vue {
     const timeElapsedFromUpdated = currentTime - updatedAt;
     const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 3000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
-    const isDifferentMusic = playedMusic.id !== music.id;
+    const isDifferentMusic = playedMusic.id !== music?.id;
     if (isUpdateAtTooNear || isDifferentMusic) {
       return;
     }
@@ -313,7 +313,7 @@ export default class Hub extends Vue {
 
     // console.log(music, errorMusic);
 
-    if (music.id === playedMusic?.id) {
+    if (music?.id === playedMusic?.id) {
       room.setMusicFromQueue(queues);
 
       this.$logger.error('player error', {
