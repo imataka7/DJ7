@@ -8,4 +8,4 @@ export {
   SyncButton,
   ForwardButton,
   PlayerButtons,
-}
+};

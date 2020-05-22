@@ -57,7 +57,7 @@ class RoomManager extends VuexModule {
   }
 
   get initUser() {
-    return this.status?.initUser
+    return this.status?.initUser;
   }
 
   @Mutation
@@ -171,7 +171,7 @@ class RoomManager extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async updateInitUser(initUser: { roleTags: RoleTags}  ) {
+  public async updateInitUser(initUser: { roleTags: RoleTags }) {
     this.roomRef!.update({
       initUser,
     });
@@ -281,7 +281,7 @@ class RoomManager extends VuexModule {
     }
 
     const queues = JSON.parse(JSON.stringify(this.queues)) as Musicx[];
-    const playingMusic = this.status.player.music;
+    const playingMusic = this.status.player.music!;
 
     queues.unshift({
       ...playingMusic,

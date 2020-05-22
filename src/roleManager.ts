@@ -1,6 +1,6 @@
-import firebase from 'firebase'
+import firebase from 'firebase';
 import { user, room } from '@/store/modules';
-import { Role } from '@/models'
+import { Role } from '@/models';
 import roleBook from '@/roleBook';
 
 
@@ -10,16 +10,16 @@ export const initUserPolyfill =
     (room.isMonarchism) ?
       { roleTags: [] }
       :
-      { roleTags: ['managePlay'] }
+      { roleTags: ['managePlay'] };
 
 const initUserRolePolyfill =
     (room.isMonarchism) ?
       roleBook['dog']
       :
     // anarchimsRoom
-      roleBook['managePlay']
+      roleBook['managePlay'];
 
-export const initUser = room.initUser || initUserPolyfill
+export const initUser = room.initUser || initUserPolyfill;
 
 export const makeCurrentRole= (currentUser: firebase.User ): Role => {
   const myRole = room.adminUsers
@@ -37,7 +37,7 @@ export const makeCurrentRole= (currentUser: firebase.User ): Role => {
 
   if (myRole) {
     // myRole.roleTags => role
-    const roleTags = myRole.roleTags
+    const roleTags = myRole.roleTags;
     return {
       playerPause: !!(roleTags.includes('managePlay')),
       playerSkip: !!(roleTags.includes('managePlay')),
@@ -50,10 +50,10 @@ export const makeCurrentRole= (currentUser: firebase.User ): Role => {
       queueMoveToTop: !!(roleTags.includes('managePlay')),
       addFromHistory: !!(roleTags.includes('managePlay')),
       manageUser: !!(roleTags.includes('manageUser')),
-    }
+    };
   } else if (room.initUser) {
     // initUser.roleTags => role
-    const roleTags = room.initUser.roleTags
+    const roleTags = room.initUser.roleTags;
     return {
       playerPause: !!(roleTags.includes('managePlay')),
       playerSkip: !!(roleTags.includes('managePlay')),
@@ -66,8 +66,8 @@ export const makeCurrentRole= (currentUser: firebase.User ): Role => {
       queueMoveToTop: !!(roleTags.includes('managePlay')),
       addFromHistory: !!(roleTags.includes('managePlay')),
       manageUser: !!(roleTags.includes('manageUser')),
-    }
+    };
   } else {
-    return initUserRolePolyfill
+    return initUserRolePolyfill;
   }
-}
+};

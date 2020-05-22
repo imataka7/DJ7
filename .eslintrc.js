@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true,
   },
-  'extends': [
+  extends: [
     'plugin:vue/essential',
     'eslint:recommended',
     '@vue/typescript/recommended',
@@ -14,14 +14,18 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'quotes': ['error', 'single'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
     'object-curly-spacing': ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
-    'no-async-promise-executor': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    '@typescript-eslint/ban-ts-ignore': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    '@typescript-eslint/no-var-requires': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-async-promise-executor':
+      process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/ban-ts-ignore':
+      process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/no-var-requires':
+      process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/camelcase': 'off',
   },
-}
+};

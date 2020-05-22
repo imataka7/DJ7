@@ -14,7 +14,7 @@ import { Role, RoleTags } from '@/models';
 import { setEvent, showToast } from '@/utils';
 import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
-import { makeCurrentRole, initUser } from '@/roleManager'
+import { makeCurrentRole, initUser } from '@/roleManager';
 import roleBook from '@/roleBook';
 
 
@@ -61,16 +61,16 @@ export default class Hub extends Vue {
   }
 
   get dbg() {
-    return process.env.NODE_ENV === 'development'
+    return process.env.NODE_ENV === 'development';
   }
 
   get currentRole(): Role {
     // currentUser is null
     if (!this.currentUser) {
-      return roleBook['dog']
+      return roleBook['dog'];
     }
 
-    return makeCurrentRole(this.currentUser)
+    return makeCurrentRole(this.currentUser);
   }
 
   get room() {
@@ -123,7 +123,7 @@ export default class Hub extends Vue {
   }
 
   public setInitUser() {
-    this.initUser = initUser
+    this.initUser = initUser;
   }
 
   public setUserRoleProfiles() {
@@ -159,7 +159,7 @@ export default class Hub extends Vue {
 
     await Promise.all([this.init()]);
 
-    this.setInitUser()
-    this.setUserRoleProfiles()
+    this.setInitUser();
+    this.setUserRoleProfiles();
   }
 }
