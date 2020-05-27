@@ -380,8 +380,8 @@ export default class PlayerController extends Vue {
     this.$emit('speed', s);
   }
 
-  @Watch('playingSpeed')
-  public onSpeedChanged(s: number) {
-    this.currentPlayer?.setSpeed(s);
-  }
+  // @Watch('playingSpeed')
+  // public onSpeedChanged(s: number) {
+  //   this.currentPlayer?.setSpeed(s);
+  // }
 }
