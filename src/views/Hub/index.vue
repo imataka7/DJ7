@@ -123,7 +123,6 @@
       @error="onError"
       @forward="forwardMusic"
       @seeked="onSeeked"
-      @speed="onSpeedChanged"
     ></player-controller>
   </div>
 </template>
