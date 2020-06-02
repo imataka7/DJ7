@@ -161,7 +161,7 @@ export default class PlayerController extends Vue {
     return this.currentPlayerInfo?.music;
   }
 
-  private currentPlayer: MusicPlayer | null = null;
+  private currentPlayer = this.$refs.youtube as unknown as MusicPlayer;
 
   public currentVolume = 50;
 
@@ -172,9 +172,9 @@ export default class PlayerController extends Vue {
   public musicDuration = 0;
 
   public async loadMusic(music: Musicx) {
-    if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
-      this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
-    }
+    // if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
+    //   this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
+    // }
 
     this.$logger.info('load music', {
       content: {
