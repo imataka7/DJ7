@@ -316,62 +316,6 @@ export default class PlayerController extends Vue {
     this.seekTo(to);
   }
 
-  public sumMovementY = 0;
-
-  public initialPageY = 0;
-
-  public pointerEventStartAt = 0;
-
-  public onPointerStart() {
-    if (window.innerWidth > 1240) {
-      return;
-    }
-
-    if (this.isTheaterMode) {
-      const el = this.$el as HTMLElement;
-      el.style.removeProperty('transition');
-      this.sumMovementY = 0;
-      this.pointerEventStartAt = adate.now();
-      this.initialPageY = 0;
-    }
-  }
-
-  public onPointerMove(e: PointerEvent) {
-    if (e.pressure === 0 || window.innerWidth > 1240) {
-      return;
-    }
-
-    if (this.isTheaterMode) {
-      const py = e.pageY;
-      if (this.initialPageY === 0) {
-        this.initialPageY = py;
-      }
-
-      this.sumMovementY = py - this.initialPageY;
-
-      const el = this.$el as HTMLElement;
-      if (this.sumMovementY > 0) {
-        el.style.transform = `translateY(${this.sumMovementY}px)`;
-      }
-    }
-  }
-
-  public async onPointerEnd() {
-    if (window.innerWidth > 1240) {
-      return;
-    }
-
-    const el = this.$el as HTMLElement;
-    el.style.removeProperty('height');
-    el.style.setProperty('transition', 'height .3s ease, transform .3s ease-in-out');
-
-    const dy = this.sumMovementY / (adate.now() - this.pointerEventStartAt);
-    if (dy > 1 || this.sumMovementY > 200) {
-      this.isTheaterMode = false;
-    }
-    el.style.removeProperty('transform');
-  }
-
   get playingSpeed() {
     return this.currentPlayerInfo?.playingSpeed || 1;
   }
