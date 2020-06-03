@@ -60,10 +60,6 @@
           <img v-for="u in users" :key="u.id" :src="u.photo" alt="icon" />
         </div>
 
-        <div class="ad-container">
-          <ad-square></ad-square>
-        </div>
-
         <div class="jumper">
           <label>
             <p class="label-desc">部屋の移動/作成をする</p>
@@ -80,6 +76,7 @@
                 作成時は権限を設定できるようにする
               </label> -->
         </div>
+
         <abutton @click="signOut" v-if="!currentUser">
           サインアウト
         </abutton>
@@ -90,6 +87,10 @@
         <template v-if="role.addViaSearch">
           <input-area @parsed="addQueue" />
         </template>
+
+        <div class="ad-container">
+          <ad-square></ad-square>
+        </div>
       </div>
 
       <div class="column swiper-slide">
