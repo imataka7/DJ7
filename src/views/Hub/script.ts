@@ -1,6 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import 'firebase/firestore';
-import Swiper from 'swiper';
 
 import {
   YoutubePlayer,
@@ -53,7 +52,6 @@ export default class Hub extends Vue {
     if (this.isGeneral) {
       return roleBook['managePlay'];
     }
-
 
     // 更新直後に権限持ってなくても一瞬だけボタンが出てしまうので
     // 最初は何も与えないように変更
@@ -216,41 +214,9 @@ export default class Hub extends Vue {
     await user.updateHistory(music);
   }
 
-  public swiper?: Swiper;
-
-  public initSwiper() {
-    this.swiper = new Swiper('.swiper-container', {
-      direction: 'horizontal',
-      loop: false,
-      slidesPerView: 1,
-      breakpoints: {
-        1240: {
-          slidesPerView: 3,
-          allowTouchMove: false,
-        },
-      },
-    });
-  }
-
-  public updateSwiper() {
-    if (window.innerWidth < 1240 && !this.swiper) {
-      this.initSwiper();
-      return;
-    }
-
-    this.swiper?.update();
-  }
-
   public async mounted() {
-    if (window.innerWidth < 1240) {
-      this.initSwiper();
-    }
-
-    setEvent(window, 'resize', this.updateSwiper);
-
     await Promise.all([this.init()]);
   }
-
 
   // // ユーザがRoomから退出する処理
   // public beforeDestroy() {
