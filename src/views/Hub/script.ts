@@ -67,6 +67,13 @@ export default class Hub extends Vue {
     return makeCurrentRole(this.currentUser);
   }
 
+  @Watch('role', { immediate: true })
+  public onRoleChanged(newRole: Role) {
+    if (this.controller) {
+      this.controller.role = newRole;
+    }
+  }
+
   get room() {
     return room;
   }

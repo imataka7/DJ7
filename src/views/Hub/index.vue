@@ -1,7 +1,7 @@
 <template>
   <div class="hub">
-    <div class="columns swiper-wrapper">
-      <div class="column swiper-slide input-container">
+    <div class="columns">
+      <div class="column input-container">
         <div class="room-desc">
           <div class="dj7-logo">
             <img :src="require('@/assets/logo.png')" alt="DJ7" />
@@ -93,7 +93,7 @@
         </div>
       </div>
 
-      <div class="column swiper-slide">
+      <div class="column queue-container">
         <p class="header">キュー</p>
         <div class="no-music" v-if="queues.length === 0">
           キューに動画がありません
@@ -108,7 +108,7 @@
         ></music-queue>
       </div>
 
-      <div class="column swiper-slide">
+      <div class="column history-container">
         <p class="header">履歴</p>
         <template v-if="!currentUser">
           <div class="no-music">サインインしたユーザーのみが利用できます</div>
