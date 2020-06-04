@@ -77,20 +77,20 @@
               </label> -->
         </div>
 
-        <abutton @click="signOut" v-if="!currentUser">
+        <abutton @click="signOut" v-if="currentUser">
           サインアウト
         </abutton>
         <abutton @click="$router.push('/signin')" v-else>
           サインイン
         </abutton>
+      </div>
 
-        <template v-if="role.addViaSearch">
-          <input-area @parsed="addQueue" />
-        </template>
+      <template v-if="role.addViaSearch">
+        <input-area @parsed="addQueue" />
+      </template>
 
-        <div class="ad-container">
-          <ad-square></ad-square>
-        </div>
+      <div class="ad-container">
+        <ad-square></ad-square>
       </div>
 
       <div class="column queue-container">
