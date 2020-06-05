@@ -134,7 +134,6 @@
 
     <player-controller
       ref="controller"
-      :role="role"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"
