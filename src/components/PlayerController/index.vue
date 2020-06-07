@@ -27,9 +27,9 @@
 
       <div class="seek-bar-container">
         <p class="progress-container">
-          <span class="progress-start">
-            {{ formatDuration(((range * musicDuration) | 0) / 100) }}
-          </span>
+          <span class="progress-start">{{
+            formatDuration(((range * musicDuration) | 0) / 100)
+          }}</span>
           <span class="progress-slash">/</span>
           <span class="progress-end">{{ formatDuration(musicDuration) }}</span>
         </p>
