@@ -9,6 +9,7 @@ import {
   PlayerController,
   ShareButton,
   AdSquare,
+  TabBar,
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
@@ -31,6 +32,7 @@ import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
     ShareButton,
     abutton: ActionButton,
     AdSquare,
+    TabBar,
   },
 })
 export default class Hub extends Vue {
@@ -348,4 +350,6 @@ export default class Hub extends Vue {
   public async onSpeedChanged(s: number) {
     await room.updatePlayingSpeed(s);
   }
+
+  public currentView = 'home';
 }

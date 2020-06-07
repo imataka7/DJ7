@@ -2,7 +2,7 @@
   <div class="hub">
     <div class="columns">
       <div class="column input-container">
-        <div class="tab-item">
+        <div class="tab-item" v-show="currentView === 'home'">
           <div class="room-desc">
             <div class="dj7-logo">
               <img :src="require('@/assets/logo.png')" alt="DJ7" />
@@ -86,9 +86,7 @@
               サインイン
             </abutton>
           </div>
-        </div>
 
-        <div class="tab-item">
           <template v-if="role.addViaSearch">
             <input-area @parsed="addQueue" />
           </template>
@@ -99,7 +97,10 @@
         </div>
       </div>
 
-      <div class="column queue-container tab-item">
+      <div
+        class="column queue-container tab-item"
+        v-show="currentView === 'queue'"
+      >
         <p class="header">キュー</p>
         <div class="no-music" v-if="queues.length === 0">
           キューに動画がありません
@@ -114,7 +115,10 @@
         ></music-queue>
       </div>
 
-      <div class="column history-container tab-item">
+      <div
+        class="column history-container tab-item"
+        v-show="currentView === 'history'"
+      >
         <p class="header">履歴</p>
         <template v-if="!currentUser">
           <div class="no-music">サインインしたユーザーのみが利用できます</div>
@@ -140,13 +144,19 @@
 
     <player-controller
       ref="controller"
-      class="tab-item"
+      class="tab-item is-placed-bottom"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"
       @forward="forwardMusic"
       @seeked="onSeeked"
+      v-show="currentView === 'player'"
     ></player-controller>
+
+    <tab-bar
+      class="tab-bar is-placed-bottom"
+      :current-view.sync="currentView"
+    ></tab-bar>
   </div>
 </template>
 
