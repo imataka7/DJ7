@@ -1,10 +1,5 @@
 <template>
-  <div
-    :class="`player-controller  ${isTheaterMode ? 'is-theater' : ''}`"
-    @pointerdown="onPointerStart"
-    @pointermove="onPointerMove"
-    @pointerup="onPointerEnd"
-  >
+  <div :class="`player-controller  ${isTheaterMode ? 'is-theater' : ''}`">
     <div class="controller-container is-flex">
       <PlayPauseButton
         v-if="role.playerPause"

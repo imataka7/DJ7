@@ -33,6 +33,10 @@
   }
 }
 
+.sign-in-n-out {
+  margin-bottom: 10px;
+}
+
 .label-desc {
   margin: 0;
 }
@@ -47,7 +51,8 @@
 }
 
 .music-list {
-  width: 430px;
+  width: 420px;
+  // width: 100%;
   height: calc(100% - 20px);
   overflow-x: hidden;
   overflow-y: auto;
@@ -55,7 +60,7 @@
 
 .no-music {
   width: 100%;
-  padding: 10px;
+  padding: 10px 0;
   margin-top: 10px;
   background: var(--hub-no-music-bg);
   color: var(--hub-no-music-fc);
@@ -77,4 +82,23 @@
 
 .jumper {
   margin-bottom: 15px;
+}
+
+@media screen and (min-width: 1260px) {
+  .columns {
+    display: flex;
+    // justify-content: space-evenly;
+    justify-content: center;
+
+    height: calc(100vh - 50px);
+    padding-top: 10px;
+  }
+
+  .column {
+    width: 420px;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
 }

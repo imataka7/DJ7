@@ -167,7 +167,6 @@ export default class MusicQueue extends Vue {
 .music-queue {
   width: 100%;
   min-height: calc(100% - 20px);
-  padding: 0 5px;
   touch-action: pan-y;
 
   .button {

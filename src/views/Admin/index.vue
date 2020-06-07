@@ -14,7 +14,7 @@
               ></fa-icon>
             </div>
 
-            <div v-if="dbg" style="border: solid 1px red;">
+            <div v-if="false" style="border: solid 1px red;">
               <div>{{ initUserRoleTags }}</div>
               <div>government: {{ room.government }}</div>
               <div>adminUsers: {{ room.adminUsers }}</div>
@@ -39,13 +39,6 @@
               >
             </p>
             <span class="version">{{ version }}</span>
-          </div>
-
-          <div class="share-button-container">
-            <share-button
-              :room-id="roomId"
-              :now-playing="playingMusic && playingMusic.title"
-            ></share-button>
           </div>
 
           <div class="room-users">
@@ -92,7 +85,7 @@
                   <input
                     type="checkbox"
                     value="manageUser"
-                    v-modle="initUser.roleTags"
+                    v-model="initUser.roleTags"
                   />
                   管理者権限
                 </label>
@@ -101,7 +94,7 @@
             <div
               v-for="user in users"
               :key="user.id"
-              :id="uid"
+              :id="user.id"
               class="user-settings"
             >
               <div>

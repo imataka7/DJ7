@@ -78,12 +78,14 @@
               </label> -->
           </div>
 
-          <abutton @click="signOut" v-if="currentUser">
-            サインアウト
-          </abutton>
-          <abutton @click="$router.push('/signin')" v-else>
-            サインイン
-          </abutton>
+          <div class="sign-in-n-out">
+            <abutton @click="signOut" v-if="currentUser">
+              サインアウト
+            </abutton>
+            <abutton @click="$router.push('/signin')" v-else>
+              サインイン
+            </abutton>
+          </div>
         </div>
 
         <div class="tab-item">
