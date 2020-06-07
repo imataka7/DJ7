@@ -1,3 +1,8 @@
+.input-container {
+  height: 100%;
+  overflow: auto;
+}
+
 .dj7-logo {
   img {
     height: 50px;
@@ -51,9 +56,7 @@
 }
 
 .music-list {
-  max-width: 420px;
-  // width: 100%;
-  height: calc(100% - 20px);
+  height: calc(100% - 41px);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -87,7 +90,6 @@
 @media screen and (min-width: 1260px) {
   .columns {
     display: flex;
-    // justify-content: space-evenly;
     justify-content: center;
 
     height: calc(100vh - 50px);
@@ -105,16 +107,29 @@
   .tab-bar {
     display: none;
   }
+
+  .tab-item {
+    display: block !important;
+  }
 }
 
-@media screen and (max-width: 1260px) {
+@media screen and (max-width: 1259px) {
   .tab-item {
     position: fixed;
     top: 0;
     left: 0;
 
-    width: 100%;
+    // width: 100%;
     height: calc(100vh - 50px);
-    padding-top: 10px;
+  }
+
+  .input-container {
+    width: calc(100% - 20px);
+    padding: 10px 10px 0 10px;
+  }
+
+  .header {
+    height: 40px;
+    line-height: 40px;
   }
 }
