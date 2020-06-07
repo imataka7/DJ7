@@ -159,6 +159,8 @@ export default class Hub extends Vue {
     this.isQueueUpdating = true;
 
     const previousId = oldStatus?.player.music?.id;
+
+    const needLoadingVideo = !!this.controller.currentPlayerInfo;
     this.controller.currentPlayerInfo = newStatus.player;
 
     setTimeout(() => {
@@ -174,7 +176,7 @@ export default class Hub extends Vue {
 
     const { id } = music;
 
-    if (id && id !== previousId) {
+    if (needLoadingVideo || (id && id !== previousId)) {
       user.updateHistory(music);
 
       await this.controller.loadMusic(music);
@@ -191,6 +193,7 @@ export default class Hub extends Vue {
       status === PlayerStatus.PLAY
         ? (adate.now() - updatedAt) / 1000 + playedTime
         : playedTime;
+    console.log(seekTo, adate.now(), updatedAt, playedTime, status);
 
     await this.setStatus(status, seekTo);
   }
