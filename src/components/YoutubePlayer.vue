@@ -151,12 +151,10 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
 }
 </script>
 
-<style lang="scss" scoped>
-.control-buttons {
-  padding: 10px 0;
-
-  button {
-    margin-right: 10px;
-  }
+<style lang="scss">
+.player,
+iframe {
+  width: 100%;
+  height: 100%;
 }
 </style>

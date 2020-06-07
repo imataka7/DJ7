@@ -84,14 +84,13 @@ export default class VolumeController extends Vue {
   display: flex;
   align-items: center;
   position: relative;
-  width: 50px;
-  // height: 100%;
+  width: 35px;
   z-index: 100;
 }
 
 .volume-picker {
   position: absolute;
-  bottom: 110px;
-  right: -55px;
+  bottom: 400%;
+  right: -210%;
 }
 </style>
