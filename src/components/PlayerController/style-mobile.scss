@@ -24,7 +24,7 @@
     grid-area: controller;
 
     display: grid;
-    grid-template-rows: 30% 30% 1fr;
+    grid-template-rows: 20% 30% 1fr;
     grid-template-areas:
       "info info info"
       "seek seek seek"
@@ -76,6 +76,7 @@
   }
 
   .volume-controller {
+    display: none !important;
     grid-area: volm;
     margin: 0 auto;
   }

@@ -64,7 +64,7 @@
 .no-music {
   width: 100%;
   padding: 10px 0;
-  margin-top: 10px;
+  margin: 10px auto 0;
   background: var(--hub-no-music-bg);
   color: var(--hub-no-music-fc);
   text-align: center;
@@ -119,7 +119,7 @@
     top: 0;
     left: 0;
 
-    // width: 100%;
+    width: 100%;
     height: calc(100vh - 50px);
   }
 
@@ -131,5 +131,9 @@
   .header {
     height: 40px;
     line-height: 40px;
+  }
+
+  .no-music {
+    width: 95%;
   }
 }
