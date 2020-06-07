@@ -51,7 +51,7 @@ export default class PlayerController extends Vue {
   // @Prop({ default: () => ({}) })
   // role!: Role;
 
-  public role: Role | null = null;
+  public role: Role | {} = {};
 
   public log(action: string, content: Record<string, any>) {
     this.$ga.logEvent(action);
@@ -70,6 +70,7 @@ export default class PlayerController extends Vue {
 
   public async initPlayers() {
     this.players.youtube = this.$refs.youtube as unknown as MusicPlayer;
+    this.currentPlayer = this.players.youtube;
 
     await Promise.all(this.allPlayers.map(p => p!.init()));
 
@@ -163,7 +164,7 @@ export default class PlayerController extends Vue {
     return this.currentPlayerInfo?.music;
   }
 
-  private currentPlayer = this.$refs.youtube as unknown as MusicPlayer;
+  private currentPlayer: MusicPlayer | null = null;
 
   public currentVolume = 50;
 
@@ -177,6 +178,9 @@ export default class PlayerController extends Vue {
     // if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
     //   this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
     // }
+    if (!this.currentPlayer) {
+      return;
+    }
 
     this.$logger.info('load music', {
       content: {
