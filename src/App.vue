@@ -249,10 +249,10 @@ body,
 }
 
 @media screen and (max-width: 1200px) {
-  * {
-    touch-action: pan-x pan-y;
-    // touch-action: pan-y;
-  }
+  // * {
+  //   touch-action: pan-x pan-y;
+  //   // touch-action: pan-y;
+  // }
 
   html,
   body,

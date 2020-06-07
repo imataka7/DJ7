@@ -166,7 +166,7 @@ export default class MusicQueue extends Vue {
 <style lang="scss" scoped>
 .music-queue {
   width: 100%;
-  touch-action: pan-y;
+  // touch-action: pan-y;
 
   .button {
     margin: 0 10px;
