@@ -98,6 +98,10 @@ export default class Hub extends Vue {
       room.addUser(this.me);
       user.addVisitedRooms(this.roomId);
     }
+
+    if (this.controller) {
+      this.controller.role = this.role;
+    }
   }
 
   public async signOut() {
@@ -144,6 +148,7 @@ export default class Hub extends Vue {
   public async init() {
     this.controller = this.$refs.controller as PlayerController;
     await this.controller.initPlayers();
+    this.controller.role = this.role;
 
     await room.init(this.roomId);
 
