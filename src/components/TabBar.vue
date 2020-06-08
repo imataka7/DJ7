@@ -69,6 +69,7 @@ export default class TabBar extends Vue {
   width: 100%;
   background-color: var(--controller-bg);
   border-top: solid 1px var(--controller-border);
+  user-select: none;
 }
 
 .tab-bar-button {
