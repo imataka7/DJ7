@@ -5,6 +5,7 @@
     grid-template-areas:
       "player"
       "controller";
+    background-color: var(--bgc) !important;
   }
 
   .player-container {
