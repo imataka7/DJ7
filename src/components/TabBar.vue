@@ -8,14 +8,14 @@
       <span class="icon"><fa-icon icon="home"></fa-icon></span>
       <span class="button-desc">ルーム</span>
     </div>
-    <!-- <div
+    <div
       class="tab-bar-button"
       @click="select('add')"
       :data-active="currentView === 'add'"
     >
       <span class="icon"><fa-icon icon="plus-circle"></fa-icon></span>
       <span class="button-desc">追加</span>
-    </div> -->
+    </div>
     <div
       class="tab-bar-button"
       @click="select('queue')"
@@ -69,7 +69,6 @@ export default class TabBar extends Vue {
   width: 100%;
   background-color: var(--controller-bg);
   border-top: solid 1px var(--controller-border);
-  user-select: none;
 }
 
 .tab-bar-button {
