@@ -170,12 +170,10 @@ $sairi-orange: #f50;
   }
 }
 
-:root {
-  @include is-light-mode;
-}
-
-:root[data-darkmode="true"] {
-  @include is-dark-mode;
+@media (prefers-color-scheme: light) {
+  :root {
+    @include is-light-mode;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
