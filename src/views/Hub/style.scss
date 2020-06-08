@@ -145,4 +145,14 @@
   .no-music {
     width: 95%;
   }
+
+  .player-controller {
+    top: 110%;
+    left: 110%;
+
+    &[data-active] {
+      top: 0;
+      left: 0;
+    }
+  }
 }

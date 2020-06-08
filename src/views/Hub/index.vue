@@ -146,13 +146,13 @@
 
     <player-controller
       ref="controller"
-      class="tab-item is-placed-bottom"
+      class="tab-item is-placed-bottom player-controller"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"
       @forward="forwardMusic"
       @seeked="onSeeked"
-      v-show="currentView === 'player'"
+      :data-active="currentView === 'player'"
     ></player-controller>
 
     <tab-bar
