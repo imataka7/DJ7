@@ -1,6 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator';
 import 'firebase/firestore';
-import Swiper from 'swiper';
 import {
   YoutubePlayer,
   InputArea,
@@ -11,7 +10,7 @@ import {
   AdSquare,
 } from '@/components';
 import { Role, RoleTags } from '@/models';
-import { setEvent, showToast } from '@/utils';
+import { showToast } from '@/utils';
 import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import { makeCurrentRole, initUser } from '@/roleManager';
@@ -97,33 +96,8 @@ export default class Hub extends Vue {
     return room.status;
   }
 
-  public swiper?: Swiper;
-
-  public initSwiper() {
-    this.swiper = new Swiper('.swiper-container', {
-      direction: 'horizontal',
-      loop: false,
-      slidesPerView: 1,
-      breakpoints: {
-        1240: {
-          slidesPerView: 3,
-          allowTouchMove: false,
-        },
-      },
-    });
-  }
-
-  public updateSwiper() {
-    if (window.innerWidth < 1240 && !this.swiper) {
-      this.initSwiper();
-      return;
-    }
-
-    this.swiper?.update();
-  }
-
   public setInitUser() {
-    this.initUser = initUser;
+    this.initUser = room.initUser || initUser;
   }
 
   public setUserRoleProfiles() {
@@ -150,13 +124,6 @@ export default class Hub extends Vue {
   }
 
   public async mounted() {
-
-    if (window.innerWidth < 1240) {
-      this.initSwiper();
-    }
-
-    setEvent(window, 'resize', this.updateSwiper);
-
     await Promise.all([this.init()]);
 
     this.setInitUser();

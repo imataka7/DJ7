@@ -1,117 +1,6 @@
-.hub {
+.admin {
   width: 100%;
   height: 100%;
-  margin: auto;
-  overflow: hidden;
-}
-
-.swiper-container {
-  width: 1240px;
-  height: 100%;
-  margin: auto;
-}
-
-.columns {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-}
-
-.column {
-  padding: 10px;
-  font-family: "Roboto Mono", monospace;
-
-  &.input-container {
-    width: 300px;
-    overflow: auto;
-  }
-}
-
-.room-desc {
-  margin-bottom: 15px;
-}
-
-.room-users {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 50px;
-  width: 100%;
-  margin-bottom: 10px;
-  // flex-wrap: wrap;
-  overflow-x: overlay;
-
-  img {
-    height: 50px;
-  }
-}
-
-.ad-container {
-  min-width: 50px;
-  min-height: 50px;
-  margin: 10px auto;
-}
-
-.share-button-container {
-  margin-bottom: 10px;
-}
-
-.label-desc {
-  margin: 0;
-}
-
-.header {
-  margin: 0;
-  height: 30px;
-  text-align: center;
-  border-bottom: solid 1px var(--hub-header-border);
-  font-size: 1.2em;
-  font-weight: 700;
-}
-
-.music-list {
-  width: 430px;
-  max-height: calc(100% - 20px);
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.no-music {
-  width: 420px;
-  padding: 10px;
-  margin-top: 10px;
-  background: var(--hub-no-music-bg);
-  color: var(--hub-no-music-fc);
-  text-align: center;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-}
-
-.player-controller {
-  position: fixed;
-  bottom: 0;
-  z-index: 100;
-}
-
-.jumper {
-  margin-bottom: 15px;
-}
-
-.dj7-logo {
-  img {
-    height: 50px;
-  }
-
-  .crown {
-    position: relative;
-    left: 5px;
-    bottom: 7px;
-  }
 }
 
 .save-button-container {
@@ -121,6 +10,7 @@
 
 .user-settings {
   display: grid;
+  width: 300px;
   height: 70px;
   grid-template-areas:
     "icon name"
@@ -156,38 +46,15 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
-  .hub,
-  .columns {
-    width: 300vw;
-    margin: 0;
+@media screen and (min-width: 1260px) {
+  .admin {
+    padding: 30px;
   }
+}
 
-  .swiper-container {
-    width: 100vw;
-    height: 100%;
-    overflow-y: auto;
-    margin: 0;
-  }
-
-  .column,
-  .input-container {
-    width: 90vw;
-    padding: 10px 5vw;
-    overflow-x: hidden;
-    overflow-y: hidden;
-
-    &:first-child {
-      overflow-y: auto;
-    }
-  }
-
-  .music-list {
-    width: calc(90vw - 10px);
-    user-select: none;
-  }
-
-  .no-music {
-    width: calc(90vw - 20px);
+@media screen and (max-width: 1260px) {
+  .admin {
+    width: calc(100% - 20px);
+    padding: 10px;
   }
 }
