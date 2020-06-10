@@ -55,6 +55,8 @@
               :room-id="roomId"
               :now-playing="playingMusic && playingMusic.title"
             ></share-button>
+
+            <copy-button></copy-button>
           </div>
 
           <div class="room-users">
