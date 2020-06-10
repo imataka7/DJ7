@@ -13,7 +13,6 @@ import {
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
-  setEvent,
   getClone,
   showToast,
 } from '@/utils';
@@ -167,7 +166,6 @@ export default class Hub extends Vue {
 
     const previousId = oldStatus?.player.music?.id;
 
-    const needLoadingVideo = !!this.controller.currentPlayerInfo;
     this.controller.currentPlayerInfo = newStatus.player;
 
     setTimeout(() => {
@@ -183,9 +181,10 @@ export default class Hub extends Vue {
 
     const { id } = music;
 
-    if (needLoadingVideo || (id && id !== previousId)) {
+    if (id && id !== previousId) {
       user.updateHistory(music);
 
+      console.log(id, previousId);
       await this.controller.loadMusic(music);
     }
 
