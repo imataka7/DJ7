@@ -1,6 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import 'firebase/firestore';
-import Swiper from 'swiper';
 
 import {
   YoutubePlayer,
@@ -10,10 +9,10 @@ import {
   PlayerController,
   ShareButton,
   AdSquare,
+  TabBar,
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
-  setEvent,
   getClone,
   showToast,
 } from '@/utils';
@@ -32,6 +31,7 @@ import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
     ShareButton,
     abutton: ActionButton,
     AdSquare,
+    TabBar,
   },
 })
 export default class Hub extends Vue {
@@ -54,7 +54,6 @@ export default class Hub extends Vue {
       return roleBook['managePlay'];
     }
 
-
     // 更新直後に権限持ってなくても一瞬だけボタンが出てしまうので
     // 最初は何も与えないように変更
     if (!room.status) {
@@ -67,6 +66,13 @@ export default class Hub extends Vue {
     }
 
     return makeCurrentRole(this.currentUser);
+  }
+
+  @Watch('role', { immediate: true })
+  public onRoleChanged(newRole: Role) {
+    if (this.controller) {
+      this.controller.role = newRole;
+    }
   }
 
   get room() {
@@ -90,6 +96,10 @@ export default class Hub extends Vue {
     if (this.me) {
       room.addUser(this.me);
       user.addVisitedRooms(this.roomId);
+    }
+
+    if (this.controller) {
+      this.controller.role = this.role;
     }
   }
 
@@ -137,6 +147,7 @@ export default class Hub extends Vue {
   public async init() {
     this.controller = this.$refs.controller as PlayerController;
     await this.controller.initPlayers();
+    this.controller.role = this.role;
 
     await room.init(this.roomId);
 
@@ -154,6 +165,7 @@ export default class Hub extends Vue {
     this.isQueueUpdating = true;
 
     const previousId = oldStatus?.player.music?.id;
+
     this.controller.currentPlayerInfo = newStatus.player;
 
     setTimeout(() => {
@@ -172,6 +184,7 @@ export default class Hub extends Vue {
     if (id && id !== previousId) {
       user.updateHistory(music);
 
+      console.log(id, previousId);
       await this.controller.loadMusic(music);
     }
 
@@ -186,6 +199,7 @@ export default class Hub extends Vue {
       status === PlayerStatus.PLAY
         ? (adate.now() - updatedAt) / 1000 + playedTime
         : playedTime;
+    console.log(seekTo, adate.now(), updatedAt, playedTime, status);
 
     await this.setStatus(status, seekTo);
   }
@@ -216,41 +230,9 @@ export default class Hub extends Vue {
     await user.updateHistory(music);
   }
 
-  public swiper?: Swiper;
-
-  public initSwiper() {
-    this.swiper = new Swiper('.swiper-container', {
-      direction: 'horizontal',
-      loop: false,
-      slidesPerView: 1,
-      breakpoints: {
-        1240: {
-          slidesPerView: 3,
-          allowTouchMove: false,
-        },
-      },
-    });
-  }
-
-  public updateSwiper() {
-    if (window.innerWidth < 1240 && !this.swiper) {
-      this.initSwiper();
-      return;
-    }
-
-    this.swiper?.update();
-  }
-
   public async mounted() {
-    if (window.innerWidth < 1240) {
-      this.initSwiper();
-    }
-
-    setEvent(window, 'resize', this.updateSwiper);
-
     await Promise.all([this.init()]);
   }
-
 
   // // ユーザがRoomから退出する処理
   // public beforeDestroy() {
@@ -372,4 +354,6 @@ export default class Hub extends Vue {
   public async onSpeedChanged(s: number) {
     await room.updatePlayingSpeed(s);
   }
+
+  public currentView = 'home';
 }

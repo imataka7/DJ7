@@ -48,8 +48,10 @@ export default class PlayerController extends Vue {
   @Prop({ default: false })
   public mute!: boolean;
 
-  @Prop({ default: () => ({}) })
-  role!: Role;
+  // @Prop({ default: () => ({}) })
+  // role!: Role;
+
+  public role: Role | {} = {};
 
   public log(action: string, content: Record<string, any>) {
     this.$ga.logEvent(action);
@@ -68,6 +70,7 @@ export default class PlayerController extends Vue {
 
   public async initPlayers() {
     this.players.youtube = this.$refs.youtube as unknown as MusicPlayer;
+    this.currentPlayer = this.players.youtube;
 
     await Promise.all(this.allPlayers.map(p => p!.init()));
 
@@ -172,8 +175,11 @@ export default class PlayerController extends Vue {
   public musicDuration = 0;
 
   public async loadMusic(music: Musicx) {
-    if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
-      this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
+    // if (!this.currentPlayer || this.currentPlayer?.platform !== music.platform) {
+    //   this.currentPlayer = this.allPlayers.find(p => p!.platform === music.platform)!;
+    // }
+    if (!this.currentPlayer) {
+      return;
     }
 
     this.$logger.info('load music', {
@@ -314,62 +320,6 @@ export default class PlayerController extends Vue {
     });
 
     this.seekTo(to);
-  }
-
-  public sumMovementY = 0;
-
-  public initialPageY = 0;
-
-  public pointerEventStartAt = 0;
-
-  public onPointerStart() {
-    if (window.innerWidth > 1240) {
-      return;
-    }
-
-    if (this.isTheaterMode) {
-      const el = this.$el as HTMLElement;
-      el.style.removeProperty('transition');
-      this.sumMovementY = 0;
-      this.pointerEventStartAt = adate.now();
-      this.initialPageY = 0;
-    }
-  }
-
-  public onPointerMove(e: PointerEvent) {
-    if (e.pressure === 0 || window.innerWidth > 1240) {
-      return;
-    }
-
-    if (this.isTheaterMode) {
-      const py = e.pageY;
-      if (this.initialPageY === 0) {
-        this.initialPageY = py;
-      }
-
-      this.sumMovementY = py - this.initialPageY;
-
-      const el = this.$el as HTMLElement;
-      if (this.sumMovementY > 0) {
-        el.style.transform = `translateY(${this.sumMovementY}px)`;
-      }
-    }
-  }
-
-  public async onPointerEnd() {
-    if (window.innerWidth > 1240) {
-      return;
-    }
-
-    const el = this.$el as HTMLElement;
-    el.style.removeProperty('height');
-    el.style.setProperty('transition', 'height .3s ease, transform .3s ease-in-out');
-
-    const dy = this.sumMovementY / (adate.now() - this.pointerEventStartAt);
-    if (dy > 1 || this.sumMovementY > 200) {
-      this.isTheaterMode = false;
-    }
-    el.style.removeProperty('transform');
   }
 
   get playingSpeed() {

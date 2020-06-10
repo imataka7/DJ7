@@ -1,29 +1,17 @@
-.hub {
-  width: 100%;
+.input-container {
   height: 100%;
-  margin: auto;
-  overflow: hidden;
+  overflow: auto;
 }
 
-.swiper-container {
-  width: 1240px;
-  height: 100%;
-  margin: auto;
-}
+.dj7-logo {
+  img {
+    height: 50px;
+  }
 
-.columns {
-  display: flex;
-  justify-content: center;
-  height: calc(100% - 50px);
-}
-
-.column {
-  padding: 10px;
-  font-family: "Roboto Mono", monospace;
-
-  &.input-container {
-    width: 300px;
-    overflow: auto;
+  .crown {
+    position: relative;
+    left: 5px;
+    bottom: 7px;
   }
 }
 
@@ -50,10 +38,8 @@
   }
 }
 
-.ad-container {
-  min-width: 50px;
-  min-height: 50px;
-  margin: 10px auto;
+.sign-in-n-out {
+  margin-bottom: 10px;
 }
 
 .label-desc {
@@ -70,16 +56,15 @@
 }
 
 .music-list {
-  width: 430px;
-  height: calc(100% - 20px);
+  height: calc(100% - 41px);
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 .no-music {
-  width: 420px;
-  padding: 10px;
-  margin-top: 10px;
+  width: 100%;
+  padding: 10px 0;
+  margin: 10px auto 0;
   background: var(--hub-no-music-bg);
   color: var(--hub-no-music-fc);
   text-align: center;
@@ -92,7 +77,7 @@
   padding: 15px;
 }
 
-.player-controller {
+.is-placed-bottom {
   position: fixed;
   bottom: 0;
   z-index: 100;
@@ -102,50 +87,72 @@
   margin-bottom: 15px;
 }
 
-.dj7-logo {
-  img {
-    height: 50px;
-  }
-
-  .crown {
-    position: relative;
-    left: 5px;
-    bottom: 7px;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .hub,
+@media screen and (min-width: 1260px) {
   .columns {
-    width: 300vw;
-    margin: 0;
+    display: flex;
+    justify-content: center;
+
+    height: calc(100vh - 50px);
+    padding-top: 10px;
   }
 
-  .swiper-container {
-    width: 100vw;
-    height: 100%;
-    overflow-y: auto;
-    margin: 0;
-  }
+  .column {
+    width: 420px;
 
-  .column,
-  .input-container {
-    width: 90vw;
-    padding: 10px 5vw;
-    overflow-x: hidden;
-    overflow-y: hidden;
-
-    &:first-child {
-      overflow-y: auto;
+    &:not(:last-child) {
+      margin-right: 10px;
     }
   }
 
-  .music-list {
-    width: calc(90vw - 10px);
-    user-select: none;
+  .tab-bar {
+    display: none;
+  }
+
+  .tab-item {
+    display: block !important;
+  }
+}
+
+@media screen and (max-width: 1259px) {
+  .tab-item {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: calc(100vh - 50px);
+  }
+
+  .input-container {
+    width: calc(100% - 20px);
+    padding: 10px 10px 0 10px;
+  }
+
+  .tab-item-home {
+    padding: 10px 10px 0 10px;
+  }
+
+  .tab-item-add {
+    padding: 10px 10px 0 10px;
+    width: calc(100% - 20px);
+  }
+
+  .header {
+    height: 40px;
+    line-height: 40px;
   }
 
   .no-music {
-    width: calc(90vw - 20px);
+    width: 95%;
+  }
+
+  .player-controller {
+    top: 110%;
+    left: 110%;
+
+    &[data-active] {
+      top: 0;
+      left: 0;
+    }
   }
 }

@@ -27,7 +27,7 @@ import {
 } from 'vue-property-decorator';
 // import VirtualList from 'vue-virtual-scroll-list';
 import { Music, Role } from '@/models';
-import { generateRandomId, getClone } from '@/utils';
+import { generateRandomId } from '@/utils';
 import MusicListItem from './molecules/MusicListItem.vue';
 import ActionButton from './molecules/ActionButton.vue';
 
@@ -48,7 +48,7 @@ export default class HistoryList extends Vue {
   role!: Role;
 
   get reversedList() {
-    return getClone(this.list).reverse();
+    return [...this.list].reverse();
   }
 
   public log(action: string, music: Music) {
@@ -84,7 +84,8 @@ export default class HistoryList extends Vue {
 .history-list {
   width: 100%;
   padding: 0 5px;
-  overflow: hidden !important;
+  // overflow: hidden !important;
+  overflow: auto;
 
   .button {
     margin: 0 10px;

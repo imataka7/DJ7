@@ -2,7 +2,7 @@
   <button
     :class="`action-button ${isPhone ? '' : 'has-effect'}`"
     :title="title"
-    @click="$emit('click')"
+    @click="click"
   >
     <slot></slot>
   </button>
@@ -22,6 +22,29 @@ export default class ActionButton extends Vue {
 
   get isPhone() {
     return isMobile().phone;
+  }
+
+  public click(ev: Event) {
+    this.flash(ev.target as HTMLElement);
+    this.$emit('click');
+  }
+
+  public flash(e: HTMLElement) {
+    if (window.innerWidth >= 1260 || !e.animate) {
+      return;
+    }
+
+    e.animate(
+      [
+        { background: 'transparent' },
+        { background: 'var(--button-hover)' },
+        { background: 'transparent' },
+      ],
+      {
+        duration: 500,
+        easing: 'ease-out',
+      },
+    );
   }
 }
 </script>

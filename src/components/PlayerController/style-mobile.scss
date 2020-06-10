@@ -1,0 +1,84 @@
+@media screen and (max-width: 1259px) {
+  .player-controller {
+    display: grid;
+    grid-template-rows: 50% 1fr;
+    grid-template-areas:
+      "player"
+      "controller";
+    background-color: var(--bgc) !important;
+  }
+
+  .player-container {
+    grid-area: player;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .youtube-player {
+      width: 90%;
+      height: 250px;
+    }
+  }
+
+  .controller-container {
+    grid-area: controller;
+
+    display: grid;
+    grid-template-rows: 20% 30% 1fr;
+    grid-template-areas:
+      "info info info"
+      "seek seek seek"
+      "play sync skip";
+  }
+
+  .music-info-container {
+    grid-area: info;
+    margin: 0 auto;
+    width: 300px;
+  }
+
+  .seek-bar-container {
+    grid-area: seek;
+
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column-reverse;
+
+    margin: 0 auto;
+    padding: 0 50px;
+    width: calc(100% - 100px);
+
+    .progress-container {
+      display: flex;
+      justify-content: space-between;
+
+      margin: 0;
+
+      .progress-slash {
+        display: none;
+      }
+    }
+  }
+
+  .play-pause-button {
+    grid-area: play;
+    margin: 0 auto;
+  }
+
+  .sync-button {
+    grid-area: sync;
+    margin: 0 auto;
+  }
+
+  .forward-button {
+    grid-area: skip;
+    margin: 0 auto;
+  }
+
+  .volume-controller {
+    display: none !important;
+    grid-area: volm;
+    margin: 0 auto;
+  }
+}

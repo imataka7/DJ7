@@ -43,12 +43,6 @@ export default class SeekBar extends Vue {
 
 <style lang="scss" scoped>
 .seek-bar {
-  width: 500px;
-}
-
-@media screen and (max-width: 1240px) {
-  .seek-bar {
-    width: 300px;
-  }
+  width: 100%;
 }
 </style>

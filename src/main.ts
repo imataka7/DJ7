@@ -5,20 +5,25 @@ import {
   faPlay,
   faPlus,
   faUser,
+  faHome,
+  faList,
   faCrown,
   faPause,
   faTimes,
+  faMusic,
   faEquals,
   faCircle,
   faSyncAlt,
   faSpinner,
   faForward,
+  faHistory,
   faVolumeUp,
   faTrashAlt,
   faHandPaper,
   faVolumeOff,
   faVolumeDown,
   faVolumeMute,
+  faPlusCircle,
   faExchangeAlt,
   faArrowAltCircleUp,
 } from '@fortawesome/free-solid-svg-icons';
@@ -41,29 +46,34 @@ import logInstaller, { logger } from '@/plugins/logger';
 
 const { initUserInfo, captureException } = logger;
 
-library.add(...[
+library.add(
   faCog,
   faPlay,
   faPlus,
   faUser,
+  faHome,
+  faList,
   faCrown,
   faPause,
   faTimes,
+  faMusic,
   faEquals,
   faCircle,
   faSyncAlt,
   faSpinner,
   faForward,
-  faTwitter,
+  faHistory,
   faVolumeUp,
   faTrashAlt,
   faHandPaper,
   faVolumeOff,
   faVolumeDown,
   faVolumeMute,
+  faPlusCircle,
   faExchangeAlt,
   faArrowAltCircleUp,
-]);
+  faTwitter,
+);
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.component('fa-layers', FontAwesomeLayers);
 

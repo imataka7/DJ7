@@ -134,15 +134,13 @@ export default class InputArea extends Vue {
 
 .textarea-wrapper {
   position: relative;
-  width: 100%;
-  // min-height: 10em;
+  width: calc(100% - 10px);
+  // margin: 0 auto;
 
   textarea {
-    min-width: calc(100% - 4px);
+    width: 100%;
     min-height: 10em;
     border-radius: 3px;
-    // padding: 0;
-    margin: 0 auto;
 
     color: var(--input-fc);
     background: var(--input-bg);
@@ -158,18 +156,12 @@ export default class InputArea extends Vue {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+
+  width: 100%;
+  margin: 5px auto 0;
 
   .button {
     width: 80px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  textarea {
-    min-width: 0 !important;
-    width: 85vw;
-    height: 10em;
   }
 }
 </style>

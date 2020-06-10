@@ -166,9 +166,7 @@ export default class MusicQueue extends Vue {
 <style lang="scss" scoped>
 .music-queue {
   width: 100%;
-  min-height: calc(100% - 20px);
-  padding: 0 5px;
-  touch-action: pan-y;
+  // touch-action: pan-y;
 
   .button {
     margin: 0 10px;
@@ -178,19 +176,6 @@ export default class MusicQueue extends Vue {
     animation: flash 1.5s ease;
   }
 }
-
-// .flip-list-move {
-//   transition: transform 0.2s;
-// }
-
-// .no-move {
-//   transition: transform 0s;
-// }
-
-// .ghost {
-//   opacity: 0.5;
-//   background: #c8cbfb;
-// }
 
 @keyframes flash {
   0% {

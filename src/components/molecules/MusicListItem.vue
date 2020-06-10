@@ -16,13 +16,13 @@
     <div class="desc-buttons">
       <div class="desc" :title="music.title">
         <p>
-          <template v-if="music.extraStatus">*</template>
           <a
             class="original-link"
             target="_blank"
             rel="noopener noreferrer"
             :href="getUrl(music.source)"
           >
+            <template v-if="music.extraStatus">*</template>
             {{ music.title }}
           </a>
         </p>
@@ -64,10 +64,6 @@ export default class MusicListItem extends Vue {
   padding: 5px 0;
   font-family: "Roboto Mono", "Meiryo UI", monospace;
   transition: background 0.2s;
-
-  &:hover {
-    background: var(--list-item-bg-hover);
-  }
 }
 
 .img-link {
@@ -101,10 +97,6 @@ export default class MusicListItem extends Vue {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
-
-      &:hover {
-        color: var(--list-item-link-fc-hover);
-      }
     }
   }
 }
@@ -117,5 +109,15 @@ export default class MusicListItem extends Vue {
 
 .handle {
   padding: 8px;
+}
+
+@media screen and (min-width: 1260px) {
+  .music-list-item:hover {
+    background: var(--list-item-bg-hover);
+  }
+
+  .original-link:hover {
+    color: var(--list-item-link-fc-hover);
+  }
 }
 </style>

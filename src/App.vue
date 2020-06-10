@@ -57,6 +57,7 @@ export default class MusicHub extends Vue {
 @import "~@sweetalert2/theme-dark/dark.scss";
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 @import "./styles/sairi-components.scss";
+@import "./styles/animations.scss";
 
 $black: #000;
 $gray-1: #111;
@@ -169,12 +170,10 @@ $sairi-orange: #f50;
   }
 }
 
-:root {
-  @include is-light-mode;
-}
-
-:root[data-darkmode="true"] {
-  @include is-dark-mode;
+@media (prefers-color-scheme: light) {
+  :root {
+    @include is-light-mode;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -248,10 +247,10 @@ body,
 }
 
 @media screen and (max-width: 1200px) {
-  * {
-    touch-action: pan-x pan-y;
-    // touch-action: pan-y;
-  }
+  // * {
+  //   touch-action: pan-x pan-y;
+  //   // touch-action: pan-y;
+  // }
 
   html,
   body,
