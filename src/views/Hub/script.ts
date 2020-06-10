@@ -10,6 +10,7 @@ import {
   ShareButton,
   AdSquare,
   TabBar,
+  CopyButton,
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
@@ -32,6 +33,7 @@ import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
     abutton: ActionButton,
     AdSquare,
     TabBar,
+    CopyButton,
   },
 })
 export default class Hub extends Vue {
