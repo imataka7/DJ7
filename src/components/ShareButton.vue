@@ -27,6 +27,7 @@ export default class ShareButton extends Vue {
     const baseUrl = 'https://twitter.com/intent/tweet';
 
     const roomId = encodeURIComponent(this.roomId);
+    // const playing = this.nowPlaying ? `Now playing ♫ ${this.nowPlaying}\n\n` : '';
     const playing = this.nowPlaying ? `現在再生中 ♫ ${this.nowPlaying}\n\n` : '';
 
     // const text = encodeURIComponent(`Share your moments on DJ7! I'm at ${this.roomId}!\n\n${playing}`);
