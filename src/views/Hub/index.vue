@@ -90,7 +90,10 @@
           </div>
         </div>
 
-        <div class="tab-item tab-item-add" v-show="currentView === 'add'">
+        <div
+          class="tab-item tab-item-add toggle-active"
+          :data-active="currentView === 'add'"
+        >
           <template v-if="role.addViaSearch">
             <input-area @parsed="addQueue" />
           </template>
@@ -148,7 +151,7 @@
 
     <player-controller
       ref="controller"
-      class="tab-item is-placed-bottom player-controller"
+      class="tab-item is-placed-bottom toggle-active"
       @update="onStatusChanged"
       @end="onMusicEnded"
       @error="onError"
