@@ -27,9 +27,10 @@ export default class ShareButton extends Vue {
     const baseUrl = 'https://twitter.com/intent/tweet';
 
     const roomId = encodeURIComponent(this.roomId);
-    const playing = this.nowPlaying ? `Now playing ♫ ${this.nowPlaying}\n\n` : '';
+    const playing = this.nowPlaying ? `現在再生中 ♫ ${this.nowPlaying}\n\n` : '';
 
-    const text = encodeURIComponent(`Share your moments on DJ7! I'm at ${this.roomId}!\n\n${playing}`);
+    // const text = encodeURIComponent(`Share your moments on DJ7! I'm at ${this.roomId}!\n\n${playing}`);
+    const text = encodeURIComponent(`DJ7に集まってYouTubeを見よう！ 会場は ${this.roomId} だ！\n\n${playing}`);
     const hashtags = `DJ7,DJ7_${roomId},NowPlaying`;
     const url = `https://dj7.io/${roomId}`;
     const related = 'dj7app,imataka7';
