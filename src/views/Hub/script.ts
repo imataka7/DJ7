@@ -166,7 +166,8 @@ export default class Hub extends Vue {
   public async onRoomStatusChanged(newStatus: Room, oldStatus: Room) {
     this.isQueueUpdating = true;
 
-    const previousId = oldStatus?.player.music?.id;
+    // const previousId = oldStatus?.player.music?.id;
+    const prevMusic = oldStatus?.player.music;
 
     this.controller.currentPlayerInfo = newStatus.player;
 
@@ -181,12 +182,13 @@ export default class Hub extends Vue {
       return;
     }
 
-    const { id } = music;
+    const { id, title } = music;
+    const isMusicChanged = id !== prevMusic?.id && title !== prevMusic?.title;
 
-    if (id && id !== previousId) {
+    if (isMusicChanged) {
       user.updateHistory(music);
 
-      console.log(id, previousId);
+      console.log(music, prevMusic);
       await this.controller.loadMusic(music);
     }
 
