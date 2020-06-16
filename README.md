@@ -1,5 +1,6 @@
 # MusicHub
 ![Deploy to firebase](https://github.com/imataka7/MusicHub/workflows/Deploy%20to%20firebase/badge.svg)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/eb2db077-fe0f-44ae-9b07-4912b3832042/deploy-status)](https://app.netlify.com/sites/dj7/deploys)
 
 Share your moments with music.
 
