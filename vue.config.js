@@ -1,4 +1,4 @@
-process.env.VUE_APP_VERSION = '0.30.55+20200616';
+process.env.VUE_APP_VERSION = '0.30.56+20200616';
 
 const manifestJSON = require('./public/manifest.json');
 
@@ -11,7 +11,7 @@ const pwaArgs = {
 const dist = `${__dirname}/dist`;
 
 module.exports = {
-  // productionSourceMap: process.env.NODE_ENV !== 'production',
+  productionSourceMap: process.env.NODE_ENV !== 'production',
   chainWebpack: (config) => {
     config.plugin('pwa').tap(() => [pwaArgs]);
   },
