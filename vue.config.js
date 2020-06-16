@@ -11,7 +11,7 @@ const pwaArgs = {
 const dist = `${__dirname}/dist`;
 
 module.exports = {
-  // productionSourceMap: process.env.NODE_ENV !== 'production',
+  productionSourceMap: process.env.NODE_ENV !== 'production',
   chainWebpack: (config) => {
     config.plugin('pwa').tap(() => [pwaArgs]);
   },
