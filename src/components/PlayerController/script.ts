@@ -249,7 +249,11 @@ export default class PlayerController extends Vue {
 
   public onSeeked(r: number) {
     const to = r * this.musicDuration / 100;
+    this.seek(to);
+    this.isRangeDragging = false;
+  }
 
+  public seek(to: number) {
     this.$ga.logEvent('seek');
     this.$logger.info('seek', {
       content: {
@@ -259,7 +263,6 @@ export default class PlayerController extends Vue {
       },
     });
 
-    this.isRangeDragging = false;
     this.$emit('seeked', to);
   }
 
