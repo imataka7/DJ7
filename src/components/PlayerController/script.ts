@@ -5,6 +5,12 @@ import {
 import isMobile from 'ismobilejs';
 import dayjs from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration';
+import {
+  KEY_ESCAPE,
+  KEY_LEFT,
+  KEY_RIGHT,
+  KEY_SPACE,
+} from 'keycode-js';
 
 import VolumeController from '../VolumeController.vue';
 import PlayerMusicInfo from '../PlayerMusicInfo.vue';
@@ -48,10 +54,8 @@ export default class PlayerController extends Vue {
   @Prop({ default: false })
   public mute!: boolean;
 
-  // @Prop({ default: () => ({}) })
-  // role!: Role;
-
-  public role: Role | {} = {};
+  @Prop({ default: () => ({}) })
+  role!: Role;
 
   public log(action: string, content: Record<string, any>) {
     this.$ga.logEvent(action);
@@ -93,8 +97,37 @@ export default class PlayerController extends Vue {
     await this.initVolume();
 
     this.listeners.push(setEvent(window, 'keydown', (e) => {
-      if ((e as KeyboardEvent).keyCode === 27) { // Esc
+      const { keyCode } = e as KeyboardEvent;
+
+      // esc -> Disable theater mode
+      if (keyCode === KEY_ESCAPE) {
         this.isTheaterMode = false;
+      }
+
+      // if the player is not controllable (e.g. buffering)
+      if (this.isControllerDisable) {
+        return;
+      }
+
+      // space -> toggle play and pause
+      if (keyCode === KEY_SPACE && this.role.playerPause) {
+        if (this.currentStatus === PlayerStatus.PLAY) {
+          this.updateStatus(PlayerStatus.PAUSE);
+        } else if (this.currentStatus === PlayerStatus.PAUSE) {
+          this.updateStatus(PlayerStatus.PLAY);
+        }
+      }
+
+      // left -> seek -5 sec
+      if (keyCode === KEY_LEFT && this.role.playerSeek) {
+        const currentTime = this.range * this.musicDuration / 100;
+        this.seek(currentTime - 5);
+      }
+
+      // right -> seek 5 sec
+      if (keyCode === KEY_RIGHT && this.role.playerSeek) {
+        const currentTime = this.range * this.musicDuration / 100;
+        this.seek(currentTime + 5);
       }
     }));
   }
@@ -251,7 +284,11 @@ export default class PlayerController extends Vue {
 
   public onSeeked(r: number) {
     const to = r * this.musicDuration / 100;
+    this.seek(to);
+    this.isRangeDragging = false;
+  }
 
+  public seek(to: number) {
     this.$ga.logEvent('seek');
     this.$logger.info('seek', {
       content: {
@@ -261,7 +298,6 @@ export default class PlayerController extends Vue {
       },
     });
 
-    this.isRangeDragging = false;
     this.$emit('seeked', to);
   }
 

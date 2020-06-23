@@ -70,13 +70,6 @@ export default class Hub extends Vue {
     return makeCurrentRole(this.currentUser);
   }
 
-  @Watch('role', { immediate: true })
-  public onRoleChanged(newRole: Role) {
-    if (this.controller) {
-      this.controller.role = newRole;
-    }
-  }
-
   get room() {
     return room;
   }
@@ -98,10 +91,6 @@ export default class Hub extends Vue {
     if (this.me) {
       room.addUser(this.me);
       user.addVisitedRooms(this.roomId);
-    }
-
-    if (this.controller) {
-      this.controller.role = this.role;
     }
   }
 
@@ -149,7 +138,6 @@ export default class Hub extends Vue {
   public async init() {
     this.controller = this.$refs.controller as PlayerController;
     await this.controller.initPlayers();
-    this.controller.role = this.role;
 
     await room.init(this.roomId);
 
