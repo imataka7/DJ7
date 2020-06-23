@@ -48,10 +48,8 @@ export default class PlayerController extends Vue {
   @Prop({ default: false })
   public mute!: boolean;
 
-  // @Prop({ default: () => ({}) })
-  // role!: Role;
-
-  public role: Role | {} = {};
+  @Prop({ default: () => ({}) })
+  role!: Role;
 
   public log(action: string, content: Record<string, any>) {
     this.$ga.logEvent(action);
