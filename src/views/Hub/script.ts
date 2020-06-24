@@ -16,6 +16,7 @@ import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
   getClone,
   showToast,
+  getVersion,
 } from '@/utils';
 import { user, room, adate } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
@@ -75,7 +76,7 @@ export default class Hub extends Vue {
   }
 
   get version() {
-    return `v${process.env.VUE_APP_VERSION.replace('+', ' on ')}`;
+    return getVersion();
   }
 
   get currentUser() {

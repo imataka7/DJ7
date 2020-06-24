@@ -14,6 +14,7 @@ import {
 import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
+import { getVersion } from '@/utils';
 
 const configureUi = (to?: string) => ({
   signInSuccessUrl: to || '/',
@@ -29,7 +30,7 @@ const configureUi = (to?: string) => ({
 @Component
 export default class Signin extends Vue {
   get version() {
-    return `v${process.env.VUE_APP_VERSION.replace('+', ' on ')}`;
+    return getVersion();
   }
 
   private get ui() {

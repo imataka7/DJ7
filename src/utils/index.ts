@@ -3,6 +3,7 @@ import {
 } from './urlParser';
 import { getPlaylistVideos, getYTVideoTitle } from './dataAPIConnector';
 import convertProviderIdToName from './convertProviderIdToName';
+import getVersion from './getVersion';
 import showToast from './showToast';
 import setEvent from './eventUtil';
 import getClone from './getClone';
@@ -19,6 +20,7 @@ export {
   getMusicInfo,
   getYTVideoId,
   getEmbedUrl,
+  getVersion,
   showToast,
   getClone,
   setEvent,
