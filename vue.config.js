@@ -1,5 +1,3 @@
-process.env.VUE_APP_VERSION = '0.30.58+20200623';
-
 const manifestJSON = require('./public/manifest.json');
 
 const pwaArgs = {

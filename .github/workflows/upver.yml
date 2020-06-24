@@ -1,0 +1,30 @@
+name: upver
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out dj7 repo
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: check out upver repo
+        uses: actions/checkout@v2
+        with:
+          repository: fuyutarow/UpVER
+          path: upver
+      - name: update version
+        run: upver/bin/musl/upver up -rz main/package.json
+      - name: commit
+        run: |
+          cd main
+          git config user.name sairikun 
+          git config user.email yattane-taechan@i.softbank.jp
+          git commit -am "[GitHub Actions] Update version"
+          git push
