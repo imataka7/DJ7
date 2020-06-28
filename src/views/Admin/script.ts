@@ -10,7 +10,7 @@ import {
   AdSquare,
 } from '@/components';
 import { Role, RoleTags } from '@/models';
-import { showToast } from '@/utils';
+import { showToast, getVersion } from '@/utils';
 import { user, room } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import { makeCurrentRole, initUser } from '@/roleManager';
@@ -77,7 +77,7 @@ export default class Hub extends Vue {
   }
 
   get version() {
-    return `v${process.env.VUE_APP_VERSION.replace('+', ' on ')}`;
+    return getVersion();
   }
 
   get currentUser() {
