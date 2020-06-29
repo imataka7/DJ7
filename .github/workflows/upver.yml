@@ -17,7 +17,7 @@ jobs:
       - name: check out upver repo
         uses: actions/checkout@v2
         with:
-          repository: fuyutarow/UpVER
+          repository: fuyutarow/upver
           path: upver
       - name: update version
         run: upver/bin/musl/upver up -rz main/package.json
