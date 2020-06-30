@@ -151,6 +151,8 @@ export default class Hub extends Vue {
     return room.status;
   }
 
+  public initialized = false;
+
   @Watch('roomStatus', { deep: true })
   public async onRoomStatusChanged(newStatus: Room, oldStatus: Room) {
     this.isQueueUpdating = true;
@@ -174,7 +176,7 @@ export default class Hub extends Vue {
     const { id, title } = music;
     const isMusicChanged = id !== prevMusic?.id && title !== prevMusic?.title;
 
-    if (isMusicChanged) {
+    if (!this.initialized || isMusicChanged) {
       user.updateHistory(music);
 
       console.log(music, prevMusic);
@@ -182,6 +184,7 @@ export default class Hub extends Vue {
     }
 
     if (
+      this.initialized &&
       oldStatus?.player.playedTime === playedTime &&
       status === oldStatus?.player.status
     ) {
@@ -195,6 +198,8 @@ export default class Hub extends Vue {
     console.log(seekTo, adate.now(), updatedAt, playedTime, status);
 
     await this.setStatus(status, seekTo);
+
+    this.initialized = true;
   }
 
   private async setStatus(status: PlayerStatus, to: number) {
