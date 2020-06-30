@@ -18,8 +18,13 @@ const textCopied = 'コピーしました！';
 export default class CopyButton extends Vue {
   public text = textCopy;
 
+  get url() {
+    const { origin, pathname } = window.location;
+    return `${origin}${decodeURIComponent(pathname)}`;
+  }
+
   public async copy() {
-    await navigator.clipboard.writeText(window.location.href);
+    await navigator.clipboard.writeText(this.url);
 
     this.text = textCopied;
     setTimeout(() => { this.text = textCopy; }, 1000);
