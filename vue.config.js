@@ -19,7 +19,7 @@ module.exports = {
       swDest: `${dist}/service-worker.js`,
       skipWaiting: true,
       clientsClaim: true,
-      exclude: ['ads.txt', /.+png/],
+      exclude: ['ads.txt', '_redirects', /.+png/],
       navigateFallback: '/index.html',
       runtimeCaching: [
         {
