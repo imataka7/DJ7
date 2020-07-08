@@ -6,6 +6,7 @@ import Room, {
 } from './room';
 import User from './user';
 import Role from './role';
+import Presence from './presence';
 
 export {
   Music,
@@ -20,4 +21,5 @@ export {
   User,
   Role,
   RoleTags,
+  Presence,
 };
