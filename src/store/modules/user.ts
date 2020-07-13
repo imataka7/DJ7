@@ -118,7 +118,7 @@ class FirebaseUser extends VuexModule {
       username: userData.userName,
     });
 
-    configurePresence(uid);
+    await configurePresence(uid);
   }
 
   @Action({ rawError: true })

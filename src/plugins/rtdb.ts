@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import { rtdb, firestore } from './firebase';
+import { presence } from '@/store/modules';
 
 const isOfflineForDatabase = {
   state: 'offline',
@@ -11,23 +12,25 @@ const isOnlineForDatabase = {
   last_changed: firebase.database.ServerValue.TIMESTAMP,
 };
 
-export default function configurePresence(uid: string) {
+export default async function configurePresence(uid: string) {
   const rtdbRef = rtdb.ref(`/status/${uid}`);
   const firestoreRef = firestore.collection('presences').doc(uid);
 
   rtdb.ref('.info/connected').on('value', (snapshot) => {
     if (snapshot.val() === false) {
-      firestoreRef.set(isOfflineForDatabase);
+      firestoreRef.update(isOfflineForDatabase);
       return;
     }
 
     rtdbRef.onDisconnect().set(isOfflineForDatabase).then(function () {
       rtdbRef.set(isOnlineForDatabase);
-      firestoreRef.set(isOnlineForDatabase);
+      firestoreRef.update(isOnlineForDatabase);
     });
 
     firestoreRef.onSnapshot((doc) => {
       const isOnline = doc.data()?.state === 'online';
     });
   });
+
+  await presence.init(uid);
 }

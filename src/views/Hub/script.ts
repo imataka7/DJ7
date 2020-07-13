@@ -18,7 +18,7 @@ import {
   showToast,
   getVersion,
 } from '@/utils';
-import { user, room, adate } from '@/store/modules';
+import { user, room, adate, presence } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
 import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
@@ -87,11 +87,12 @@ export default class Hub extends Vue {
     return user.me;
   }
 
-  @Watch('currentUser', { immediate: true })
+  @Watch('me', { immediate: true })
   public onAuthStateChanged() {
     if (this.me) {
       room.addUser(this.me);
       user.addVisitedRooms(this.roomId);
+      presence.addRoom(this.roomId);
     }
   }
 
