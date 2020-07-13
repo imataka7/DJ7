@@ -17,9 +17,9 @@ async function leaveRooms(uid, roomIds) {
       return;
     }
 
-    return ref.update({
+    return ref.set({
       users: arrayRemove(me),
-    });
+    }, { merge: true });
   });
 
   return Promise.all(tasks);
@@ -47,5 +47,5 @@ exports.onUserStatusChagned = functions.database.ref('/status/{uid}')
       eventStatus.rooms = [];
     }
 
-    return userStatusFirestoreRef.update(eventStatus);
+    return userStatusFirestoreRef.set(eventStatus, { merge: true });
   });

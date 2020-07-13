@@ -61,16 +61,16 @@ class PresenceManager extends VuexModule {
 
   @Action({})
   public async addRoom(roomId: string) {
-    this.ref!.update({
+    this.ref!.set({
       rooms: arrayUnion(roomId),
-    });
+    }, { merge: true });
   }
 
   @Action({})
   public async removeRoom(roomId: string) {
-    this.ref!.update({
+    this.ref!.set({
       rooms: arrayRemove(roomId),
-    });
+    }, { merge: true });
   }
 }
 
