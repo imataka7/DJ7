@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 const { arrayRemove } = admin.firestore.FieldValue;
 
 async function leaveRooms(uid, roomIds) {
-  const tasks = roomIds.map(id => {
+  const tasks = roomIds.map(async id => {
     const ref = firestore.doc(`rooms/${id}`);
     const room = (await ref.get()).data();
 
@@ -29,7 +29,7 @@ exports.onUserStatusChagned = functions.database.ref('/status/{uid}')
   .onUpdate(async (change, context) => {
     const eventStatus = change.after.val();
 
-    const userStatusFirestoreRef = firestore.doc(`status/${context.params.uid}`);
+    const userStatusFirestoreRef = firestore.doc(`presences/${context.params.uid}`);
 
     const statusSnapshot = await change.after.ref.once('value');
     const status = statusSnapshot.val();
@@ -41,8 +41,10 @@ exports.onUserStatusChagned = functions.database.ref('/status/{uid}')
     eventStatus.last_changed = new Date(eventStatus.last_changed);
 
     if (eventStatus.state === 'offline') {
-      const rooms = status.rooms || [];
+      const firestoreSnapshot = (await userStatusFirestoreRef.get()).data();
+      const rooms = firestoreSnapshot.rooms || [];
       await leaveRooms(context.params.uid, rooms);
+      eventStatus.rooms = [];
     }
 
     return userStatusFirestoreRef.update(eventStatus);
