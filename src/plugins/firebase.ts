@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/analytics';
+import 'firebase/database';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -34,9 +35,12 @@ const firebaseConfig = {
 export const app = firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+export const rtdb = app.database();
+export const firestore = app.firestore();
+
 export default {
   install(vue: VueConstructor) {
-    vue.prototype.$firestore = app.firestore();
+    vue.prototype.$firestore = firestore;
     vue.prototype.$auth = app.auth();
     vue.prototype.$ga = app.analytics();
   },

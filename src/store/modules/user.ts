@@ -11,6 +11,7 @@ import {
   RoomUser, Music, User, Musicx,
 } from '@/models';
 import { logger } from '@/plugins/logger';
+import configurePresence from '@/plugins/rtdb';
 
 const { setUserInfo, initUserInfo } = logger;
 
@@ -116,6 +117,8 @@ class FirebaseUser extends VuexModule {
       provider,
       username: userData.userName,
     });
+
+    await configurePresence(uid);
   }
 
   @Action({ rawError: true })
