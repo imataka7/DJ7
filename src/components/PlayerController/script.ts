@@ -6,10 +6,10 @@ import isMobile from 'ismobilejs';
 import dayjs from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration';
 import {
-  KEY_ESCAPE,
-  KEY_LEFT,
-  KEY_RIGHT,
-  KEY_SPACE,
+  CODE_ESCAPE,
+  CODE_LEFT,
+  CODE_RIGHT,
+  CODE_SPACE,
 } from 'keycode-js';
 
 import VolumeController from '../VolumeController.vue';
@@ -97,10 +97,10 @@ export default class PlayerController extends Vue {
     await this.initVolume();
 
     this.listeners.push(setEvent(window, 'keydown', (e) => {
-      const { keyCode } = e as KeyboardEvent;
+      const { code } = e as KeyboardEvent;
 
       // esc -> Disable theater mode
-      if (keyCode === KEY_ESCAPE) {
+      if (code === CODE_ESCAPE) {
         this.isTheaterMode = false;
       }
 
@@ -110,7 +110,7 @@ export default class PlayerController extends Vue {
       }
 
       // space -> toggle play and pause
-      if (keyCode === KEY_SPACE && this.role.playerPause) {
+      if (code === CODE_SPACE && this.role.playerPause) {
         if (this.currentStatus === PlayerStatus.PLAY) {
           this.updateStatus(PlayerStatus.PAUSE);
         } else if (this.currentStatus === PlayerStatus.PAUSE) {
@@ -119,13 +119,13 @@ export default class PlayerController extends Vue {
       }
 
       // left -> seek -5 sec
-      if (keyCode === KEY_LEFT && this.role.playerSeek) {
+      if (code === CODE_LEFT && this.role.playerSeek) {
         const currentTime = this.range * this.musicDuration / 100;
         this.seek(currentTime - 5);
       }
 
       // right -> seek 5 sec
-      if (keyCode === KEY_RIGHT && this.role.playerSeek) {
+      if (code === CODE_RIGHT && this.role.playerSeek) {
         const currentTime = this.range * this.musicDuration / 100;
         this.seek(currentTime + 5);
       }
