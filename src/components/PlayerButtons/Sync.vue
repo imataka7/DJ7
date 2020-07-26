@@ -1,6 +1,11 @@
 <template>
   <div>
-    <button :disabled="disabled" aria-label="Sync" @click="sync" class="sairi-player-button">
+    <button
+      :disabled="disabled"
+      aria-label="Sync"
+      @click="sync"
+      class="sairi-player-button"
+    >
       <fa-icon icon="sync-alt" size="lg"></fa-icon>
     </button>
   </div>
@@ -20,9 +25,9 @@ export default class Sync extends Vue {
   public disabled!: boolean;
 
   public sync(e: Event) {
-    if (this.currentStatus !== PlayerStatus.PLAY) {
-      return;
-    }
+    // if (this.currentStatus !== PlayerStatus.PLAY) {
+    //   return;
+    // }
 
     this.spinElement(e.currentTarget as HTMLElement);
     this.$emit('sync');

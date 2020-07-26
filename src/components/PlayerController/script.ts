@@ -346,16 +346,17 @@ export default class PlayerController extends Vue {
       return;
     }
 
-    const { updatedAt, playedTime } = this.currentPlayerInfo;
-    const to = (adate.now() - updatedAt) / 1000 + playedTime;
+    const { updatedAt, playedTime, status } = this.currentPlayerInfo;
+    const isPlaying = status === PlayerStatus.PLAY;
+    const to = isPlaying ? (adate.now() - updatedAt) / 1000 + playedTime : playedTime;
+
+    this.seekTo(to);
 
     this.log('sync', {
       music: this.currentMusic,
       to,
       diff: to - this.range * this.musicDuration / 100,
     });
-
-    this.seekTo(to);
   }
 
   get playingSpeed() {
