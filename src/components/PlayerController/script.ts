@@ -21,7 +21,7 @@ import {
   PlayerButtons,
 } from '@/components/PlayerButtons';
 import YouTubePlayer from '../YoutubePlayer.vue';
-import PlayerConfig from '../PlayerConfig.vue';
+import PlaybackRateController from '../PlaybackRateController.vue';
 import SeekBar from '../SeekBar.vue';
 
 import {
@@ -42,7 +42,7 @@ interface SupportedPlatform {
     'youtube-player': YouTubePlayer,
     VolumeController,
     PlayerMusicInfo,
-    PlayerConfig,
+    PlaybackRateController,
     SeekBar,
     PlayPauseButton,
     SyncButton,
