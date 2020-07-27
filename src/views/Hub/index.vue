@@ -157,6 +157,7 @@
       @error="onError"
       @forward="forwardMusic"
       @seeked="onSeeked"
+      @speed="onSpeedChanged"
       :role="role"
       :data-active="currentView === 'player'"
     ></player-controller>

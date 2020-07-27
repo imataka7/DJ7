@@ -130,6 +130,8 @@ export default class PlayerController extends Vue {
         this.seek(currentTime + 5);
       }
     }));
+
+    this.configureFlags();
   }
 
   public listeners: ReturnType<typeof setEvent>[] = [];
@@ -367,8 +369,22 @@ export default class PlayerController extends Vue {
     this.$emit('speed', s);
   }
 
-  // @Watch('playingSpeed')
-  // public onSpeedChanged(s: number) {
-  //   this.currentPlayer?.setSpeed(s);
-  // }
+  @Watch('playingSpeed')
+  public onSpeedChanged(s: number) {
+    if (!this.playbackRateEnabled) {
+      return;
+    }
+
+    this.currentPlayer?.setSpeed(s);
+  }
+
+  public playbackRateEnabled = false;
+
+  public configureFlags() {
+    this.$set(window, 'flags', {
+      togglePlaybackRateEnabled: () => {
+        this.playbackRateEnabled = !this.playbackRateEnabled;
+      },
+    });
+  }
 }
