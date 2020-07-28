@@ -381,9 +381,20 @@ export default class PlayerController extends Vue {
   public playbackRateEnabled = false;
 
   public configureFlags() {
+    // load
+    const flags: Record<string, boolean> = localStorage.flags ? JSON.parse(localStorage.flags) : {};
+    this.playbackRateEnabled = !!flags.playbackRateEnabled;
+
+    const save = () => {
+      localStorage.flags = JSON.stringify({
+        playbackRateEnabled: this.playbackRateEnabled,
+      });
+    };
+
     this.$set(window, 'flags', {
-      togglePlaybackRateEnabled: () => {
+      togglePlaybackRateControllerEnabled: () => {
         this.playbackRateEnabled = !this.playbackRateEnabled;
+        save();
       },
     });
   }
