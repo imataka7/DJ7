@@ -23,7 +23,10 @@
         class="sync-button"
       />
 
-      <!-- <player-config v-model="playingSpeed"></player-config> -->
+      <playback-rate-controller
+        v-model="playingSpeed"
+        v-if="playbackRateEnabled"
+      ></playback-rate-controller>
 
       <div class="seek-bar-container">
         <p class="progress-container">

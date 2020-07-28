@@ -21,7 +21,7 @@ import {
   PlayerButtons,
 } from '@/components/PlayerButtons';
 import YouTubePlayer from '../YoutubePlayer.vue';
-import PlayerConfig from '../PlayerConfig.vue';
+import PlaybackRateController from '../PlaybackRateController.vue';
 import SeekBar from '../SeekBar.vue';
 
 import {
@@ -42,7 +42,7 @@ interface SupportedPlatform {
     'youtube-player': YouTubePlayer,
     VolumeController,
     PlayerMusicInfo,
-    PlayerConfig,
+    PlaybackRateController,
     SeekBar,
     PlayPauseButton,
     SyncButton,
@@ -130,6 +130,8 @@ export default class PlayerController extends Vue {
         this.seek(currentTime + 5);
       }
     }));
+
+    this.configureFlags();
   }
 
   public listeners: ReturnType<typeof setEvent>[] = [];
@@ -270,7 +272,7 @@ export default class PlayerController extends Vue {
   public updateSeekBarRange() {
     const { updatedAt, playedTime } = this.currentPlayerInfo!;
     const diff = this.currentPlayerInfo?.status === PlayerStatus.PLAY
-      ? (adate.now() - updatedAt)
+      ? (adate.now() - updatedAt) * this.playingSpeed
       : 0;
     const per = (playedTime + diff / 1000) / this.musicDuration;
 
@@ -348,7 +350,7 @@ export default class PlayerController extends Vue {
 
     const { updatedAt, playedTime, status } = this.currentPlayerInfo;
     const isPlaying = status === PlayerStatus.PLAY;
-    const to = isPlaying ? (adate.now() - updatedAt) / 1000 + playedTime : playedTime;
+    const to = isPlaying ? (adate.now() - updatedAt) * this.playingSpeed / 1000 + playedTime : playedTime;
 
     this.seekTo(to);
 
@@ -367,8 +369,33 @@ export default class PlayerController extends Vue {
     this.$emit('speed', s);
   }
 
-  // @Watch('playingSpeed')
-  // public onSpeedChanged(s: number) {
-  //   this.currentPlayer?.setSpeed(s);
-  // }
+  @Watch('playingSpeed')
+  public onSpeedChanged(s: number) {
+    if (!this.playbackRateEnabled) {
+      return;
+    }
+
+    this.currentPlayer?.setSpeed(s);
+  }
+
+  public playbackRateEnabled = false;
+
+  public configureFlags() {
+    // load
+    const flags: Record<string, boolean> = localStorage.flags ? JSON.parse(localStorage.flags) : {};
+    this.playbackRateEnabled = !!flags.playbackRateEnabled;
+
+    const save = () => {
+      localStorage.flags = JSON.stringify({
+        playbackRateEnabled: this.playbackRateEnabled,
+      });
+    };
+
+    this.$set(window, 'flags', {
+      togglePlaybackRateControllerEnabled: () => {
+        this.playbackRateEnabled = !this.playbackRateEnabled;
+        save();
+      },
+    });
+  }
 }
