@@ -272,7 +272,7 @@ export default class PlayerController extends Vue {
   public updateSeekBarRange() {
     const { updatedAt, playedTime } = this.currentPlayerInfo!;
     const diff = this.currentPlayerInfo?.status === PlayerStatus.PLAY
-      ? (adate.now() - updatedAt)
+      ? (adate.now() - updatedAt) * this.playingSpeed
       : 0;
     const per = (playedTime + diff / 1000) / this.musicDuration;
 
@@ -350,7 +350,7 @@ export default class PlayerController extends Vue {
 
     const { updatedAt, playedTime, status } = this.currentPlayerInfo;
     const isPlaying = status === PlayerStatus.PLAY;
-    const to = isPlaying ? (adate.now() - updatedAt) / 1000 + playedTime : playedTime;
+    const to = isPlaying ? (adate.now() - updatedAt) * this.playingSpeed / 1000 + playedTime : playedTime;
 
     this.seekTo(to);
 
