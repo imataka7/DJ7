@@ -350,8 +350,9 @@ export default class Hub extends Vue {
     await user.deleteHistoryItem(music);
   }
 
-  public async onSpeedChanged(s: number) {
-    await room.updatePlayingSpeed(s);
+  public async onSpeedChanged(speed: number) {
+    const playedTime = await this.controller.getPlayedTime();
+    await room.updatePlayingSpeed({ speed, playedTime });
   }
 
   public currentView = 'home';
