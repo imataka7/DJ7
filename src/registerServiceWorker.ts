@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 
 const confirmReloading = () => {
   return Swal.fire({
-    text: '最新版があります。更新して今すぐ使おう🤟🏻',
+    text: '最新版があります。今すぐ更新しよう🤟🏻',
     toast: true,
     confirmButtonText: '更新',
     position: 'bottom-right',
