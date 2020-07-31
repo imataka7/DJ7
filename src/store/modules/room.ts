@@ -206,9 +206,13 @@ class RoomManager extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public updatePlayingSpeed(s: number) {
+  public updatePlayingSpeed(palyload: { speed: number; playedTime: number }) {
+    const { speed, playedTime } = palyload;
+
     return this.roomRef!.update({
-      'player.playingSpeed': s,
+      'player.playingSpeed': speed,
+      'player.playedTime': playedTime,
+      'player.updatedAt': store.getters['date/now'](),
     });
   }
 
