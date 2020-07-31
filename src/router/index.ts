@@ -34,9 +34,9 @@ const routes = [
     path: '/:roomId',
     name: 'hub',
     component: Hub,
-    meta: {
-      authRequired: true,
-    },
+    // meta: {
+    //   authRequired: true,
+    // },
   },
   {
     path: '/:roomId/admin',
