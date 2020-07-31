@@ -371,10 +371,6 @@ export default class PlayerController extends Vue {
 
   @Watch('playingSpeed')
   public onSpeedChanged(s: number) {
-    if (!this.playbackRateEnabled) {
-      return;
-    }
-
     this.currentPlayer?.setSpeed(s);
   }
 
