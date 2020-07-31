@@ -12,6 +12,7 @@ import {
 } from '@/models';
 
 const firestore = firebaseApp.firestore();
+const auth = firebaseApp.auth();
 const { arrayUnion, arrayRemove } = firebase.firestore.FieldValue;
 
 @Module({
@@ -146,10 +147,15 @@ class RoomManager extends VuexModule {
 
     const snapshot = await this.roomRef!.get();
 
-    if (!snapshot.exists) {
+    if (snapshot.exists) {
+      // the room exists
+      this.setStatus(snapshot.data() as Room);
+    } else if (auth.currentUser) {
+      // the room not exists and signed in
       await this.addRoom();
     } else {
-      this.setStatus(snapshot.data() as Room);
+      // the room not exists and not signed in
+      throw new Error('Only signed in users can carete a room');
     }
 
     const listener = this.roomRef!.onSnapshot(async doc => this.setStatus(doc.data() as Room));
