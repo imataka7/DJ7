@@ -22,6 +22,7 @@ import { user, room, adate, presence } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
 import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
+import Swal from 'sweetalert2';
 
 @Component({
   components: {
@@ -141,7 +142,22 @@ export default class Hub extends Vue {
     this.controller = this.$refs.controller as PlayerController;
     await this.controller.initPlayers();
 
-    await room.init(this.roomId);
+    try {
+      await room.init(this.roomId);
+    } catch {
+      await Swal.fire({
+        title: '部屋が存在しません。',
+        text: '部屋の作成はサインインしたユーザのみが可能です。',
+        confirmButtonText: 'サインイン',
+        icon: 'warning',
+      });
+      this.$router.push({
+        path: '/signin',
+        query: {
+          redirect: this.roomId,
+        },
+      });
+    }
 
     if (this.me) {
       room.addUser(this.me);

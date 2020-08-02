@@ -66,14 +66,9 @@
           <div class="jumper">
             <label>
               <p class="label-desc">部屋の移動/作成をする</p>
-              <input
-                type="text"
-                v-model="jumpTo"
-                :disabled="!currentUser"
-                placeholder="部屋ID"
-              />
+              <input type="text" v-model="jumpTo" placeholder="部屋ID" />
             </label>
-            <abutton @click="jump" :disabled="!currentUser">移動</abutton>
+            <abutton @click="jump">移動</abutton>
             <!-- <label class="checkbox">
                 <input type="checkbox" v-model="isMonarchism" disabled="true" />
                 作成時は権限を設定できるようにする

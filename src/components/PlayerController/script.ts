@@ -110,13 +110,13 @@ export default class PlayerController extends Vue {
       }
 
       // space -> toggle play and pause
-      if (code === CODE_SPACE && this.role.playerPause) {
-        if (this.currentStatus === PlayerStatus.PLAY) {
-          this.updateStatus(PlayerStatus.PAUSE);
-        } else if (this.currentStatus === PlayerStatus.PAUSE) {
-          this.updateStatus(PlayerStatus.PLAY);
-        }
-      }
+      // if (code === CODE_SPACE && this.role.playerPause) {
+      //   if (this.currentStatus === PlayerStatus.PLAY) {
+      //     this.updateStatus(PlayerStatus.PAUSE);
+      //   } else if (this.currentStatus === PlayerStatus.PAUSE) {
+      //     this.updateStatus(PlayerStatus.PLAY);
+      //   }
+      // }
 
       // left -> seek -5 sec
       if (code === CODE_LEFT && this.role.playerSeek) {
@@ -371,10 +371,6 @@ export default class PlayerController extends Vue {
 
   @Watch('playingSpeed')
   public onSpeedChanged(s: number) {
-    if (!this.playbackRateEnabled) {
-      return;
-    }
-
     this.currentPlayer?.setSpeed(s);
   }
 
