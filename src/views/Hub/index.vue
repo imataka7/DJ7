@@ -79,7 +79,7 @@
             <abutton @click="signOut" v-if="currentUser">
               サインアウト
             </abutton>
-            <abutton @click="$router.push('/signin')" v-else>
+            <abutton @click="jumpToSignin" v-else>
               サインイン
             </abutton>
           </div>
@@ -125,7 +125,7 @@
         <template v-if="!currentUser">
           <div class="no-music">サインインしたユーザーのみが利用できます</div>
           <div class="button-container">
-            <abutton class="is-large" @click="$router.push('/signin')">
+            <abutton class="is-large" @click="jumpToSignin">
               サインイン
             </abutton>
           </div>
