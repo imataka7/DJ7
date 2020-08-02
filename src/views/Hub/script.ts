@@ -372,4 +372,12 @@ export default class Hub extends Vue {
   }
 
   public currentView = 'home';
+
+  public jumpToSignin() {
+    if (this.roomId !== 'general') {
+      this.$router.push({ path: 'signin', query: { redirect: this.roomId } });
+    } else {
+      this.$router.push('/signin');
+    }
+  }
 }
