@@ -10,6 +10,7 @@ interface Role {
   queueInterrupt: boolean; // 再生待ちキューからの曲の割り込み再生
   queueMoveToTop: boolean; // 再生待ちキューにおける曲の先頭移行
   addFromHistory: boolean; // 再生履歴からの曲追加
+  changePlaybackRate: boolean; // 再生速度の変更
   manageUser: boolean; // 他ユーザへの権限付与
 }
 
