@@ -1,4 +1,4 @@
-import {  Role } from '@/models';
+import { Role } from '@/models';
 
 const roleBook: { [roleTag: string]: Role } = {
   dog: {
@@ -12,6 +12,7 @@ const roleBook: { [roleTag: string]: Role } = {
     queueInterrupt: false,
     queueMoveToTop: false,
     addFromHistory: false,
+    changePlaybackRate: false,
     manageUser: false,
   },
   king: {
@@ -25,6 +26,7 @@ const roleBook: { [roleTag: string]: Role } = {
     queueInterrupt: true,
     queueMoveToTop: true,
     addFromHistory: true,
+    changePlaybackRate: true,
     manageUser: true,
   },
   // dj: {
@@ -39,6 +41,7 @@ const roleBook: { [roleTag: string]: Role } = {
     queueInterrupt: true,
     queueMoveToTop: true,
     addFromHistory: true,
+    changePlaybackRate: true,
     manageUser: false,
   },
   // admin: {
@@ -53,6 +56,7 @@ const roleBook: { [roleTag: string]: Role } = {
     queueInterrupt: false,
     queueMoveToTop: false,
     addFromHistory: false,
+    changePlaybackRate: false,
     manageUser: true,
   },
 };

@@ -64,7 +64,6 @@ export default class TabBar extends Vue {
   justify-content: space-around;
   align-items: center;
 
-  cursor: pointer;
   height: 50px;
   width: 100%;
   background-color: var(--controller-bg);

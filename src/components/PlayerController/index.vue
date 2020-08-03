@@ -25,7 +25,7 @@
 
       <playback-rate-controller
         v-model="playingSpeed"
-        v-if="playbackRateEnabled"
+        v-if="role.changePlaybackRate && playbackRateEnabled"
       ></playback-rate-controller>
 
       <div class="seek-bar-container">

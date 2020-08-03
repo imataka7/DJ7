@@ -7,21 +7,21 @@ import roleBook from '@/roleBook';
 // TODO
 // すべてのRoomがinitUserを備えたあとは以下のソースは削除する
 export const initUserPolyfill =
-    (room.isMonarchism) ?
-      { roleTags: [] }
-      :
-      { roleTags: ['managePlay'] };
+  (room.isMonarchism) ?
+    { roleTags: [] }
+    :
+    { roleTags: ['managePlay'] };
 
 const initUserRolePolyfill =
-    (room.isMonarchism) ?
-      roleBook['dog']
-      :
+  (room.isMonarchism) ?
+    roleBook['dog']
+    :
     // anarchimsRoom
-      roleBook['managePlay'];
+    roleBook['managePlay'];
 
 export const initUser = room.initUser || initUserPolyfill;
 
-export const makeCurrentRole= (currentUser: firebase.User ): Role => {
+export const makeCurrentRole = (currentUser: firebase.User): Role => {
   const myRole = room.adminUsers
     .filter((adminUser) => adminUser.uid === currentUser.uid).shift();
 
@@ -49,6 +49,7 @@ export const makeCurrentRole= (currentUser: firebase.User ): Role => {
       queueInterrupt: !!(roleTags.includes('managePlay')),
       queueMoveToTop: !!(roleTags.includes('managePlay')),
       addFromHistory: !!(roleTags.includes('managePlay')),
+      changePlaybackRate: !!(roleTags.includes('managePlay')),
       manageUser: !!(roleTags.includes('manageUser')),
     };
   } else if (room.initUser) {
@@ -65,6 +66,7 @@ export const makeCurrentRole= (currentUser: firebase.User ): Role => {
       queueInterrupt: !!(roleTags.includes('managePlay')),
       queueMoveToTop: !!(roleTags.includes('managePlay')),
       addFromHistory: !!(roleTags.includes('managePlay')),
+      changePlaybackRate: !!(roleTags.includes('managePlay')),
       manageUser: !!(roleTags.includes('manageUser')),
     };
   } else {
