@@ -12,7 +12,7 @@
       :disabled="disabled"
       min="0"
       max="100"
-      step="0.1"
+      step="any"
       @change="$emit('change', val)"
     />
   </div>
