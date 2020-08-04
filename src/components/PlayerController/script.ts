@@ -73,6 +73,8 @@ export default class PlayerController extends Vue {
   public timer?: number;
 
   public async initPlayers() {
+    this.configureFlags();
+
     this.players.youtube = this.$refs.youtube as unknown as MusicPlayer;
     this.currentPlayer = this.players.youtube;
 
@@ -130,8 +132,6 @@ export default class PlayerController extends Vue {
         this.seek(currentTime + 5);
       }
     }));
-
-    this.configureFlags();
   }
 
   public listeners: ReturnType<typeof setEvent>[] = [];
@@ -376,21 +376,41 @@ export default class PlayerController extends Vue {
 
   public playbackRateEnabled = false;
 
-  public configureFlags() {
-    // load
-    const flags: Record<string, boolean> = localStorage.flags ? JSON.parse(localStorage.flags) : {};
-    this.playbackRateEnabled = !!flags.playbackRateEnabled;
+  public isVolumePopupShowing = true;
 
-    const save = () => {
-      localStorage.flags = JSON.stringify({
-        playbackRateEnabled: this.playbackRateEnabled,
-      });
-    };
+  public offVolumePopupShowing() {
+    if (!this.isVolumePopupShowing) return;
+
+    this.isVolumePopupShowing = false;
+    this.saveFlags();
+  }
+
+  get flags(): Record<string, boolean> {
+    return localStorage.flags ? JSON.parse(localStorage.flags) : {};
+  }
+
+  public saveFlags() {
+    localStorage.flags = JSON.stringify({
+      playbackRateEnabled: this.playbackRateEnabled,
+      isVolumePopupShowing: this.isVolumePopupShowing,
+    });
+  }
+
+  public configureFlags() {
+    const { flags } = this;
+
+    // load
+    this.playbackRateEnabled = !!flags.playbackRateEnabled;
+    this.isVolumePopupShowing = flags.isVolumePopupShowing === undefined ? true : !!flags.isVolumePopupShowing;
 
     this.$set(window, 'flags', {
       togglePlaybackRateControllerEnabled: () => {
         this.playbackRateEnabled = !this.playbackRateEnabled;
-        save();
+        this.saveFlags();
+      },
+      toggleVolumePopupEnabled: () => {
+        this.isVolumePopupShowing = !this.isVolumePopupShowing;
+        this.saveFlags();
       },
     });
   }

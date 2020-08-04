@@ -73,4 +73,14 @@
     opacity: 0;
     transition: all 0.5s;
   }
+
+  .volume-controller-container {
+    position: relative;
+  }
+
+  .volume-here {
+    position: absolute;
+    bottom: 260%;
+    left: -120%;
+  }
 }
