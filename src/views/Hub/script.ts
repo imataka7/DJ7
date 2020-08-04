@@ -276,18 +276,18 @@ export default class Hub extends Vue {
     const { player, queues } = status;
     const { music, playedTime, updatedAt } = player;
 
-    // // チャタリング対策
-    // // 更新時間が近いとき
-    // // 再生された時間が0のときに限定しているのは
-    // // 一時停止のタイミングなどによって切り替わらなくなってしまうため
+    // チャタリング対策
+    // 更新時間が近いとき
+    // 再生された時間が0のときに限定しているのは
+    // 一時停止のタイミングなどによって切り替わらなくなってしまうため
     const currentTime = adate.now();
     const timeElapsedFromUpdated = currentTime - updatedAt;
-    // const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 3000;
-    // // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
-    // const isDifferentMusic = playedMusic.id !== music?.id;
-    // if (isUpdateAtTooNear || isDifferentMusic) {
-    //   return;
-    // }
+    const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 4000;
+    // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
+    const isDifferentMusic = playedMusic.id !== music?.id;
+    if (isUpdateAtTooNear || isDifferentMusic) {
+      return;
+    }
 
     this.$logger.info('music end', {
       content: {
