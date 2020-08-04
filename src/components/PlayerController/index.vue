@@ -10,11 +10,19 @@
         class="play-pause-button"
       />
 
-      <volume-controller
-        v-model="currentVolume"
+      <div
+        class="volume-controller-container"
         v-if="!isPhone && !isTablet"
-        class="volume-controller"
-      ></volume-controller>
+        @mouseenter="offVolumePopupShowing"
+      >
+        <div class="sairi-popup volume-here" v-if="isVolumePopupShowing">
+          <p>音量調整はここ</p>
+        </div>
+        <volume-controller
+          v-model="currentVolume"
+          class="volume-controller"
+        ></volume-controller>
+      </div>
 
       <SyncButton
         :currentStatus="currentStatus"
