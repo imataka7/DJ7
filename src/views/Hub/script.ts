@@ -284,7 +284,12 @@ export default class Hub extends Vue {
     const timeElapsedFromUpdated = currentTime - updatedAt;
     const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 2000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
-    const isDifferentMusic = playedMusic.id !== music?.id;
+    // なぜかidというフィールドがなくなるときがあります
+    const isDifferentMusic = (playedMusic.id && music?.id)
+      ? playedMusic.id !== music?.id
+      : playedMusic.source !== music?.source;
+
+    console.log(music, playedMusic, queues, timeElapsedFromUpdated);
     if (isUpdateAtTooNear || isDifferentMusic) {
       return;
     }
