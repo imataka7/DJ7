@@ -285,6 +285,8 @@ export default class Hub extends Vue {
     const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 2000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
     const isDifferentMusic = playedMusic.id !== music?.id;
+
+    console.log(music, playedMusic, timeElapsedFromUpdated);
     if (isUpdateAtTooNear || isDifferentMusic) {
       return;
     }
