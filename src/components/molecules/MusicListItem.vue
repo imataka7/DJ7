@@ -61,13 +61,14 @@ export default class MusicListItem extends Vue {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: 80px;
   padding: 5px 0;
   font-family: "Roboto Mono", "Meiryo UI", monospace;
   transition: background 0.2s;
 }
 
 .img-link {
-  height: 80px;
+  height: 100%;
   width: 106.66px;
   margin-right: 10px;
 
@@ -108,7 +109,10 @@ export default class MusicListItem extends Vue {
 }
 
 .handle {
-  padding: 8px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 100%;
 }
 
 @media screen and (min-width: 1260px) {
