@@ -86,13 +86,13 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
       const listener = this.player.on('stateChange', async (e) => {
         if (e.data === 1) {
           // await this.player.pauseVideo();
+          this.currentMusic = music;
           r();
           // @ts-ignore
           this.player.off(listener);
         }
       });
 
-      this.currentMusic = music;
       await this.player.loadVideoByUrl({ mediaContentUrl: music.source, startSeconds: 0 });
     });
   }
