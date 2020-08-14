@@ -289,7 +289,7 @@ export default class Hub extends Vue {
       ? playedMusic.id !== music?.id
       : playedMusic.source !== music?.source;
 
-    console.log(music, playedMusic, timeElapsedFromUpdated);
+    console.log(music, playedMusic, queues, timeElapsedFromUpdated);
     if (isUpdateAtTooNear || isDifferentMusic) {
       return;
     }
