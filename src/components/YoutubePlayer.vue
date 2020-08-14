@@ -79,14 +79,6 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
     this.player.setVolume(currentVolume + level);
   }
 
-  public query = '';
-
-  public async cue() {
-    // await sleep(3000);
-    // console.log(this.query);
-    await this.player.loadVideoByUrl(this.query);
-  }
-
   public currentMusic?: Musicx;
 
   async loadMusic(music: Musicx): Promise<void> {
@@ -94,13 +86,13 @@ export default class PlayerYoutube extends Vue implements MusicPlayer {
       const listener = this.player.on('stateChange', async (e) => {
         if (e.data === 1) {
           // await this.player.pauseVideo();
+          this.currentMusic = music;
           r();
           // @ts-ignore
           this.player.off(listener);
         }
       });
 
-      this.currentMusic = music;
       await this.player.loadVideoByUrl({ mediaContentUrl: music.source, startSeconds: 0 });
     });
   }
