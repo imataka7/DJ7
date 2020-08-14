@@ -52,7 +52,8 @@
 
 .column-header {
   position: relative;
-  height: 30px;
+  height: 40px;
+  line-height: 40px;
   border-bottom: solid 1px var(--hub-header-border);
 }
 
@@ -112,7 +113,6 @@
     justify-content: center;
 
     height: calc(100vh - 50px);
-    padding-top: 10px;
   }
 
   .column {
@@ -121,6 +121,10 @@
     &:not(:last-child) {
       margin-right: 10px;
     }
+  }
+
+  .input-container {
+    padding-top: 10px;
   }
 
   .tab-bar {
