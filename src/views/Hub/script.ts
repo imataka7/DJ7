@@ -385,4 +385,22 @@ export default class Hub extends Vue {
       this.$router.push('/signin');
     }
   }
+
+  public async deleteAllQueue() {
+    const { value } = await Swal.fire({
+      title: 'キュー全削除',
+      html: 'キューを削除する場合は<code>delete</code>と入力してください。',
+      input: 'text',
+      inputPlaceholder: 'delete',
+      showCancelButton: true,
+      confirmButtonText: '削除',
+      cancelButtonText: 'キャンセル',
+      confirmButtonColor: '#d33',
+    });
+
+    if (value !== 'delete') return;
+
+    await room.updateQueue([]);
+    showToast('info', '削除しました');
+  }
 }

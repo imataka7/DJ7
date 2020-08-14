@@ -103,7 +103,14 @@
         class="column queue-container tab-item"
         v-show="currentView === 'queue'"
       >
-        <p class="header">キュー</p>
+        <header class="column-header">
+          <p class="header-text">キュー</p>
+          <div class="delete-all-button">
+            <abutton @click="deleteAllQueue"
+              >全削除 <fa-icon icon="trash-alt"></fa-icon
+            ></abutton>
+          </div>
+        </header>
         <div class="no-music" v-if="queues.length === 0">
           キューに動画がありません
         </div>
@@ -121,7 +128,9 @@
         class="column history-container tab-item"
         v-show="currentView === 'history'"
       >
-        <p class="header">履歴</p>
+        <header class="column-header">
+          <div class="header-text">履歴</div>
+        </header>
         <template v-if="!currentUser">
           <div class="no-music">サインインしたユーザーのみが利用できます</div>
           <div class="button-container">
