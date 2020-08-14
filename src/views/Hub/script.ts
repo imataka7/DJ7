@@ -282,7 +282,7 @@ export default class Hub extends Vue {
     // 一時停止のタイミングなどによって切り替わらなくなってしまうため
     const currentTime = adate.now();
     const timeElapsedFromUpdated = currentTime - updatedAt;
-    const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 2500;
+    const isUpdateAtTooNear = playedTime === 0 && timeElapsedFromUpdated < 2000;
     // いままでローカルで再生していた曲とDB上の曲が違うとき === 他の人がすでに切り替えている
     const isDifferentMusic = playedMusic.id !== music?.id;
     if (isUpdateAtTooNear || isDifferentMusic) {
