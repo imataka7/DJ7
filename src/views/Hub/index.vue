@@ -6,12 +6,9 @@
           <div class="room-desc">
             <div class="dj7-logo">
               <img :src="require('@/assets/logo.png')" alt="DJ7" />
-              <fa-icon
-                class="crown"
-                icon="crown"
-                size="lg"
-                v-if="room.isMonarchism"
-              ></fa-icon>
+              <abutton class="info-button" @click="openDocument">
+                使い方・お問い合わせ
+              </abutton>
             </div>
 
             <div v-if="false" style="border: solid 1px red;">
@@ -40,6 +37,11 @@
 
             <p>
               部屋ID: {{ roomId }}
+              <fa-icon
+                class="crown-icon"
+                icon="crown"
+                v-if="room.isMonarchism"
+              ></fa-icon>
               <abutton
                 @click="$router.push({ name: 'admin', params: { roomId } })"
               >

@@ -1,13 +1,13 @@
 <template>
   <div :class="`music-queue ${isFlash ? 'is-flash' : ''}`" :key="reloadKey">
     <draggable
-      :delay="isMobile ? 200 : 0"
       @start="dragging = true"
       @end="dragging = false"
       tag="div"
       class="draggable-list"
       v-model="queues"
       :disabled="!role.queueSort"
+      :handle="isMobile ? '.handle' : ''"
     >
       <music-list-item
         :class="`draggable-item ${!dragging ? '' : ''}`"

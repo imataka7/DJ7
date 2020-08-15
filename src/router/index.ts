@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { Hub, Admin } from '@/views';
+import { Hub, Admin, Documents } from '@/views';
 import { app as firebase } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -24,6 +24,11 @@ const routes = [
     path: '/privacy-policy',
     name: 'pp',
     component: () => import(/* webpackChunkName: "pp" */ '../views/Privacy.vue'),
+  },
+  {
+    path: '/docs',
+    name: 'docs',
+    component: Documents,
   },
   {
     path: '/general',

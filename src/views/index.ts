@@ -1,7 +1,3 @@
-import Hub from './Hub/index.vue';
-import Admin from './Admin/index.vue';
-
-export {
-  Hub,
-  Admin,
-};
+export { default as Hub } from './Hub/index.vue';
+export { default as Admin } from './Admin/index.vue';
+export { default as Documents } from './Documents.vue';
