@@ -8,10 +8,9 @@
     height: 50px;
   }
 
-  .crown {
-    position: relative;
-    left: 5px;
-    bottom: 7px;
+  .info-button {
+    margin-left: 10px;
+    bottom: 10px;
   }
 }
 
@@ -105,6 +104,10 @@
 
 .ad-container {
   margin-top: 15px;
+}
+
+.crown-icon {
+  margin-right: 10px;
 }
 
 @media screen and (min-width: 1260px) {

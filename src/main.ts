@@ -24,6 +24,7 @@ import {
   faVolumeDown,
   faVolumeMute,
   faPlusCircle,
+  faInfoCircle,
   faExchangeAlt,
   faArrowAltCircleUp,
 } from '@fortawesome/free-solid-svg-icons';
@@ -70,6 +71,7 @@ library.add(
   faVolumeDown,
   faVolumeMute,
   faPlusCircle,
+  faInfoCircle,
   faExchangeAlt,
   faArrowAltCircleUp,
   faTwitter,

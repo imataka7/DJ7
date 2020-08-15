@@ -415,4 +415,8 @@ export default class Hub extends Vue {
     await room.updateQueue([]);
     showToast('info', '削除しました');
   }
+
+  public openDocument() {
+    window.open('https://docs.dj7.io');
+  }
 }
