@@ -374,7 +374,7 @@ export default class PlayerController extends Vue {
     this.currentPlayer?.setSpeed(s);
   }
 
-  public playbackRateEnabled = false;
+  public playbackRateEnabled = true;
 
   public isVolumePopupShowing = true;
 
