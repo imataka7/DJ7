@@ -417,6 +417,7 @@ export default class Hub extends Vue {
   }
 
   public openDocument() {
-    window.open('https://docs.dj7.io');
+    // window.open('https://docs.dj7.io');
+    window.open('https://dj7.io/docs');
   }
 }
