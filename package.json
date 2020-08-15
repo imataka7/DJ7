@@ -1,6 +1,6 @@
 {
   "name": "dj7",
-  "version": "0.202008.19",
+  "version": "0.202008.20",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
