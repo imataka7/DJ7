@@ -23,6 +23,7 @@ import { ActionButton } from '@/components/molecules';
 import roleBook from '@/roleBook';
 import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
 import Swal from 'sweetalert2';
+import isMobile from 'ismobilejs';
 
 @Component({
   components: {
@@ -246,6 +247,15 @@ export default class Hub extends Vue {
   }
 
   public async mounted() {
+    const isMobileDevice = isMobile().phone || isMobile().tablet;
+    if (isMobileDevice && this.isGeneral && localStorage.stayedRoom) {
+      this.$router.push(localStorage.stayedRoom);
+      localStorage.removeItem('stayedRoom');
+    }
+    if (!this.isGeneral) {
+      localStorage.stayedRoom = this.roomId;
+    }
+
     await Promise.all([this.init()]);
   }
 
@@ -339,6 +349,8 @@ export default class Hub extends Vue {
     if (!this.jumpTo) {
       return;
     }
+
+    localStorage.stayedRoom = this.jumpTo;
 
     this.$ga.logEvent('jump', {
       roomId: this.jumpTo,
