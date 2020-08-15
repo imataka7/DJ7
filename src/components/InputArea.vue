@@ -15,9 +15,14 @@
         <input type="checkbox" v-model="isPlaylist" />
         プレイリスト
       </label>
-      <abutton class="button" @click="parse" :disabled="searching">
-        追加
-      </abutton>
+      <div class="add-buttons">
+        <abutton class="button" @click="addRandom">
+          ランダム
+        </abutton>
+        <abutton class="button" @click="parse" :disabled="searching">
+          追加
+        </abutton>
+      </div>
     </div>
   </div>
 </template>
@@ -28,10 +33,11 @@ import {
   Component, Vue,
 } from 'vue-property-decorator';
 import {
-  getMusicInfo, getPlaylistInfo, getPlaylistId, showToast,
+  getMusicInfo, getPlaylistInfo, getPlaylistId, showToast, getRandomVideo,
 } from '@/utils';
 import { Musicx } from '@/models/room';
 import ActionButton from './molecules/ActionButton.vue';
+import { user } from '@/store/modules';
 
 const queryMessage = '動画のURLか単語を入力して検索しよう';
 
@@ -124,6 +130,15 @@ export default class InputArea extends Vue {
     this.searching = false;
     this.isPlaylist = false;
   }
+
+  get history() {
+    return user.history || [];
+  }
+
+  public async addRandom() {
+    const m = await getRandomVideo(this.history);
+    this.$emit('parsed', [m]);
+  }
 }
 </script>
 
@@ -162,6 +177,12 @@ export default class InputArea extends Vue {
 
   .button {
     width: 80px;
+  }
+}
+
+.add-buttons {
+  button:not(:last-child) {
+    margin-right: 10px;
   }
 }
 </style>
