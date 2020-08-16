@@ -16,7 +16,7 @@
         プレイリスト
       </label>
       <div class="add-buttons">
-        <abutton class="button" @click="addRandom">
+        <abutton class="button" @click="addRandom" :disabled="searching">
           ランダム
         </abutton>
         <abutton class="button" @click="parse" :disabled="searching">
@@ -136,7 +136,9 @@ export default class InputArea extends Vue {
   }
 
   public async addRandom() {
+    this.searching = true;
     const m = await getRandomVideo(this.history);
+    this.searching = false;
     this.$emit('parsed', [m]);
   }
 }
