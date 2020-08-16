@@ -1,10 +1,23 @@
-import { app as firebase } from '@/plugins/firebase';
+import { functions } from '@/plugins/firebase';
 import { Music } from '@/models';
 
 const premadeList: Music[] = [];
 
 async function getVideoList(): Promise<Music[]> {
-  return [];
+  const videoList = localStorage.videoList ? JSON.parse(localStorage.videoList) : null;
+  if (videoList && (Date.now() - videoList.fetchedAt) < 86400 * 30 * 1000) {
+    return videoList.list as Music[];
+  }
+
+  const r = await functions.httpsCallable('getVideoList')();
+  const list = r.data as Music[];
+
+  localStorage.videoList = JSON.stringify({
+    list,
+    fetchedAt: Date.now(),
+  });
+
+  return list;
 }
 
 function pickOne<T>(arr: T[]) {
