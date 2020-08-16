@@ -24,7 +24,7 @@
       ]
     },
     "typeRoots": [
-      "types",
+      "types"
     ],
     "lib": [
       "esnext",

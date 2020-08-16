@@ -3,6 +3,7 @@ import {
 } from './urlParser';
 import { getPlaylistVideos, getYTVideoTitle } from './dataAPIConnector';
 import convertProviderIdToName from './convertProviderIdToName';
+import getRandomVideo from './getRandomVideo';
 import getVersion from './getVersion';
 import showToast from './showToast';
 import setEvent from './eventUtil';
@@ -16,6 +17,7 @@ export {
   generateRandomId,
   getYTVideoTitle,
   getPlaylistInfo,
+  getRandomVideo,
   getPlaylistId,
   getMusicInfo,
   getYTVideoId,
