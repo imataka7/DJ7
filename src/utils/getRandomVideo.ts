@@ -1,5 +1,6 @@
 import { functions } from '@/plugins/firebase';
 import { Music } from '@/models';
+import { generateRandomId } from '@/utils';
 
 const premadeList: Music[] = [];
 
@@ -30,5 +31,6 @@ export default async function getRandomVideo(history: Music[]) {
     premadeList.push(...list);
   }
 
-  return pickOne([...premadeList, ...history]);
+  const m = pickOne([...premadeList, ...history]);
+  return { id: generateRandomId(), ...m };
 }
