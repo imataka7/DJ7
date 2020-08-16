@@ -1,4 +1,5 @@
 node_modules
 lib
-src/*.js
-src/*.js.map
+**/*.js
+**/*.js.map
+*.log

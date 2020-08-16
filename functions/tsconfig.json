@@ -1,31 +1,13 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
     "sourceMap": true,
-    "baseUrl": ".",
-    "types": ["webpack-env"],
-    "paths": {
-      "@/*": ["src/*"],
-      "vuedraggable": ["types/vuedraggable"]
-    },
-    "typeRoots": ["types"],
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "strict": true,
+    "target": "es2017"
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-  ],
-  "exclude": ["node_modules"]
+  "compileOnSave": true,
+  "include": ["src"]
 }
