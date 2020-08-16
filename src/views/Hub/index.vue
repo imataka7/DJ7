@@ -107,10 +107,10 @@
       >
         <header class="column-header">
           <p class="header-text">キュー</p>
-          <div class="delete-all-button">
-            <abutton @click="deleteAllQueue"
-              >全削除 <fa-icon icon="trash-alt"></fa-icon
-            ></abutton>
+          <div class="header-side-button">
+            <abutton @click="deleteAllQueue">
+              全削除 <fa-icon icon="trash-alt"></fa-icon>
+            </abutton>
           </div>
         </header>
         <div class="no-music" v-if="queues.length === 0">
@@ -131,7 +131,22 @@
         v-show="currentView === 'history'"
       >
         <header class="column-header">
-          <div class="header-text">履歴</div>
+          <p class="header-text" v-if="!isSearchBarActive">履歴</p>
+          <p class="header-text search-input" v-else>
+            <input
+              type="text"
+              v-model="searchTerm"
+              placeholder="検索キーワード"
+              autofocus
+            />
+          </p>
+          <div
+            class="header-side-button search-button"
+            @click="toggleSearchBarActive"
+          >
+            <fa-icon icon="search" v-if="!isSearchBarActive"></fa-icon>
+            <fa-icon icon="times" size="lg" v-else></fa-icon>
+          </div>
         </header>
         <template v-if="!currentUser">
           <div class="no-music">サインインしたユーザーのみが利用できます</div>
@@ -145,12 +160,13 @@
           履歴に動画がありません
         </div>
         <history-list
-          :list="history"
+          :list="filteredHistory"
           @add="addQueue"
           @del="deleteMusicFromHistory"
           class="music-list"
           :role="role"
           v-else
+          :key="historyReloadKey"
         ></history-list>
       </div>
     </div>

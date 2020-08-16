@@ -64,10 +64,31 @@
   font-weight: 700;
 }
 
-.delete-all-button {
+.header-side-button {
   position: absolute !important;
   top: 0;
   right: 10px;
+}
+
+.search-button {
+  display: grid;
+  place-items: center;
+  transition: color 0.2s;
+  cursor: pointer;
+  width: 30px;
+  height: 100%;
+
+  &:hover {
+    color: var(--button-hover);
+  }
+}
+
+.search-input {
+  text-align: left;
+
+  input {
+    width: 19em;
+  }
 }
 
 .music-list {
@@ -180,5 +201,9 @@
       top: 0;
       left: 0;
     }
+  }
+
+  .search-input > input {
+    width: 16em;
   }
 }

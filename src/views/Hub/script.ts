@@ -420,4 +420,27 @@ export default class Hub extends Vue {
     // window.open('https://docs.dj7.io');
     window.open('https://dj7.io/docs');
   }
+
+  public searchTerm = '';
+
+  public isSearchBarActive = false;
+
+  public historyReloadKey = Math.random();
+
+  public toggleSearchBarActive() {
+    this.isSearchBarActive = !this.isSearchBarActive;
+
+    if (!this.isSearchBarActive) this.searchTerm = '';
+  }
+
+  get filteredHistory() {
+    if (!this.searchTerm) {
+      this.historyReloadKey = Math.random();
+      return this.history;
+    }
+
+    const kws = this.searchTerm.split(' ');
+    const isMatched = (t: string) => kws.some(kw => t.toLowerCase().includes(kw.toLowerCase()));
+    return this.history.filter(h => isMatched(h.title));
+  }
 }
