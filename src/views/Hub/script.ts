@@ -254,6 +254,7 @@ export default class Hub extends Vue {
     }
     if (!this.isGeneral) {
       localStorage.stayedRoom = this.roomId;
+      document.title = `DJ7 - ${this.roomId}`;
     }
 
     await Promise.all([this.init()]);
