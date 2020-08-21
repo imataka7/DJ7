@@ -58,6 +58,8 @@
               :now-playing="playingMusic && playingMusic.title"
             ></share-button>
 
+            <line-share :room-id="roomId"></line-share>
+
             <copy-button></copy-button>
           </div>
 

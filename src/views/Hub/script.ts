@@ -10,6 +10,7 @@ import {
   AdSquare,
   TabBar,
   CopyButton,
+  LineShare,
 } from '@/components';
 import { Room, Musicx, Music, PlayerStatus, Role } from '@/models';
 import {
@@ -36,10 +37,11 @@ import isMobile from 'ismobilejs';
     AdSquare,
     TabBar,
     CopyButton,
+    LineShare,
   },
 })
 export default class Hub extends Vue {
-  isMonarchism = true
+  isMonarchism = true;
 
   get dbg() {
     return process.env.NODE_ENV === 'development';
