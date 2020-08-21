@@ -27,6 +27,8 @@ export default class LineShare extends Vue {
   }
 
   public open() {
+    this.$ga.logEvent('line_share');
+
     window.open(this.shareLink);
   }
 }
