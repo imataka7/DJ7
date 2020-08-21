@@ -30,7 +30,7 @@ import {
   faExchangeAlt,
   faArrowAltCircleUp,
 } from '@fortawesome/free-solid-svg-icons';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faLine, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
 import VueLazyload from 'vue-lazyload';
 
@@ -78,6 +78,7 @@ library.add(
   faInfoCircle,
   faExchangeAlt,
   faArrowAltCircleUp,
+  faLine,
   faTwitter,
 );
 Vue.component('fa-icon', FontAwesomeIcon);
