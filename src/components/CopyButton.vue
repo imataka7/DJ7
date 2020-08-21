@@ -24,6 +24,8 @@ export default class CopyButton extends Vue {
   }
 
   public async copy() {
+    this.$ga.logEvent('copy_link');
+
     await navigator.clipboard.writeText(this.url);
 
     this.text = textCopied;
