@@ -8,6 +8,7 @@ import AdSquare from './adsense/AdSquare.vue';
 import AdHorizontal from './adsense/AdHorizontal.vue';
 import TabBar from './TabBar.vue';
 import CopyButton from './CopyButton.vue';
+import LineShare from './LineShare.vue';
 
 export {
   PlayerController,
@@ -20,4 +21,5 @@ export {
   AdHorizontal,
   TabBar,
   CopyButton,
+  LineShare,
 };

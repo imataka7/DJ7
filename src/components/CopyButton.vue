@@ -1,5 +1,5 @@
 <template>
-  <abutton @click="copy">{{ text }}</abutton>
+  <abutton @click="copy"><fa-icon icon="clone"></fa-icon> {{ text }}</abutton>
 </template>
 
 <script lang="ts">
@@ -24,10 +24,12 @@ export default class CopyButton extends Vue {
   }
 
   public async copy() {
+    this.$ga.logEvent('copy_link');
+
     await navigator.clipboard.writeText(this.url);
 
     this.text = textCopied;
-    setTimeout(() => { this.text = textCopy; }, 1000);
+    setTimeout(() => { this.text = textCopy; }, 1500);
   }
 }
 </script>

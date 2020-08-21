@@ -45,8 +45,8 @@
               <abutton
                 @click="$router.push({ name: 'admin', params: { roomId } })"
               >
-                設定
                 <fa-icon icon="cog"></fa-icon>
+                設定
               </abutton>
             </p>
             <span class="version">{{ version }}</span>
@@ -57,6 +57,8 @@
               :room-id="roomId"
               :now-playing="playingMusic && playingMusic.title"
             ></share-button>
+
+            <line-share :room-id="roomId"></line-share>
 
             <copy-button></copy-button>
           </div>
@@ -109,7 +111,7 @@
           <p class="header-text">キュー</p>
           <div class="header-side-button">
             <abutton @click="deleteAllQueue">
-              全削除 <fa-icon icon="trash-alt"></fa-icon>
+              <fa-icon icon="trash-alt"></fa-icon> 全削除
             </abutton>
           </div>
         </header>
