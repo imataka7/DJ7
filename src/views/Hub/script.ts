@@ -1,5 +1,4 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import 'firebase/firestore';
 
 import {
   YoutubePlayer,
