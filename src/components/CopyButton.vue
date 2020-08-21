@@ -1,5 +1,5 @@
 <template>
-  <abutton @click="copy">{{ text }}</abutton>
+  <abutton @click="copy"><fa-icon icon="clone"></fa-icon> {{ text }}</abutton>
 </template>
 
 <script lang="ts">
