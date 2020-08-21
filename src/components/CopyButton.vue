@@ -27,7 +27,7 @@ export default class CopyButton extends Vue {
     await navigator.clipboard.writeText(this.url);
 
     this.text = textCopied;
-    setTimeout(() => { this.text = textCopy; }, 1000);
+    setTimeout(() => { this.text = textCopy; }, 1500);
   }
 }
 </script>
