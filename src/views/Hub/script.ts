@@ -283,6 +283,10 @@ export default class Hub extends Vue {
       return;
     }
 
+    if (!this.currentUser) {
+      this.showSigninGuide();
+    }
+
     const status = await room.fetchCurrentStatus();
 
     const { player, queues } = status;
@@ -444,5 +448,34 @@ export default class Hub extends Vue {
     const kws = this.searchTerm.split(' ');
     const isMatched = (t: string) => kws.some(kw => t.toLowerCase().includes(kw.toLowerCase()));
     return this.history.filter(h => isMatched(h.title));
+  }
+
+  public async showSigninGuide() {
+    if (localStorage.signinGuide) {
+      return;
+    }
+
+    const { value } = await Swal.fire({
+      icon: 'info',
+      title: 'サインイン',
+      html: `
+        サインインすると動画の追加など、<br>
+        すべての機能にアクセスできます。<br>
+        いますぐサインインしてDJ7を使いこなそう！`,
+      confirmButtonText: 'サインイン',
+      showCancelButton: true,
+      cancelButtonText: 'キャンセル',
+    });
+
+    if (value) {
+      this.$router.push({
+        path: '/signin',
+        query: {
+          redirect: this.roomId,
+        },
+      });
+    }
+
+    localStorage.signinGuide = JSON.stringify(true);
   }
 }
