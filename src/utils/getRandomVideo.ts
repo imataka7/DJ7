@@ -1,6 +1,7 @@
 import { functions } from '@/plugins/firebase';
 import { Music } from '@/models';
 import { generateRandomId } from '@/utils';
+import showToast from '@/utils/showToast';
 
 const premadeList: Music[] = [];
 
@@ -27,6 +28,7 @@ function pickOne<T>(arr: T[]) {
 
 export default async function getRandomVideo(history: Music[]) {
   if (!premadeList.length) {
+    showToast('info', '動画のリストをダウンロードしています。少々お待ち下さい。');
     const list = await getVideoList();
     premadeList.push(...list);
   }
