@@ -139,9 +139,9 @@ export default class InputArea extends Vue {
     this.searching = true;
     const m = await getRandomVideo(this.history);
     this.searching = false;
-    this.$emit('parsed', [m]);
 
     this.$ga.logEvent('random_add');
+    this.$emit('parsed', [m]);
   }
 }
 </script>
