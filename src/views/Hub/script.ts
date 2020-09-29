@@ -17,6 +17,7 @@ import {
   getClone,
   showToast,
   getVersion,
+  shuffleArray,
 } from '@/utils';
 import { user, room, adate, presence } from '@/store/modules';
 import { ActionButton } from '@/components/molecules';
@@ -479,5 +480,14 @@ export default class Hub extends Vue {
     }
 
     localStorage.signinGuide = JSON.stringify(true);
+  }
+
+  public isBusy = false;
+
+  public async shuffle() {
+    this.isBusy = true;
+    const shuffled = shuffleArray(this.queues);
+    await this.room.updateQueue(shuffled);
+    this.isBusy = false;
   }
 }

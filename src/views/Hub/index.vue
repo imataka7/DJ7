@@ -110,8 +110,11 @@
         <header class="column-header">
           <p class="header-text">キュー</p>
           <div class="header-side-button">
+            <abutton @click="shuffle" :disabled="isBusy">
+              <fa-icon icon="random"></fa-icon>
+            </abutton>
             <abutton @click="deleteAllQueue">
-              <fa-icon icon="trash-alt"></fa-icon> 全削除
+              <fa-icon icon="trash-alt"></fa-icon>
             </abutton>
           </div>
         </header>
