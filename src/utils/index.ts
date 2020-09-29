@@ -4,6 +4,7 @@ import {
 import { getPlaylistVideos, getYTVideoTitle } from './dataAPIConnector';
 import convertProviderIdToName from './convertProviderIdToName';
 import getRandomVideo from './getRandomVideo';
+import shuffleArray from './shuffleArray';
 import getVersion from './getVersion';
 import showToast from './showToast';
 import setEvent from './eventUtil';
@@ -20,6 +21,7 @@ export {
   getRandomVideo,
   getPlaylistId,
   getMusicInfo,
+  shuffleArray,
   getYTVideoId,
   getEmbedUrl,
   getVersion,
