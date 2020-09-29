@@ -65,17 +65,21 @@
 }
 
 .header-side-button {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  place-items: center;
+
   position: absolute !important;
   top: 0;
   right: 10px;
+  height: 100%;
 }
 
 .search-button {
-  display: grid;
-  place-items: center;
   transition: color 0.2s;
   cursor: pointer;
-  width: 30px;
+  width: 20px;
   height: 100%;
 
   &:hover {

@@ -52,17 +52,35 @@ async function getYTVideoTitle(id: string) {
   }
 }
 
+type PlaylistItem = { videoId: string; title: string };
+
+function extractVideos(items: any): PlaylistItem[] {
+  return items.map((i: any) => ({
+    videoId: i.snippet.resourceId.videoId,
+    title: i.snippet.title,
+  }));
+}
+
 async function getPlaylistVideos(id: string) {
-  const res = await dataAPIBase(`playlistItems?playlistId=${id}&maxResults=50&fields=items(snippet(title,resourceId(videoId)))&part=snippet`);
+  const query = `playlistItems?playlistId=${id}&maxResults=50&fields=items(snippet(title,resourceId(videoId))),nextPageToken&part=snippet`;
+  let res = await dataAPIBase(query);
 
-  if (res) {
-    const { items } = res;
+  if (!res) return [];
 
-    return items.map((i: any) => ({
-      videoId: i.snippet.resourceId.videoId,
-      title: i.snippet.title,
-    }));
+  let { items, nextPageToken } = res;
+  const results: PlaylistItem[] = [...extractVideos(items)];
+
+  while (nextPageToken) {
+    res = await dataAPIBase(`${query}&pageToken=${nextPageToken}`)
+
+    items = res.items;
+    nextPageToken = res.nextPageToken;
+
+    const resultsPerPage = extractVideos(items);
+    results.push(...resultsPerPage);
   }
+
+  return results;
 }
 
 export {
