@@ -110,10 +110,10 @@
         <header class="column-header">
           <p class="header-text">キュー</p>
           <div class="header-side-button">
-            <abutton @click="shuffle" :disabled="isBusy">
+            <abutton @click="shuffle" :disabled="isBusy" v-if="role.queueSort">
               <fa-icon icon="random"></fa-icon>
             </abutton>
-            <abutton @click="deleteAllQueue">
+            <abutton @click="deleteAllQueue" v-if="role.queueDelete">
               <fa-icon icon="trash-alt"></fa-icon>
             </abutton>
           </div>
