@@ -25,12 +25,14 @@ import roleBook from '@/roleBook';
 import { makeCurrentRole, initUserPolyfill } from '@/roleManager';
 import Swal from 'sweetalert2';
 import isMobile from 'ismobilejs';
+import DraggableList from '@/components/DraggableList.vue';
 
 @Component({
   components: {
     YoutubePlayer,
     InputArea,
-    MusicQueue,
+    // MusicQueue,
+    MusicQueue: DraggableList,
     HistoryList,
     PlayerController,
     ShareButton,
