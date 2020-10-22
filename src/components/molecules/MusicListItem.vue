@@ -65,6 +65,7 @@ export default class MusicListItem extends Vue {
   padding: 5px 0;
   font-family: "Roboto Mono", "Meiryo UI", monospace;
   transition: background 0.2s;
+  background: var(--bgc);
 }
 
 .img-link {
